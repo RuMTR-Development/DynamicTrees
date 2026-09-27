@@ -3,8 +3,11 @@ plugins {
     id 'net.neoforged.moddev'
     id "me.modmuss50.mod-publish-plugin"
 }
-mod_version = "${mod_version}${neoVersionAppend}"
+
+mod_version = "${mod_version}-neoforge${neoVersionAppend}"
 version = mod_version
+
+
 
 neoForge {
     version = neoforge_version
@@ -46,27 +49,29 @@ neoForge {
             sourceSet sourceSets.main
         }
     }
-    repositories {
-        maven {
-            url "https://cursemaven.com"
-            content {
-                includeGroup "curse.maven"
-            }
-        }
-        flatDir {
-            dir 'libs'
-        }
-    }
-    dependencies {
-        implementation "curse.maven:jade-324717:6011258"
-        implementation "curse.maven:jei-238222:5846880"
-        implementation "curse.maven:glitchcore-955399:5660740"
-        implementation "curse.maven:serene-seasons-291874:5753503"
-        
-        runtimeOnly "curse.maven:patchouli-306770:6164617"
-        runtimeOnly "curse.maven:spark-361579:6225208"
-    }
 
+}
+
+repositories {
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    flatDir {
+        dir 'libs'
+    }
+}
+
+dependencies {
+    implementation "curse.maven:jade-324717:${jade_version}"
+    implementation "curse.maven:jei-238222:${jei_version}"
+    implementation "curse.maven:glitchcore-955399:${glitchcore_version}"
+    implementation "curse.maven:serene-seasons-291874:${serene_seasons_version}"
+
+    runtimeOnly "curse.maven:patchouli-306770:${patchouli_version}"
+    runtimeOnly "curse.maven:spark-361579:${spark_version}"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

@@ -3,7 +3,7 @@ plugins {
     id 'fabric-loom'
     id "me.modmuss50.mod-publish-plugin"
 }
-mod_version = "${mod_version}${fabricVersionAppend}"
+mod_version = "${mod_version}-fabric${fabricVersionAppend}"
 version = mod_version
 
 dependencies {

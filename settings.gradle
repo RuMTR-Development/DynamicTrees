@@ -41,11 +41,22 @@ pluginManagement {
 }
 
 plugins {
+    id 'dev.kikugie.stonecutter' version '0.9.8'
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+stonecutter {
+    kotlinController = false
+    centralScript = "build.gradle"
+
+    create(getRootProject()) {
+        versions "1.21.1"
+
+        branch "common"
+        branch "fabric"
+        branch "neoforge"
+    }
 }
 
 // This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)
 rootProject.name = 'Dynamic Trees'
-include('common')
-include('fabric')
-include('neoforge')

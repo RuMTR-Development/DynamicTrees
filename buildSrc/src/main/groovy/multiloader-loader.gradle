@@ -12,13 +12,14 @@ configurations {
 }
 
 dependencies {
-    compileOnly(project(':common')) {
+    compileOnly(project(":common:${stonecutter.current.version}")) {
         capabilities {
             requireCapability "$group:$mod_id"
         }
     }
-    commonJava project(path: ':common', configuration: 'commonJava')
-    commonResources project(path: ':common', configuration: 'commonResources')
+
+    commonJava project(path: ":common:${stonecutter.current.version}", configuration: "commonJava")
+    commonResources project(path: ":common:${stonecutter.current.version}", configuration: 'commonResources')
 }
 
 tasks.named('compileJava', JavaCompile) {
@@ -44,9 +45,9 @@ tasks.named('sourcesJar', Jar) {
 }
 
 pluginManager.withPlugin('me.modmuss50.mod-publish-plugin') {
-    def isFabric = project.name == 'fabric'
+    def isFabric = parent.name == 'fabric'
     def loaderName = isFabric ? 'Fabric' : 'NeoForge'
-    def changelogFile = file("../${project.name}/build/changelog.txt")
+    def changelogFile = file("../${parent.name}/build/changelog.txt")
     def releaseType = isFabric ? project.findProperty('fabricVersionType') : project.findProperty('versionType')
 
     afterEvaluate {
