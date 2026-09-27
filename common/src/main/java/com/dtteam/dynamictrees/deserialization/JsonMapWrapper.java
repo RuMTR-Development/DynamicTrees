@@ -29,7 +29,7 @@ public final class JsonMapWrapper implements Map<String, JsonElement> {
 
     @Override
     public boolean isEmpty() {
-        return this.jsonObject.isEmpty();
+        return this.jsonObject.size() == 0;
     }
 
     @Override

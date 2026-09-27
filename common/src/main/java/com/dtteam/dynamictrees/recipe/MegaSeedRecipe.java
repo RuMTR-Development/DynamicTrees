@@ -4,24 +4,44 @@ import com.dtteam.dynamictrees.config.DTConfigs;
 import com.dtteam.dynamictrees.item.Seed;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;import java.util.Arrays;import java.util.stream.Stream;
+
+//? if >= 1.21 {
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.core.HolderLookup;
+//? } else {
+/*import net.minecraft.core.RegistryAccess;
+*///? }
 
 public class MegaSeedRecipe extends CustomRecipe {
-
+    //? if >= 1.21 {
     public MegaSeedRecipe(CraftingBookCategory pCategory) {
         super(pCategory);
     }
+    //? } else {
+    /*public MegaSeedRecipe(ResourceLocation pId, CraftingBookCategory pCategory) {
+        super(pId, pCategory);
+    }
+    *///? }
 
     @Override
-    public boolean matches(CraftingInput craftingInput, Level level) {
+    public boolean matches(
+            //? if >= 1.21 {
+            CraftingInput craftingInput,
+            //? } else {
+            /*CraftingContainer craftingInput,
+            *///? }
+
+            Level level
+    ) {
         if(DTConfigs.COMMON.generateMegaSeedRecipe.get() && atLeastHasSeed(craftingInput)){
             for(Species species : Species.REGISTRY) {
                 if(recipeMatchCondition(craftingInput, species)) {
@@ -33,7 +53,15 @@ public class MegaSeedRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(
+            //? if >= 1.21 {
+            CraftingInput craftingInput,
+            HolderLookup.Provider registryAccess
+             //? } else {
+            /*CraftingContainer craftingInput,
+            RegistryAccess registryAccess
+            *///? }
+    ) {
         for (Species species : Species.REGISTRY) {
             if (recipeMatchCondition(craftingInput, species)) {
                 return new ItemStack(species.getSeed().get());
@@ -42,23 +70,61 @@ public class MegaSeedRecipe extends CustomRecipe {
         return ItemStack.EMPTY;
     }
 
-    private static boolean atLeastHasSeed(CraftingInput craftingInput) {
+    private static boolean atLeastHasSeed(
+            //? if >= 1.21 {
+            CraftingInput craftingInput
+             //? } else {
+            /*CraftingContainer craftingInput
+            *///? }
+    ) {
+        //? if >=1.21 {
         return craftingInput.items().stream().anyMatch(s -> !s.isEmpty() && s.getItem() instanceof Seed);
+        //? } else {
+        /*return craftingInput.hasAnyMatching(s -> !s.isEmpty() && s.getItem() instanceof Seed);
+        *///? }
     }
 
-    private static boolean recipeMatchCondition(CraftingInput craftingInput, Species species) {
+    private static boolean recipeMatchCondition(
+            //? if >= 1.21 {
+            CraftingInput craftingInput,
+             //? } else {
+            /*CraftingContainer craftingInput,
+            *///? }
+
+            Species species
+    ) {
         return species.isMegaSpecies() && species.hasSeed()
                 && species.getPreMegaSpecies().canCraftMegaSeed()
                 && allItemsMatchSeed(craftingInput, species.getPreMegaSpecies());
     }
 
-    private static boolean allItemsMatchSeed(CraftingInput craftingInput, Species species) {
+    private static boolean allItemsMatchSeed(
+            //? if >= 1.21 {
+            CraftingInput craftingInput,
+             //? } else {
+            /*CraftingContainer craftingInput,
+            *///? }
+
+            Species species
+    ) {
         return nonEmptyStacksStream(craftingInput).allMatch(stack -> stack.is(species.getSeed().get()));
     }
 
+    //? if >= 1.21 {
     private static Stream<ItemStack> nonEmptyStacksStream(CraftingInput craftingInput) {
         return craftingInput.items().stream().filter(stack -> !stack.isEmpty());
     }
+    //? } else {
+    /*private static Stream<ItemStack> nonEmptyStacksStream(CraftingContainer craftingInput) {
+        ItemStack[] stacks = new ItemStack[craftingInput.getContainerSize()];
+
+        for (int i = 0; i < stacks.length; i++) {
+            stacks[i] = craftingInput.getItem(i);
+        }
+
+        return Arrays.stream(stacks).filter(stack -> !stack.isEmpty());
+    }
+    *///? }
 
     @Override
     public boolean canCraftInDimensions(int i, int i1) {

@@ -96,8 +96,14 @@ public class BushGenFeature extends GenFeature {
             final BlockState soilBlockState = level.getBlockState(groundPos);
 
             final BlockPos pos = groundPos.above();
-            if (!level.getBlockState(groundPos).liquid() &&
-                    species.isAcceptableSoil(level, groundPos, soilBlockState)) {
+            if (
+                    //? if >= 1.21 {
+                    !level.getBlockState(groundPos).liquid()
+                    //? } else {
+                    /*!level.getBlockState(groundPos).getMaterial().isLiquid()
+                    *///? }
+                            && species.isAcceptableSoil(level, groundPos, soilBlockState)
+            ) {
                 level.setBlock(pos, configuration.get(LOG).defaultBlockState(), 3);
 
                 SimpleVoxmap leafMap = LeafClusters.BUSH;

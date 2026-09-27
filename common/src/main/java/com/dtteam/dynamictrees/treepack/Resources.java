@@ -101,23 +101,38 @@ public final class Resources {
 
         if (Files.exists(absTreesPath)) {
             MANAGER.addPack(new TreePackResources(
+                    //? if >= 1.21 {
                     new PackLocationInfo(
                             modFile.getModId(),
                             Component.translatable("treePack."+modFile.getModId()+".name"),
                             PackSource.WORLD,
                             Optional.empty()),
+
                     absTreesPath.toAbsolutePath()
+                    //? } else {
+                    /*modFile.getModId(),
+                    absTreesPath.toAbsolutePath(),
+                    false
+                    *///? }
             ));
         }
     }
 
+    //? if >= 1.21 {
     private static final PackLocationInfo FLAT_TREE_PACK_INFO = new PackLocationInfo(
             "dynamictrees", Component.translatable("treePack.dynamictrees.name"), PackSource.BUILT_IN, Optional.empty()
     );
+
     private static void registerFlatTreePack() {
         final File mainTreeFolder = getTreeFolder();
         MANAGER.addPack(new TreePackResources(FLAT_TREE_PACK_INFO, mainTreeFolder.toPath().toAbsolutePath()));
     }
+    //? } else {
+    /*private static void registerFlatTreePack() {
+        final File mainTreeFolder = getTreeFolder();
+        MANAGER.addPack(new TreePackResources("dynamictrees", mainTreeFolder.toPath().toAbsolutePath(), true));
+    }
+    *///? }
 
     private static File getTreeFolder() {
         final File mainTreeFolder = new File("trees/");

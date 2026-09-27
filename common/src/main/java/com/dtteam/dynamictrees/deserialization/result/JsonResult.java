@@ -98,12 +98,12 @@ public class JsonResult<T> extends AbstractResult<T, JsonElement> {
     public <V> MappedResult<V, JsonElement> mapIfValid(Predicate<T> validator, String invalidError,
                                                        Mapper<T, V> mapper) {
         return this.value == null ? MappedJsonResult.mapErrorneous(this) :
-                validator.test(this.value) ?
+                (validator.test(this.value) ?
                         this.map(mapper, "Unexpected error occurred. This should not be possible.") :
                         MappedJsonResult.errorneousMap(
                                 invalidError.replaceFirst("\\{}", this.value.toString()),
                                 this
-                        );
+                        ));
     }
 
     /**
@@ -269,9 +269,16 @@ public class JsonResult<T> extends AbstractResult<T, JsonElement> {
     public static <T> Result<T, JsonElement> from(final DataResult<Pair<T, JsonElement>> dataResult,
                                                   JsonElement input) {
         try {
+            //? if >= 1.21 {
             return dataResult.map(
                             pair -> JsonResult.success(pair.getSecond(), pair.getFirst())
                     ).getOrThrow();
+            //? } else {
+            /*return dataResult.get()
+                    .mapLeft(
+                            pair -> JsonResult.success(pair.getSecond(), pair.getFirst())
+                    ).orThrow();
+            *///? }
         } catch (RuntimeException e) {
             return JsonResult.failure(input, e.getMessage());
         }

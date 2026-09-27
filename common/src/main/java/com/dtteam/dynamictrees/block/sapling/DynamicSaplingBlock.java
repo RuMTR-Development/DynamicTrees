@@ -16,9 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
@@ -31,6 +29,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//? if >= 1.21 {
+
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootParams;
+//? } else {
+/*import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.storage.loot.LootContext;
+*///? }
+
 public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     public final static Map<Block, Species> SAPLING_REPLACERS = new HashMap<>();
@@ -38,7 +46,20 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     protected Species species;
 
     public DynamicSaplingBlock(Species species) {
-        super(Properties.of().mapColor(MapColor.PLANT).noCollission().pushReaction(PushReaction.DESTROY).instabreak().sound(SoundType.GRASS).randomTicks().noOcclusion());
+        super(
+                //? if >= 1.21 {
+                Properties.of()
+                        .mapColor(MapColor.PLANT)
+                        .pushReaction(PushReaction.DESTROY)
+                //? } else {
+                /*Properties.of(Material.PLANT, MaterialColor.PLANT)
+                *///? }
+                        .noCollission()
+                        .instabreak()
+                        .sound(SoundType.GRASS)
+                        .randomTicks()
+                        .noOcclusion()
+        );
         this.species = species;
     }
 
@@ -67,7 +88,14 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+
+    //? if >= 1.21 {
+    protected
+     //?} else {
+    /*public
+    *///?}
+
+    void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (this.getSpecies().canSaplingGrowNaturally(level, pos)) {
             this.performBonemeal(level, random, pos, state);
         }
@@ -93,7 +121,16 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(
+            LevelReader levelReader,
+            BlockPos blockPos,
+            BlockState blockState
+
+            //? if < 1.21 {
+            /*,
+            boolean isClient
+            *///?}
+    ) {
         return this.getSpecies().canSaplingConsumeBoneMeal(levelReader, blockPos);
     }
 
@@ -115,7 +152,14 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    protected SoundType getSoundType(BlockState state) {
+
+    //? if >= 1.21 {
+    protected
+     //?} else {
+    /*public
+    *///?}
+
+    SoundType getSoundType(BlockState state) {
         return this.getSpecies().getSaplingSound();
     }
 
@@ -132,22 +176,57 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     protected void dropBlock(Level level, BlockState state, BlockPos pos) {
         if (level instanceof ServerLevel serverLevel){
-            getDrops(state, new LootParams.Builder(serverLevel).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY)).forEach((drop) -> popResource(level, pos, drop));
+            getDrops(
+                    state,
+
+                    //? if >= 1.21 {
+                    new LootParams.Builder(serverLevel)
+                     //? } else {
+                    /*new LootContext.Builder(serverLevel)
+                    *///? }
+
+                            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                            .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+            ).forEach((drop) -> popResource(level, pos, drop));
+
             level.removeBlock(pos, false);
         }
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(
+            //? if >= 1.21 {
+            LevelReader level,
+             //?} else {
+            /*BlockGetter level,
+            *///?}
+
+            BlockPos pos,
+            BlockState state
+    ) {
         return this.getSpecies().getSeedStack(1);
     }
 
     @Override
-    public List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootParams.Builder builder) {
+    public List<ItemStack> getDrops(
+            @NotNull BlockState state,
+
+            //? if >= 1.21 {
+            @NotNull LootParams.Builder builder
+            //? } else {
+            /*@NotNull  LootContext.Builder builder
+            *///? }
+    ) {
         if (!DTConfigs.SERVER.dynamicSaplingDrops.get())
             return Collections.emptyList();
         // If a loot table has been added load those drops instead.
+
+        //? if >= 1.21 {
         LootTable loottable = builder.getLevel().getServer().reloadableRegistries().getLootTable(getLootTable());
+         //? } else {
+        /*LootTable loottable = builder.getLevel().getServer().getLootTables().get(getLootTable());
+        *///? }
+
         if (loottable == LootTable.EMPTY)
             return Collections.singletonList(this.getSpecies().getSeedStack(1));
 
@@ -185,5 +264,10 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
         return species.shouldReplaceSaplingWhenGrown(sapling);
     }
 
-
+    //? if < 1.21 {
+    /*@Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
+    }
+    *///? }
 }

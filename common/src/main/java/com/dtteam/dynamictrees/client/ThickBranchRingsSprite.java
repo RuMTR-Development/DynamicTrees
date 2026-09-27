@@ -2,9 +2,12 @@ package com.dtteam.dynamictrees.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.SpriteContents;
+import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.ArrayList;
 
 
 public class ThickBranchRingsSprite extends SpriteContents {
@@ -16,7 +19,11 @@ public class ThickBranchRingsSprite extends SpriteContents {
     };
 
     public ThickBranchRingsSprite(ResourceLocation name, SpriteContents originalSprite){
+        //? if >= 1.21 {
         super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), originalSprite.metadata());
+        //? } else {
+        /*super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), new AnimationMetadataSection(new ArrayList<>(), 0, 0, 0, false));
+        *///? }
     }
 
     private static FrameSize getFrameSize(SpriteContents sprite){

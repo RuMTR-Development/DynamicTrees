@@ -9,7 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -21,11 +20,18 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.material.PushReaction;import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+
+//? if >= 1.21 {
+
+import net.minecraft.world.ItemInteractionResult;
+//? } else {
+
+//? }
 
 public class FruitBlock extends Block implements BonemealableBlock, Growable {
 
@@ -55,7 +61,14 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+
+    //? if >= 1.21 {
+    protected
+    //?} else {
+    /*public
+    *///?}
+
+    void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         doTick(state, level, pos, random);
     }
 
@@ -163,7 +176,16 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
 //    }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(
+            //? if >= 1.21 {
+            LevelReader level,
+             //?} else {
+            /*BlockGetter level,
+            *///?}
+
+            BlockPos pos,
+            BlockState state
+    ) {
         return fruit.getItemStack();
     }
 
@@ -176,17 +198,40 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
         return false;
     }
 
+    //? if >= 1.21 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return harvest(state, level, pos) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         return harvest(state, level, pos) ? InteractionResult.SUCCESS : InteractionResult.PASS;
     }
+    //? } else {
+    /*@Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (stack.isEmpty()) {
+            return harvest(state, level, pos) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+        } else {
+            return harvest(state, level, pos) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+        }
+    }
+    *///? }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(
+            LevelReader levelReader,
+            BlockPos blockPos,
+            BlockState blockState
+
+            //? if < 1.21 {
+            /*,
+            boolean isClient
+            *///?}
+    ) {
         return fruit.canBoneMeal() && getAge(blockState) < fruit.getMaxAge();
     }
 
@@ -220,8 +265,22 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
         level.setBlock(pos, state.setValue(fruit.getAgeProperty(), newAge), 2);
     }
 
+    //? if >= 1.21 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
+    //? } else {
+    /*@Override
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
+        return false;
+    }
+    *///? }
+
+    //? if < 1.21 {
+    /*@Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
+    }
+    *///? }
 }

@@ -1,9 +1,8 @@
 package com.dtteam.dynamictrees.treepack;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.FileUtil;
+import com.mojang.serialization.DataResult;import net.minecraft.FileUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.resources.IoSupplier;
@@ -14,9 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Set;
+import java.util.List;import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+//? if >= 1.21 {
+import net.minecraft.server.packs.PackLocationInfo;
+//? }
 
 /**
  * Credits: A lot of the file reading code was based off {@link PathPackResources}.
@@ -27,10 +30,18 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final Path root;
+
+    //? if >= 1.21 {
     public TreePackResources(PackLocationInfo location, Path root) {
         super(location, root);
         this.root = root;
     }
+    //? } else {
+    /*public TreePackResources(String name, Path root, boolean isBuiltin) {
+        super(name, root, isBuiltin);
+        this.root = root;
+    }
+    *///? }
 
     @Override
     public IoSupplier<InputStream> getResource(PackType packType, ResourceLocation location) {
@@ -45,12 +56,22 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
         return result;
     }
 
+    //? if >= 1.21 {
     @Override
     public void listResources(@Nullable PackType packType, String namespace, String path, ResourceOutput resourceOutput) {
         FileUtil.decomposePath(path)
                 .ifSuccess(parts -> net.minecraft.server.packs.PathPackResources.listPath(namespace, this.root.resolve(namespace).toAbsolutePath(), parts, resourceOutput))
                 .ifError(dataResult -> LOGGER.error("Invalid path {}: {}", path, dataResult.message()));
     }
+    //? } else {
+    /*@Override
+    public void listResources(@Nullable PackType packType, String namespace, String path, ResourceOutput resourceOutput) {
+        DataResult<List<String>> result = FileUtil.decomposePath(path);
+
+        result.result().ifPresent(parts -> net.minecraft.server.packs.PathPackResources.listPath(namespace, this.root.resolve(namespace).toAbsolutePath(), parts, resourceOutput));
+        result.error().ifPresent(dataResult -> LOGGER.error("Invalid path {}: {}", path, dataResult.message()));
+    }
+    *///? }
 
     @Override
     public Set<String> getNamespaces(@Nullable PackType type) {

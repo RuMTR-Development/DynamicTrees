@@ -5,8 +5,13 @@ import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.level.storage.loot.LootTable;
+
+//? if >= 1.20 {
+import net.minecraft.server.ReloadableServerRegistries;
+//?} else {
+/*import net.minecraft.world.level.storage.loot.LootTables;
+*///?}
 
 /**
  * @author Harley O'Connor
@@ -23,13 +28,22 @@ public final class LootTableSupplier {
         this.baseName = ResourceLocationUtils.prefix(name, path);
     }
 
+    //? if >= 1.20 {
     public LootTable get(ReloadableServerRegistries.Holder lootTables, Species species) {
         final LootTable speciesOverrideTable = lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, getName(species)));
         if (speciesOverrideTable != LootTable.EMPTY) {
             return speciesOverrideTable;
         }
         return lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, baseName));
+    }//?} else {
+    /*public LootTable get(LootTables lootTables, Species species) {
+        final LootTable speciesOverrideTable = lootTables.get(getName(species));
+        if (speciesOverrideTable != LootTable.EMPTY) {
+            return speciesOverrideTable;
+        }
+        return lootTables.get(baseName);
     }
+    *///?}
 
     public ResourceLocation getName(Species species) {
         final ResourceLocation speciesName = species.getRegistryName();

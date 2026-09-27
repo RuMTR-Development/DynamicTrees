@@ -35,9 +35,18 @@ public final class ResourceLocationDeserializer implements JsonDeserializer<Reso
     }
 
     public static boolean isValidResourceLocation(String loc) {
+        //? if >= 1.21 {
         final ResourceLocation resLoc = ResourceLocation.parse(loc);
         return ResourceLocation.isValidNamespace(StringUtils.isEmpty(resLoc.getNamespace()) ? "minecraft" : resLoc.getNamespace())
                 && ResourceLocation.isValidPath(resLoc.getPath());
+        //? } else {
+        /*try {
+            new ResourceLocation(loc);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+        *///? }
     }
 
     private ResourceLocation decode(final String resLocStr) {
@@ -50,7 +59,11 @@ public final class ResourceLocationDeserializer implements JsonDeserializer<Reso
             }
         }
 
+        //? if >= 1.21 {
         return ResourceLocation.fromNamespaceAndPath(namespaceAndPath[0], namespaceAndPath[1]);
+        //? } else {
+        /*return new ResourceLocation(namespaceAndPath[0], namespaceAndPath[1]);
+        *///? }
     }
 
     public static ResourceLocationDeserializer create() {

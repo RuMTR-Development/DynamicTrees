@@ -226,7 +226,15 @@ public class ChunkTreeHelper {
     }
 
     public static boolean canCheckSurroundings(LevelAccessor accessor, BlockPos pos, int r) {
-        return canCheckSurroundings(accessor, AABB.encapsulatingFullBlocks(pos.offset(-r, -r, -r), pos.offset(r, r, r)));
+        return canCheckSurroundings(
+                accessor,
+
+                //? if >= 1.21 {
+                AABB.encapsulatingFullBlocks(pos.offset(-r, -r, -r), pos.offset(r, r, r))
+                //? } else {
+                /*new AABB(pos.offset(-r, -r, -r), pos.offset(r, r, r))
+                *///? }
+        );
     }
 
     public static boolean isSurroundedByLoadedChunks(Level level, BlockPos pos) {

@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.data.worldgen.ProcessorLists;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
@@ -19,6 +18,12 @@ import org.apache.logging.log4j.Logger;
 import static net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool.Projection.RIGID;
 import static net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool.Projection.TERRAIN_MATCHING;
 
+//? if >= 1.21 {
+import net.minecraft.data.worldgen.BootstrapContext;
+//? } else {
+/*import net.minecraft.data.worldgen.BootstapContext;
+*///? }
+
 /**
  * @author Harley O'Connor
  */
@@ -27,7 +32,15 @@ public final class VillageTreeReplacement {
     public static final Logger LOGGER = LogManager.getLogger();
     private static final String REPLACEMENT_TOWN_CENTER_ID = DynamicTrees.location("village/plains/town_centers/plains_meeting_point_3").toString();
 
-    public static void replaceTreesFromVanillaVillages(HolderLookup.Provider vanillaProvider, BootstrapContext<StructureTemplatePool> context) {
+    public static void replaceTreesFromVanillaVillages(
+            HolderLookup.Provider vanillaProvider,
+
+            //? if >= 1.21 {
+            BootstrapContext<StructureTemplatePool> context
+            //? } else {
+            /*BootstapContext<StructureTemplatePool> context
+            *///? }
+    ) {
         // Replace Oak tree in Plains village town center.
         HolderLookup.RegistryLookup<StructureProcessorList> processorLists = vanillaProvider.lookupOrThrow(Registries.PROCESSOR_LIST);
         final TreePoolElement townCenterTreePattern = new TreePoolElement(Species.REGISTRY.get(DynamicTrees.OAK), new BlockPos(5, 1, 5) /*new BlockPos(0, 1, 0)*/, RIGID);

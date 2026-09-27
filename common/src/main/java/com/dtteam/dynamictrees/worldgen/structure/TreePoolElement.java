@@ -23,12 +23,15 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.List;
 import java.util.function.Function;
+
+//? if >= 1.21 {
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
+ //? }
 
 /**
  * @author Harley O'Connor
@@ -95,11 +98,19 @@ public final class TreePoolElement extends StructurePoolElement {
         return Vec3i.ZERO;
     }
 
+    //? if >= 1.21.1 {
     @Override
-    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox boundingBox, RandomSource randomSource, LiquidSettings liquidSettings, boolean b) {
+    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox box, RandomSource random, LiquidSettings liquidSettings, boolean b) {
         species.plantSapling(level, blockPos, true);
         return true;
     }
+    //? } else {
+    /*@Override
+    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox box, RandomSource random, boolean b) {
+        species.plantSapling(level, blockPos, true);
+        return true;
+    }
+    *///? }
 
     private int getOffsetX(Rotation rotation) {
         return offset.getX() * (rotation.rotation().inverts(Direction.Axis.X) ? -1 : 1);

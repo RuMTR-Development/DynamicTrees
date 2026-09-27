@@ -1,9 +1,7 @@
 package com.dtteam.dynamictrees.registry;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -33,6 +31,13 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+//? if >= 1.21 {
+import net.minecraft.core.component.DataComponentType;
+import com.mojang.serialization.MapCodec;
+//? } else {
+/*import net.minecraft.world.level.storage.loot.Serializer;
+*///? }
+
 public abstract class RegistryLoader {
 
     abstract public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, CreativeModeTab.DisplayItemsGenerator displayItems);
@@ -49,16 +54,26 @@ public abstract class RegistryLoader {
 
     abstract public Supplier<SoundEvent> registerSoundEvent(String name);
 
+    //? if >= 1.21 {
     abstract public <T> Supplier<DataComponentType<T>> registerDataComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> operator);
+    //? }
 
     abstract public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>>
     Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo);
 
+    //? if >= 1.21 {
     abstract public Supplier<LootItemConditionType> registerLootConditionType(String name, MapCodec<? extends LootItemCondition> serializerFactory);
 
     abstract public Supplier<LootPoolEntryType> registerLootPoolEntryType(String name, MapCodec<? extends LootPoolEntryContainer> serializerFactory);
 
     abstract public <L extends LootItemFunction> Supplier<LootItemFunctionType<L>> registerLootFunctionType(String name, MapCodec<L> serializerFactory);
+    //? } else {
+    /*abstract public Supplier<LootItemConditionType> registerLootConditionType(String name, Serializer<? extends LootItemCondition> serializerFactory);
+
+    abstract public Supplier<LootPoolEntryType> registerLootPoolEntryType(String name, Serializer<? extends LootPoolEntryContainer> serializerFactory);
+
+    abstract public <L extends LootItemFunction> Supplier<LootItemFunctionType> registerLootFunctionType(String name, Serializer<L> serializerFactory);
+    *///? }
 
     abstract public <T extends PlacementModifier> Supplier<PlacementModifierType<T>> registerPlacementModifierType(String name, Supplier<PlacementModifierType<T>> supplier);
 

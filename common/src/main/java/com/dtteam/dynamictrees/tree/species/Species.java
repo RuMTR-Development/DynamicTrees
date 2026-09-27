@@ -86,7 +86,6 @@ import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -107,7 +106,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
@@ -124,6 +122,15 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+
+//? if >= 1.20 {
+import net.minecraft.server.ReloadableServerRegistries;
+import net.minecraft.world.level.storage.loot.LootParams;
+//?} else {
+/*import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+*///?}
 
 public class Species extends RegistryEntry<Species> implements Resettable<Species> {
 
@@ -563,7 +570,11 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         if (seedName == null) {
             return ResourceLocationUtils.suffix(getRegistryName(), "_seed");
         } else {
+            //? if >= 1.20 {
             return ResourceLocation.fromNamespaceAndPath(getRegistryName().getNamespace(), seedName);
+            //?} else {
+            /*return new ResourceLocation(getRegistryName().getNamespace(), seedName);
+            *///?}
         }
     }
 
@@ -604,10 +615,19 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
             return Collections.emptyList();
         }
         if (level.getServer() == null) return List.of();
-        return getLootTable(level.getServer().reloadableRegistries(), species -> species.voluntaryDropsPath.get())
-                .getRandomItems(createVoluntaryLootParams(level, rootPos, fertility));
+        return getLootTable(
+            //? if >= 1.20 {
+            level.getServer().reloadableRegistries(),
+            //?} else {
+            /*level.getServer().getLootTables(),
+            *///?}
+
+            species -> species.voluntaryDropsPath.get()
+        ).getRandomItems(createVoluntaryLootParams(level, rootPos, fertility));
     }
 
+
+    //? if >= 1.20 {
     private LootParams createVoluntaryLootParams(Level level, BlockPos rootPos, int fertility) {
         return new LootParams.Builder(LevelContext.getServerLevelOrThrow(level))
                 .withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(rootPos))
@@ -616,11 +636,29 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
                 .withParameter(DTLootContextParams.FERTILITY, fertility)
                 .create(DTLootParameterSets.VOLUNTARY);
     }
+    //?} else {
+    /*private LootContext createVoluntaryLootParams(Level level, BlockPos rootPos, int fertility) {
+        return new LootContext.Builder(LevelContext.getServerLevelOrThrow(level))
+                .withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(rootPos))
+                .withParameter(DTLootContextParams.SEASONAL_SEED_DROP_FACTOR,
+                        seasonalSeedDropFactor(LevelContext.create(level), rootPos))
+                .withParameter(DTLootContextParams.FERTILITY, fertility)
+                .create(DTLootParameterSets.VOLUNTARY);
+    }
+    *///?}
 
+    //? if >= 1.20 {
     public LootTable getLootTable(ReloadableServerRegistries.Holder lootTables, Function<Species, ResourceLocation> nameFunction) {
         final LootTable table = lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, nameFunction.apply(this)));
         return table == LootTable.EMPTY ? (this.isCommonSpecies() ? lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, nameFunction.apply(getCommonSpecies()))) : LootTable.EMPTY) : table;
     }
+    //?} else {
+    /*public LootTable getLootTable(LootTables lootTables, Function<Species, ResourceLocation> nameFunction) {
+        final LootTable table = lootTables.get(nameFunction.apply(this));
+        return table == LootTable.EMPTY ? (this.isCommonSpecies() ? lootTables.get(nameFunction.apply(getCommonSpecies())) : LootTable.EMPTY) : table;
+    }
+    *///?}
+
 
     public List<ItemStack> getBranchesDrops(Level level, NetVolumeNode.Volume volume) {
         return getBranchesDrops(level, volume, ItemStack.EMPTY);
@@ -656,10 +694,18 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     private List<ItemStack> getDropsForBranchType(Level level, ItemStack tool, @Nullable Float explosionRadius,
                                                   int branchVolume, BranchBlock branchBlock) {
         if (level.getServer() == null) return List.of();
-        return branchBlock.getLootTable(level.getServer().reloadableRegistries(), this)
-                .getRandomItems(createBranchesLootParams(level, branchVolume, tool, explosionRadius));
+        return branchBlock.getLootTable(
+                //? if >= 1.20 {
+                level.getServer().reloadableRegistries(),
+                 //?} else {
+                /*level.getServer().getLootTables(),
+                *///?}
+
+                this
+        ).getRandomItems(createBranchesLootParams(level, branchVolume, tool, explosionRadius));
     }
 
+    //? if >= 1.21 {
     private LootParams createBranchesLootParams(Level level, int volume, ItemStack tool,
                                                   @Nullable Float explosionRadius) {
         return new LootParams.Builder(LevelContext.getServerLevelOrThrow(level))
@@ -668,7 +714,17 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
                 .withParameter(DTLootContextParams.VOLUME, volume)
                 .withOptionalParameter(LootContextParams.EXPLOSION_RADIUS, explosionRadius)
                 .create(DTLootParameterSets.BRANCHES);
+    }//?} else {
+    /*private LootContext createBranchesLootParams(Level level, int volume, ItemStack tool,
+                                                @Nullable Float explosionRadius) {
+        return new LootContext.Builder(LevelContext.getServerLevelOrThrow(level))
+                .withParameter(LootContextParams.TOOL, tool)
+                .withParameter(DTLootContextParams.SPECIES, this)
+                .withParameter(DTLootContextParams.VOLUME, volume)
+                .withOptionalParameter(LootContextParams.EXPLOSION_RADIUS, explosionRadius)
+                .create(DTLootParameterSets.BRANCHES);
     }
+    *///?}
 
     /**
      * Cleans specified drop list by dividing any stacks with a count exceeding the maximum stack size into multiple
@@ -993,7 +1049,11 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         if (saplingName == null) {
             return ResourceLocationUtils.suffix(this.getRegistryName(), "_sapling");
         } else {
+            //? if >= 1.21 {
             return ResourceLocation.fromNamespaceAndPath(getRegistryName().getNamespace(), saplingName);
+            //?} else {
+            /*return new ResourceLocation(getRegistryName().getNamespace(), saplingName);
+            *///?}
         }
     }
 
@@ -1852,7 +1912,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     public int getSeasonalTooltipFlags(LevelContext levelContext, Player player) {
         if (showSeasonalTooltip()) {
             BlockPos playerPos = BlockPos.containing(player.position());
-            ClimateZoneType climate = ClimateHelper.getClimate(player.level(), playerPos);
+            ClimateZoneType climate = ClimateHelper.getClimate(player.level, playerPos);
             float suitability = (float) (DTConfigs.SERVER.climateAffectsFruitsAndPods.get()
                     ? ClimateHelper.climateMultiplier(this, climate, climateTolerance) : 1.0);
             if (suitability < 0.3) return 0; //No seasons, still display
@@ -2087,7 +2147,11 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     }
 
     public boolean leavesAreSolid() {
+        //? if >= 1.21 {
         return getLeavesProperties().getPrimitiveLeaves().isSolid();
+        //?} else {
+        /*return getLeavesProperties().getPrimitiveLeaves().getMaterial().isSolidBlocking();
+        *///?}
     }
 
     public float falloverParticleFlingMultiplier(){

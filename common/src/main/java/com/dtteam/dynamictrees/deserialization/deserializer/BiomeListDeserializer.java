@@ -46,7 +46,11 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         tagRegex = tagRegex.replaceAll("#","");
 
         try {
+            //? if >= 1.21 {
             ResourceLocation tagLocation = ResourceLocation.parse(tagRegex);
+            //? } else {
+            /*ResourceLocation tagLocation = new ResourceLocation(tagRegex);
+            *///? }
             TagKey<Biome> tagKey = TagKey.create(Registries.BIOME, tagLocation);
 
             // TODO UPDATE: This is used as a regex in 1.19.2. Double check!!!

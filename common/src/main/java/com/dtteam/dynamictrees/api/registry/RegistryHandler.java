@@ -33,7 +33,11 @@ public abstract class RegistryHandler extends RegistryEntry<RegistryHandler> {
      * @return The {@link RegistryHandler} object.
      */
     public static RegistryHandler get(final String modId) {
+        //? if >= 1.21 {
         return REGISTRY.get(ResourceLocation.fromNamespaceAndPath(modId, modId));
+        //? } else {
+        /*return REGISTRY.get(new ResourceLocation(modId, modId));
+        *///? }
     }
 
     /**

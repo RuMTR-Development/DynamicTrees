@@ -1,6 +1,7 @@
 package com.dtteam.dynamictrees.worldgen;
 
 import com.dtteam.dynamictrees.api.worldgen.GroundFinder;
+import com.dtteam.dynamictrees.block.sapling.DynamicSaplingBlock;
 import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +26,11 @@ public class SubterraneanGroundFinder implements GroundFinder {
     private static final List<BlockPos> NO_LAYERS = Collections.singletonList(BlockPos.ZERO);
 
     protected boolean isReplaceable(final LevelAccessor level, final BlockPos pos) {
+        //? if >= 1.21 {
         return (level.isEmptyBlock(pos) || level.getBlockState(pos).is(BlockTags.REPLACEABLE_BY_TREES)) && level.getBlockState(pos).getFluidState().isEmpty();
+        //? } else {
+        /*return (level.isEmptyBlock(pos) || !level.getBlockState(pos).getMaterial().blocksMotion() || level.getBlockState(pos).getBlock() instanceof DynamicSaplingBlock) && !level.getBlockState(pos).getMaterial().isLiquid();
+        *///? }
     }
 
     protected int getTopY(final LevelAccessor level, final BlockPos pos) {
@@ -56,7 +61,7 @@ public class SubterraneanGroundFinder implements GroundFinder {
 
         // Discard the last result as it's just the top of the biome(bedrock for nether)
         if (!layers.isEmpty()) {
-            layers.removeLast();
+            layers.remove(layers.size() - 1);
         }
 
         return layers;
@@ -72,7 +77,15 @@ public class SubterraneanGroundFinder implements GroundFinder {
         for (int y : layers) {
             BlockPos pos = new BlockPos(start.getX(), y, start.getZ());
             //We only want positions for underground biomes and underground dimensions
-            if (level.dimensionType().hasCeiling() || level.getBiome(pos).is(TagKey.create(Registries.BIOME, ResourceLocation.parse("c:is_underground"))))
+            if (level.dimensionType().hasCeiling() || level.getBiome(pos).is(TagKey.create(
+                    Registries.BIOME,
+
+                    //? if >= 1.21 {
+                    ResourceLocation.parse("c:is_underground")
+                    //? } else {
+                    /*new ResourceLocation("c:is_underground")
+                    *///? }
+            )))
                 positions.add(pos);
         }
 

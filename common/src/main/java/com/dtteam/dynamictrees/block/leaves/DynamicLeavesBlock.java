@@ -39,17 +39,22 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+
+//? if >= 1.21 {
+
+import net.minecraft.world.level.storage.loot.LootParams;
+//? } else {
+/*import net.minecraft.world.level.storage.loot.LootContext;
+*///? }
 
 public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable {
 
@@ -62,7 +67,12 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     }
 
     public DynamicLeavesBlock(Properties properties) {
+        //? if >= 1.21 {
         super(properties.pushReaction(PushReaction.DESTROY));
+         //? } else {
+        /*super(properties);
+        *///? }
+
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, LeavesProperties.maxHydro).setValue(PERSISTENT, false).setValue(WATERLOGGED, false));
     }
 
@@ -107,7 +117,16 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(
+            //? if >= 1.21 {
+            LevelReader level,
+             //?} else {
+            /*BlockGetter level,
+            *///?}
+
+            BlockPos pos,
+            BlockState state
+    ) {
         return getLeavesProperties().getPrimitiveLeavesItemStack();
     }
 
@@ -141,7 +160,14 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+
+    //? if >= 1.21 {
+    protected
+    //?} else {
+    /*public
+    *///?}
+
+    void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         BlockState neighborState = level.getBlockState(neighborPos);
         boolean sideIsLeaves = neighborState.hasProperty(DISTANCE);
         int sideHydro = sideIsLeaves ? neighborState.getValue(DISTANCE) : 0;
@@ -309,7 +335,17 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         if (block instanceof DoublePlantBlock && blockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER &&
                 stateDown.getBlock() instanceof DoublePlantBlock && stateDown.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER) {
             if (block == Blocks.TALL_GRASS) {
-                level.setBlock(pos.below(), Blocks.SHORT_GRASS.defaultBlockState(), 3);
+                level.setBlock(
+                        pos.below(),
+
+                        //? if >= 1.21 {
+                        Blocks.SHORT_GRASS.defaultBlockState(),
+                         //? } else {
+                        /*Blocks.GRASS.defaultBlockState(),
+                        *///? }
+
+                        3
+                );
             } else if (block == Blocks.LARGE_FERN) {
                 level.setBlock(pos.below(), Blocks.FERN.defaultBlockState(), 3);
             }
@@ -670,7 +706,15 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
      * @return The {@link List} of {@link ItemStack}s to drop.
      */
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public List<ItemStack> getDrops(
+            BlockState state,
+
+            //? if >= 1.21 {
+            LootParams.Builder builder
+             //? } else {
+            /*LootContext.Builder builder
+            *///? }
+    ) {
         final Vec3 originPos = builder.getOptionalParameter(LootContextParams.ORIGIN);
         final LootTable lootTable;
         Species species = Species.NULL_SPECIES;
@@ -678,23 +722,57 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         ServerLevel level = builder.getLevel();
 
         if (originPos == null) {
+            //? if >= 1.21 {
             lootTable = level.getServer().reloadableRegistries().getLootTable(getLootTable());
+             //? } else {
+            /*lootTable = level.getServer().getLootTables().get(getLootTable());
+            *///? }
         } else {
             pos = BlockPos.containing(originPos.x, originPos.y, originPos.z);
             LeavesProperties leavesProperties = getLeavesProperties();
             species = getExactSpecies(level, pos, leavesProperties);
-            lootTable = leavesProperties.getBlockLootTable(level.getServer().reloadableRegistries(), species);
+            lootTable = leavesProperties.getBlockLootTable(
+                    //? if >= 1.21 {
+                    level.getServer().reloadableRegistries(),
+                     //? } else {
+                    /*level.getServer().getLootTables(),
+                    *///? }
+
+                    species
+            );
         }
 
         if (lootTable == LootTable.EMPTY) {
             return Collections.emptyList();
         } else {
+            //? if >= 1.21 {
             LootParams context = createLootParams(state, builder, species, level, pos);
+             //? } else {
+            /*LootContext context = createLootParams(state, builder, species, level, pos);
+            *///? }
+
             return lootTable.getRandomItems(context);
         }
     }
 
-    private LootParams createLootParams(BlockState state, LootParams.Builder builder, Species species, ServerLevel level, BlockPos pos) {
+    //? if >= 1.21 {
+    private LootParams createLootParams
+     //? } else {
+    /*private LootContext createLootParams
+    *///? }
+    (
+            BlockState state,
+
+            //? if >= 1.21 {
+            LootParams.Builder builder,
+             //? } else {
+            /*LootContext.Builder builder,
+            *///? }
+
+            Species species,
+            ServerLevel level,
+            BlockPos pos
+    ) {
         return builder.withParameter(LootContextParams.BLOCK_STATE, state)
                 .withParameter(DTLootContextParams.SPECIES, species)
                 .withParameter(DTLootContextParams.SEASONAL_SEED_DROP_FACTOR,
@@ -740,7 +818,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         }
 
         // Find the closest one
-        BlockPos closest = branchList.getFirst();
+        BlockPos closest = branchList.get(0);
         double minDist = 999;
 
         for (BlockPos dPos : branchList) {
@@ -807,4 +885,10 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         }
     }
 
+    //? if < 1.21 {
+    /*@Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
+    }
+    *///? }
 }

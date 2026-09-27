@@ -38,7 +38,11 @@ public class TagKeyJsonPropertyApplier<K, O, V> extends PropertyApplier<O, Float
             return null;
 
         try {
+            //? if >= 1.21 {
             TagKey<K> tagKey = TagKey.create(this.registryKey, ResourceLocation.parse(key.charAt(0) == '#' ? key.substring(1) : key));
+            //? } else {
+            /*TagKey<K> tagKey = TagKey.create(this.registryKey, new ResourceLocation(key.charAt(0) == '#' ? key.substring(1) : key));
+            *///? }
             return JsonDeserializers.getOrThrow(Float.class).deserialize(input).map(value -> this.tagKeyFunction.apply(tagKey, (O) object, value))
                     .orElseApply(
                             PropertyApplierResult::failure,

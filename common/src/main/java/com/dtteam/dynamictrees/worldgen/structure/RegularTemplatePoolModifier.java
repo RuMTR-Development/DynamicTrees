@@ -3,15 +3,18 @@ package com.dtteam.dynamictrees.worldgen.structure;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
-/**
- * @author Harley O'Connor
- */
+//? if >= 1.21 {
+import net.minecraft.data.worldgen.BootstrapContext;
+ //? } else {
+/*import net.minecraft.data.worldgen.BootstapContext;
+*///? }
+
+// @author Harley O'Connor
 public class RegularTemplatePoolModifier implements TemplatePoolModifier {
     private final ResourceKey<StructureTemplatePool> key;
     private final StructureTemplatePool templatePool;
@@ -49,12 +52,23 @@ public class RegularTemplatePoolModifier implements TemplatePoolModifier {
     }
 
     @Override
-    public void registerPool(BootstrapContext<StructureTemplatePool> context) {
+    public void registerPool(
+            //? if >= 1.21 {
+            BootstrapContext<StructureTemplatePool> context
+             //? } else {
+            /*BootstapContext<StructureTemplatePool> context
+            *///? }
+    ) {
         context.register(this.key, this.templatePool);
     }
 
     public static TemplatePoolModifier village(HolderLookup.Provider lookupProvider, String type, String patternGroup) {
+        //? if >= 1.21 {
         ResourceLocation patternName = ResourceLocation.parse("village/" + type + "/" + patternGroup);
+        //? } else {
+        /*ResourceLocation patternName = new ResourceLocation("village/" + type + "/" + patternGroup);
+        *///? }
+
         return create(lookupProvider, ResourceKey.create(Registries.TEMPLATE_POOL, patternName));
     }
 

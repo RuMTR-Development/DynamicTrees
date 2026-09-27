@@ -14,6 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -157,7 +159,12 @@ public class BeeNestGenFeature extends GenFeature {
     }
 
     protected void storeBee(RandomSource random, BeehiveBlockEntity blockEntity) {
+        //? if >= 1.21 {
         blockEntity.storeBee(BeehiveBlockEntity.Occupant.create(random.nextInt(599)));
+        //? } else {
+        /*Bee entity = new Bee(EntityType.BEE, blockEntity.getLevel());
+        blockEntity.addOccupantWithPresetTicks(entity, false, random.nextInt(599));
+        *///? }
     }
 
     protected boolean nestAlreadyPresent(LevelAccessor world, Block nestBlock, BlockPos rootPos, int maxHeight) {

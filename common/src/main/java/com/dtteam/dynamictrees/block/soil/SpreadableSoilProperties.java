@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +22,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+//? if >= 1.21 {
+import net.minecraft.world.ItemInteractionResult;
+//? } else {
+/*import net.minecraft.world.InteractionResult;
+*///? }
 
 /**
  * @author Max Hyper
@@ -80,8 +85,18 @@ public class SpreadableSoilProperties extends SoilProperties {
             return SoilHelper.getProperties(block).getBlock();
         }
 
+        //? if >= 1.20 {
         @Override
         protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        //?} else {
+        /*@Deprecated
+        public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+            ItemStack stack = player.getItemInHand(hand);
+
+            if (stack.isEmpty()) {
+                return super.use(state, level, pos, player, hand, hitResult);
+            }
+        *///?}
             SpreadableSoilProperties properties = getSoilProperties();
             if (properties.spread_item != null) {
                 ItemStack handStack = player.getItemInHand(hand);
@@ -105,11 +120,21 @@ public class SpreadableSoilProperties extends SoilProperties {
                             handStack.shrink(1);
                         }
                         ParticleHelper.spawnParticles(level, ParticleTypes.HAPPY_VILLAGER, pos.above(), 2 + level.random.nextInt(5), level.random);
+                        //? if >= 1.21 {
                         return ItemInteractionResult.SUCCESS;
+                        //? } else {
+                        /*return InteractionResult.SUCCESS;
+                        *///? }
                     }
                 }
             }
-            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+
+            //? if >= 1.21 {
+             return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+             
+            //? } else {
+            /*return super.use(state, level, pos, player, hand, hitResult);
+            *///? }
         }
 
         @Override

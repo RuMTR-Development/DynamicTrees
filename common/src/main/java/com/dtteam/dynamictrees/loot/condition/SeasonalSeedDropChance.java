@@ -3,6 +3,9 @@ package com.dtteam.dynamictrees.loot.condition;
 import com.dtteam.dynamictrees.config.DTConfigs;
 import com.dtteam.dynamictrees.loot.DTLootContextParams;
 import com.dtteam.dynamictrees.registry.DTRegistries;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -15,11 +18,25 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
  * @author Harley O'Connor
  */
 public final class SeasonalSeedDropChance implements LootItemCondition {
-
+    //? if >= 1.21 {
     public static final MapCodec<SeasonalSeedDropChance> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
                     .group(Codec.EMPTY.forGetter(a-> Unit.INSTANCE))
                     .apply(instance, SeasonalSeedDropChance::new));
+    //? } else {
+    /*public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SeasonalSeedDropChance> {
+
+        @Override
+        public void serialize(JsonObject json, SeasonalSeedDropChance value, JsonSerializationContext serializationContext) {
+
+        }
+
+        @Override
+        public SeasonalSeedDropChance deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
+            return new SeasonalSeedDropChance(Unit.INSTANCE);
+        }
+    }
+    *///? }
 
     private SeasonalSeedDropChance(Unit unit) {
     }

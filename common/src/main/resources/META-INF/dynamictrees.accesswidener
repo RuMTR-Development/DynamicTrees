@@ -4,7 +4,13 @@ mutable field net/minecraft/world/level/block/Block stateDefinition Lnet/minecra
 accessible method net/minecraft/world/level/PathNavigationRegion getChunk (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/ChunkAccess;
 accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
 accessible field net/minecraft/world/level/storage/loot/parameters/LootContextParamSets REGISTRY Lcom/google/common/collect/BiMap;
+
+#? if >= 1.21 {
 accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType <init> (Lcom/mojang/serialization/MapCodec;)V
+#? } else {
+#accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType <init> (Lcom/mojang/serialization/Codec;)V
+#? }
+
 accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool rawTemplates Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool templates Lit/unimi/dsi/fastutil/objects/ObjectArrayList;
 accessible field net/minecraft/world/item/crafting/RecipeManager byType Lcom/google/common/collect/Multimap;
@@ -22,3 +28,5 @@ accessible class net/minecraft/data/tags/IntrinsicHolderTagsProvider$IntrinsicTa
 accessible method net/minecraft/client/renderer/texture/SpriteContents metadata ()Lnet/minecraft/server/packs/resources/ResourceMetadata;
 accessible field net/minecraft/client/renderer/texture/SpriteContents originalImage Lcom/mojang/blaze3d/platform/NativeImage;
 accessible method net/minecraft/client/renderer/texture/atlas/SpriteSources register (Ljava/lang/String;Lcom/mojang/serialization/MapCodec;)Lnet/minecraft/client/renderer/texture/atlas/SpriteSourceType;
+
+accessible class net/minecraft/world/item/CreativeModeTab$Output

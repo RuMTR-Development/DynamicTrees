@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -30,6 +30,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.dtteam.dynamictrees.utility.ResourceLocationUtils.prefix;
+
+//? if > 1.21 {
+import net.minecraft.world.level.material.MapColor;
+//? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * @author Max Hyper
@@ -89,7 +95,11 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
         this(primitiveBlock, name);
         this.soilFlags = soilFlags;
         if (generate) {
+            //? if >= 1.21 {
             generateBlock(BlockBehaviour.Properties.ofFullCopy(primitiveBlock));
+            //? } else {
+            /*generateBlock(BlockBehaviour.Properties.copy(primitiveBlock));
+            *///? }
         }
     }
 
@@ -212,22 +222,40 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
     // MATERIAL
     ///////////////////////////////////////////
 
+    //? if >= 1.21 {
     @Deprecated(forRemoval = true)
     public MapColor getDefaultMapColor() {
         return MapColor.DIRT;
     }
+    //? } else {
+    /*@Deprecated(forRemoval = true)
+    public MaterialColor getDefaultMapColor() {
+        return MaterialColor.DIRT;
+    }
+    *///? }
 
     public BlockBehaviour.Properties getDefaultBlockProperties() {
+        //? if >= 1.21 {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.DIRT)
+        //? } else {
+        /*return BlockBehaviour.Properties.of(Material.DIRT, MaterialColor.DIRT)
+        *///? }
                 .sound(SoundType.GRAVEL)
                 .strength(0.5F);
     }
 
+    //? if >= 1.21 {
     @Deprecated(forRemoval = true)
     public BlockBehaviour.Properties getDefaultBlockProperties(final MapColor mapColor) {
-        return BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL);
+        return this.getDefaultBlockProperties();
     }
+    //? } else {
+    /*@Deprecated(forRemoval = true)
+    public BlockBehaviour.Properties getDefaultBlockProperties(final MaterialColor mapColor) {
+        return this.getDefaultBlockProperties();
+    }
+    *///? }
 
     ///////////////////////////////////////////
     // SOIL FLAGS

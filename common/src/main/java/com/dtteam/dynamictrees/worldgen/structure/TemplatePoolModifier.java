@@ -1,12 +1,15 @@
 package com.dtteam.dynamictrees.worldgen.structure;
 
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
-/**
- * @author Harley O'Connor
- */
+//? if >= 1.21 {
+import net.minecraft.data.worldgen.BootstrapContext;
+ //? } else {
+/*import net.minecraft.data.worldgen.BootstapContext;
+*///? }
+
+// @author Harley O'Connor
 public interface TemplatePoolModifier {
     TemplatePoolModifier replaceTemplate(int index, StructurePoolElement element);
 
@@ -14,5 +17,11 @@ public interface TemplatePoolModifier {
 
     void removeAllTemplates();
 
-    void registerPool(BootstrapContext<StructureTemplatePool> context);
+    void registerPool(
+        //? if >= 1.21 {
+        BootstrapContext<StructureTemplatePool> context
+         //? } else {
+        /*BootstapContext<StructureTemplatePool> context
+        *///? }
+    );
 }

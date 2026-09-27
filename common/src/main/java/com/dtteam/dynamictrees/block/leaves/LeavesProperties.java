@@ -32,7 +32,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -48,11 +47,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +59,18 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+//? if >= 1.21 {
+
+import net.minecraft.server.ReloadableServerRegistries;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootParams;
+//? } else {
+/*import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * This class provides a means of holding individual properties for leaves.  This is necessary since leaves can contain
@@ -227,9 +236,15 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         return blockLootTableSupplier.getName();
     }
 
+    //? if >= 1.21 {
     public LootTable getBlockLootTable(ReloadableServerRegistries.Holder lootTables, Species species) {
         return blockLootTableSupplier.get(lootTables, species);
     }
+    //? } else {
+    /*public LootTable getBlockLootTable(LootTables lootTables, Species species) {
+        return blockLootTableSupplier.get(lootTables, species);
+    }
+    *///? }
 
     public boolean shouldGenerateBlockDrops() {
         return shouldGenerateDrops();
@@ -248,9 +263,15 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         return lootTableSupplier.getName();
     }
 
+    //? if >= 1.21 {
     public LootTable getLootTable(ReloadableServerRegistries.Holder lootTables, Species species) {
         return lootTableSupplier.get(lootTables, species);
     }
+    //? } else {
+    /*public LootTable getLootTable(LootTables lootTables, Species species) {
+        return lootTableSupplier.get(lootTables, species);
+    }
+    *///? }
 
     public boolean shouldGenerateDrops() {
         return getPrimitiveLeavesBlock().isPresent();
@@ -265,10 +286,18 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
             return Collections.emptyList();
         }
         if (level.getServer() == null) return List.of();
-        return getLootTable(level.getServer().reloadableRegistries(), species)
-                .getRandomItems(createLootParams(level, pos, tool, species));
+        return getLootTable(
+                //? if >= 1.21 {
+                level.getServer().reloadableRegistries(),
+                //? } else {
+                /*level.getServer().getLootTables(),
+                *///? }
+
+                species
+        ).getRandomItems(createLootParams(level, pos, tool, species));
     }
 
+    //? if >= 1.21 {
     private LootParams createLootParams(Level level, BlockPos pos, ItemStack tool, Species species) {
         return new LootParams.Builder(LevelContext.getServerLevelOrThrow(level))
                 .withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
@@ -277,6 +306,16 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
                 .withParameter(LootContextParams.TOOL, tool)
                 .create(DTLootParameterSets.LEAVES);
     }
+    //? } else {
+    /*private LootContext createLootParams(Level level, BlockPos pos, ItemStack tool, Species species) {
+        return new LootContext.Builder(LevelContext.getServerLevelOrThrow(level))
+                .withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
+                .withParameter(DTLootContextParams.SPECIES, species)
+                .withParameter(DTLootContextParams.SEASONAL_SEED_DROP_FACTOR, species.seasonalSeedDropFactor(LevelContext.create(level), pos))
+                .withParameter(LootContextParams.TOOL, tool)
+                .create(DTLootParameterSets.LEAVES);
+    }
+    *///? }
 
     protected final MutableLazyValue<Generator<DTDataProvider.BlockState, LeavesProperties>> leavesStateGenerator =
             MutableLazyValue.supplied(blockStateGenerators.get(
@@ -571,6 +610,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         this.connectAnyRadius = connectAnyRadius;
     }
 
+    //? if >= 1.21 {
     @Deprecated(forRemoval = true)
     public MapColor getDefaultMapColor() {
         return MapColor.PLANT;
@@ -580,12 +620,26 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
     public BlockBehaviour.Properties getDefaultBlockProperties(final MapColor mapColor) {
         return getDefaultBlockProperties();
     }
+    //? } else {
+    /*public MaterialColor getDefaultMapColor() {
+        return MaterialColor.PLANT;
+    }
+
+    @Deprecated(forRemoval = true)
+    public BlockBehaviour.Properties getDefaultBlockProperties(final MaterialColor mapColor) {
+        return getDefaultBlockProperties();
+    }
+    *///? }
 
     public BlockBehaviour.Properties getDefaultBlockProperties() {
+        //? if >= 1.21 {
         return BlockBehaviour.Properties.of()
-                .mapColor(MapColor.PLANT)
                 .ignitedByLava()
                 .pushReaction(PushReaction.DESTROY)
+                .forceSolidOn()
+        //? } else {
+        /*return BlockBehaviour.Properties.of(Material.LEAVES, MaterialColor.PLANT)
+        *///? }
                 .strength(0.2F)
                 .randomTicks()
                 .sound(SoundType.GRASS)
@@ -593,8 +647,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
                 .isValidSpawn((s, r, p, e) -> e == EntityType.OCELOT || e == EntityType.PARROT)
                 .isSuffocating((s, r, p) -> false)
                 .isViewBlocking((s, r, p) -> false)
-                .isRedstoneConductor((s, r, p) -> false)
-                .forceSolidOn();
+                .isRedstoneConductor((s, r, p) -> false);
     }
 
     ///////////////////////////////////////////

@@ -176,11 +176,25 @@ public class BasicBranchBlock extends BranchBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(
+            //? if >= 1.21 {
+            @Nullable Player player,
+            //? }
+
+            BlockGetter level,
+            BlockPos pos,
+            BlockState state,
+            Fluid fluid
+    ) {
         if (getRadius(state) > maxRadiusForWaterLogging) {
             return false;
         }
+
+        //? if >= 1.21 {
         return SimpleWaterloggedBlock.super.canPlaceLiquid(player, level, pos, state, fluid);
+        //? } else {
+        /*return SimpleWaterloggedBlock.super.canPlaceLiquid(level, pos, state, fluid);
+        *///? }
     }
 
     ///////////////////////////////////////////

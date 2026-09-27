@@ -5,6 +5,7 @@ import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.texture.SpriteContents;
+import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSourceType;
 import net.minecraft.resources.ResourceLocation;
@@ -33,8 +34,14 @@ public class ThickBranchRingsSource implements SpriteSource {
         Optional<Resource> optional = resourceManager.getResource(resourceLocation);
         if (optional.isPresent()) {
             ResourceLocation location = ResourceLocationUtils.suffix(this.resourceId, "_thick");
+
+            //? if >= 1.21 {
             output.add(location, (spriteLoader) -> {
                 SpriteContents base = spriteLoader.loadSprite(location, optional.get());
+            //? } else {
+            /*output.add(location, () -> {
+                SpriteContents base = SpriteLoader.loadSprite(location, optional.get());
+            *///? }
                 if (base == null) return null;
                 return new ThickBranchRingsSprite(location, base);
             });
@@ -49,7 +56,13 @@ public class ThickBranchRingsSource implements SpriteSource {
     }
 
     public static SpriteSourceType setType (MapCodec<ThickBranchRingsSource> codec){
-        TYPE = new SpriteSourceType(codec);
+        TYPE = new SpriteSourceType(
+                //? if >= 1.21 {
+                codec
+                //? } else {
+                /*codec.codec()
+                *///? }
+        );
         return TYPE;
     }
 

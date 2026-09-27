@@ -68,8 +68,11 @@ public abstract class AbstractResourcePreparer<R> implements ResourcePreparer<R>
         final int pathIndex = this.folderName.length() + 1;
         final int pathEndIndex = resourcePath.length() - this.extensionLength;
 
-        return ResourceLocation.fromNamespaceAndPath(location.getNamespace(),
-                resourcePath.substring(pathIndex, pathEndIndex));
+        //? if >= 1.21 {
+        return ResourceLocation.fromNamespaceAndPath(location.getNamespace(), resourcePath.substring(pathIndex, pathEndIndex));
+        //? } else {
+        /*return new ResourceLocation(location.getNamespace(), resourcePath.substring(pathIndex, pathEndIndex));
+        *///? }
     }
 
 }

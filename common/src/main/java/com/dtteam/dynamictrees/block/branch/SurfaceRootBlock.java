@@ -71,7 +71,16 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(
+            //? if >= 1.21 {
+            LevelReader level,
+             //?} else {
+            /*BlockGetter level,
+            *///?}
+
+            BlockPos pos,
+            BlockState state
+    ) {
         return this.family.getBranchItem().map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
@@ -257,7 +266,14 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+
+    //? if >= 1.21 {
+    protected
+    //?} else {
+    /*public
+    *///?}
+
+    void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
         if (!canBlockStay(level, pos, state)) {
             int thisRad = state.hasProperty(RADIUS) ? state.getValue(RADIUS) : 0;
@@ -268,6 +284,7 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
         }
     }
 
+    //? if >= 1.20 {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         BlockState destroyed = super.playerWillDestroy(level, pos, state, player);
@@ -276,7 +293,17 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
             updateDisconnectedRoot(level, pos, dir, thisRad);
         }
         return destroyed;
+    }//?} else {
+    /*@Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        super.playerWillDestroy(level, pos, state, player);
+
+        int thisRad = state.hasProperty(RADIUS) ? state.getValue(RADIUS) : 0;
+        for (Direction dir : CoordUtils.HORIZONTALS) {
+            updateDisconnectedRoot(level, pos, dir, thisRad);
+        }
     }
+    *///?}
 
     private void updateDisconnectedRoot(Level level, BlockPos pos, Direction dir, int thisRad) {
         final RootConnection conn = this.getSideConnectionRadius(level, pos, dir);

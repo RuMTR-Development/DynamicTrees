@@ -50,7 +50,12 @@ public final class VoxelShapeDeserializer implements JsonDeserializer<VoxelShape
                 .mapIfContains("function", String.class, functionId -> ShapeFunctions.calculateShape(
                         functionId,
                         getParametersJson(json)
-                ).getOrThrow())
+                ).getOrThrow(
+                        //? if < 1.21 {
+                        /*true,
+                        s -> {}
+                        *///? }
+                ))
                 .elseMapIfContains("shapes", JsonArray.class, shapes -> {
                     final BooleanOp operator = JsonHelper.getOrDefault(json, "operator", BooleanOp.class, BooleanOp.OR);
                     return deserializeShapes(operator, shapes);

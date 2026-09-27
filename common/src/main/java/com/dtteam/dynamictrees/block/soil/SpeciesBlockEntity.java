@@ -32,6 +32,7 @@ public class SpeciesBlockEntity extends BlockEntity {
         this.setChanged();
     }
 
+    //? if >= 1.21 {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("species")) {
@@ -40,23 +41,55 @@ public class SpeciesBlockEntity extends BlockEntity {
         }
         super.loadAdditional(tag, registries);
     }
+    //? } else {
+    /*@Override
+    public void load(CompoundTag tag) {
+        if (tag.contains("species")) {
+            //? if >= 1.21 {
+            ResourceLocation speciesName = ResourceLocation.parse(tag.getString("species"));
+            //? } else {
+            /^ResourceLocation speciesName = new ResourceLocation(tag.getString("species"));
+            ^///? }
 
+            species = Species.findSpecies(speciesName);
+        }
+
+        super.load(tag);
+    }
+    *///? }
+
+    //? if >= 1.21 {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putString("species", species.getRegistryName().toString());
     }
+    //? } else {
+    /*@Override
+    protected void saveAdditional(CompoundTag tag) {
+        tag.putString("species", species.getRegistryName().toString());
+    }
+    *///? }
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    //? if >= 1.21 {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
         this.saveAdditional(tag, registries);
         return tag;
     }
+    //? } else {
+    /*@Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        this.saveAdditional(tag);
+        return tag;
+    }
+    *///? }
 
     //    @Override
 //    public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet) {

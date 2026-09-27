@@ -46,7 +46,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
@@ -58,6 +57,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.dtteam.dynamictrees.utility.ResourceLocationUtils.*;
+
+//? if >= 1.21 {
+
+import net.minecraft.world.level.material.MapColor;
+//? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.Material;
+*///? }
 
 /**
  * This structure describes a Family whose member Species all have a common branch.
@@ -178,9 +185,9 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
 
     protected float lootVolumeMultiplier = 1.0f;
 
-//    
+    //
     public int woodRingColor; // For rooty blocks
-//    
+    //
     public int woodBarkColor; // For rooty water
 
     /**
@@ -239,7 +246,8 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
 
     ///////////////////////////////////////////
     // SPECIES LOCATION OVERRIDES
-    ///////////////////////////////////////////
+
+    /// ////////////////////////////////////////
 
     public Species getSpeciesForLocation(LevelAccessor level, BlockPos trunkPos) {
         return this.getSpeciesForLocation(level, trunkPos, this.commonSpecies);
@@ -258,11 +266,13 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
 
     ///////////////////////////////////////////
     // INTERACTION
-    ///////////////////////////////////////////
+
+    /// ////////////////////////////////////////
 
     public record TreeActivationContext(Level level, BlockPos rootPos, BlockPos hitPos, BlockState hitState,
                                         Player player, InteractionHand hand, @Nullable ItemStack heldItem,
-                                        BlockHitResult hitResult) { }
+                                        BlockHitResult hitResult) {
+    }
 
     public boolean onTreeActivated(TreeActivationContext context) {
         if (canStripBranch(context.hitState, context.level, context.hitPos, context.player, context.heldItem)) {
@@ -301,7 +311,8 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
 
     ///////////////////////////////////////////
     // TREE PROPERTIES
-    ///////////////////////////////////////////
+
+    /// ////////////////////////////////////////
 
     public boolean isWood() {
         return true;
@@ -432,7 +443,7 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
         this.maxBranchRadius = maxBranchRadius;
     }
 
-//    
+    //
     public int getRootColor(BlockState state, boolean getBark) {
         return getBark ? woodBarkColor : woodRingColor;
     }
@@ -534,10 +545,16 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
         return null;
     }
 
+    //? if >=1.21 {
     @Deprecated(forRemoval = true)
     public MapColor getDefaultBranchMapColor() {
         return MapColor.WOOD;
     }
+    //? } else {
+    /*public MaterialColor getDefaultBranchMapColor() {
+        return MaterialColor.WOOD;
+    }
+    *///? }
 
     @Deprecated(forRemoval = true)
     public SoundType getDefaultBranchSoundType() {
@@ -545,13 +562,21 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
     }
 
     public BlockBehaviour.Properties getDefaultBranchProperties() {
+        //? if >=1.21 {
         BlockBehaviour.Properties properties = BlockBehaviour.Properties.of()
-                .sound(SoundType.WOOD)
                 .mapColor(MapColor.WOOD)
+        //? } else {
+        /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.LEAVES, MaterialColor.WOOD)
+        *///? }
+                .sound(SoundType.WOOD)
                 .noLootTable()
                 .explosionResistance(3.0F);
+
+        //? if >=1.21 {
         if (!this.isFireProof())
             properties.ignitedByLava();
+        //? }
+
         return properties;
     }
 
@@ -667,7 +692,7 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
             return this.validBranches.get(index);
         else {
             DynamicTrees.LOG.warn("Attempted to get branch block of index {} but {} only has {} valid branches.", index, this, validBranches.size());
-            return this.validBranches.getFirst();
+            return this.validBranches.get(0);
         }
     }
 
@@ -824,12 +849,16 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
     }
 
     protected Optional<IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tierTag(@Nullable Tier tier, Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender) {
+        //? if >= 1.21 {
         if (tier == null)
             return Optional.empty();
 
         TagKey<Block> tag = tier.getIncorrectBlocksForDrops();
 
         return Optional.of(tagAppender.apply(tag));
+        //? } else {
+        /*return Optional.empty();
+        *///? }
     }
 
     public void addGeneratedItemTags (Function<TagKey<Item>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item>> tagAppender){

@@ -42,7 +42,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -51,6 +50,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+
+//? if >= 1.21 {
+
+import net.minecraft.world.level.material.MapColor;
+//? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * Holds {@link JsonDeserializer} objects, which can be used to obtain objects from {@link JsonElement} objects.
@@ -279,8 +285,14 @@ public final class JsonDeserializers {
             SeedSaplingRecipe.class, new SeedSaplingRecipeDeserializer()
     );
 
+    //? if >= 1.21 {
     public static final JsonDeserializer<MapColor> MAP_COLOR =
             register(MapColor.class, new MapColorDeserializer());
+    //? } else {
+    /*public static final JsonDeserializer<MaterialColor> MAP_COLOR =
+            register(MaterialColor.class, new MapColorDeserializer());
+    *///? }
+
     public static final JsonDeserializer<SoundType> SOUND_TYPE =
             register(SoundType.class, new SoundTypeDeserializer());
 

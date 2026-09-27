@@ -38,7 +38,7 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
 
     public static int getBrightness(FallingTreeEntity entity) {
         final BranchDestructionData destructionData = entity.getDestroyData();
-        final Level world = entity.level();
+        final Level world = entity.level;
         return world.getBlockState(destructionData.cutPos).getLightEmission();
     }
 
@@ -51,7 +51,21 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+    public void renderToBuffer(
+            PoseStack poseStack,
+            VertexConsumer buffer,
+            int packedLight,
+            int packedOverlay,
+
+            //? if >= 1.21 {
+            int colorIn
+            //? } else {
+            /*float red,
+            float green,
+            float blue,
+            float alpha
+            *///? }
+    ) {
         float r, g, b;
         for (TreeQuadData treeQuad : getQuads()) {
             r = 1;
@@ -59,7 +73,7 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
             b = 1;
             BakedQuad bakedQuad = treeQuad.bakedQuad;
             if (bakedQuad.isTinted()) {
-                color = (species == null) ? treeQuad.color : species.colorTreeQuads(treeQuad.color, treeQuad);
+                int color = (species == null) ? treeQuad.color : species.colorTreeQuads(treeQuad.color, treeQuad);
                 r = (float) (color >> 16 & 255) / 255.0F;
                 g = (float) (color >> 8 & 255) / 255.0F;
                 b = (float) (color & 255) / 255.0F;
@@ -70,7 +84,12 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
                 g *= diffuse;
                 b *= diffuse;
             }
+
+            //? if >= 1.21 {
             buffer.putBulkData(poseStack.last(), bakedQuad, r, g, b, 1, packedLight, packedOverlay);
+            //? } else {
+            /*buffer.putBulkData(poseStack.last(), bakedQuad, r, g, b, packedLight, packedOverlay);
+            *///? }
         }
     }
 

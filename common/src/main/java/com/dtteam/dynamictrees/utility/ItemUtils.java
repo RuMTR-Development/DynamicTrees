@@ -83,10 +83,20 @@ public final class ItemUtils {
         }
 
         if (damage > 0) {
-            heldItem.hurtAndBreak(damage, entity, EquipmentSlot.MAINHAND);
+            heldItem.hurtAndBreak(
+                    damage,
+                    entity,
+
+                    //? if >= 1.20 {
+                    EquipmentSlot.MAINHAND
+                     //?} else {
+                    /*LivingEntity::tick
+                    *///?}
+            );
         }
     }
 
+    //? if >= 1.20 {
     public static int getEnchantmentLevel (ResourceKey<Enchantment> enchantment, ItemStack stack, RegistryAccess registryAccess){
         return EnchantmentHelper.getItemEnchantmentLevel(getEnchantment(enchantment, registryAccess), stack);
     }
@@ -95,5 +105,5 @@ public final class ItemUtils {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
         return registrylookup.getOrThrow(enchantment);
     }
-
+    //?}
 }

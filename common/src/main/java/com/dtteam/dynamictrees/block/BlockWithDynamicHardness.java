@@ -2,6 +2,7 @@ package com.dtteam.dynamictrees.block;
 
 //import com.dtteam.dynamictrees.block.branch.BasicBranchBlock;
 import com.dtteam.dynamictrees.block.branch.BasicBranchBlock;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
@@ -62,7 +63,17 @@ public abstract class BlockWithDynamicHardness extends Block {
      */
     protected final class DynamicHardnessBlockState extends BlockState {
 
-        public DynamicHardnessBlockState(Block block, Reference2ObjectArrayMap<Property<?>, Comparable<?>> propertiesToValueMap, MapCodec<BlockState> codec) {
+        public DynamicHardnessBlockState(
+                Block block,
+
+                //? if >= 1.21 {
+                Reference2ObjectArrayMap<Property<?>, Comparable<?>> propertiesToValueMap,
+                //? } else {
+                /*ImmutableMap<Property<?>, Comparable<?>> propertiesToValueMap,
+                *///? }
+
+                MapCodec<BlockState> codec
+        ) {
             super(block, propertiesToValueMap, codec);
         }
 

@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -30,12 +29,26 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+//? if >= 1.21 {
+import net.minecraft.world.ItemInteractionResult;
+//? } else {
+/*import net.minecraft.world.level.material.Material;
+*///? }
+
 public class PottedSaplingBlock extends BaseEntityBlock {
 
     protected static final AABB FLOWER_POT_AABB = new AABB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
 
     public PottedSaplingBlock() {
-        super(Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY));
+        super(
+                //? if >= 1.21 {
+                Properties.of()
+                //? } else {
+                /*Properties.of(Material.PLANT)
+                *///? }
+                        .instabreak()
+                        .noOcclusion()
+        );
     }
 
     //////////////////////////////
@@ -84,16 +97,34 @@ public class PottedSaplingBlock extends BaseEntityBlock {
     // INTERACTION
     ///////////////////////////////////////////
 
+    //? if >= 1.21 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    //?} else {
+    /*@Deprecated
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        final ItemStack stack = player.getItemInHand(hand);
+    *///? }
+
         final Species species = this.getSpecies(level, pos);
-        if (!species.isValid()) return ItemInteractionResult.FAIL;
+        if (!species.isValid()) {
+            //? if >= 1.20 {
+            return ItemInteractionResult.FAIL;
+            //?} else {
+            /*return InteractionResult.FAIL;
+            *///? }
+        }
 
         removeSaplingFromPot(stack, species, player, level, pos);
 
+        //? if >= 1.20 {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
+         //?} else {
+        /*return InteractionResult.sidedSuccess(level.isClientSide);
+        *///? }
     }
 
+    //? if >= 1.21 {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         final Species species = this.getSpecies(level, pos);
@@ -103,6 +134,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
 
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
+    //? }
 
     // Unlike a regular flower pot this is only used to eject the contents.
     private boolean removeSaplingFromPot(ItemStack heldStack, Species species, Player player, Level level, BlockPos pos){
@@ -129,7 +161,16 @@ public class PottedSaplingBlock extends BaseEntityBlock {
      * Worse implementation for Fabric, as there's no HitResult
      */
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(
+            //? if >= 1.21 {
+            LevelReader level,
+             //?} else {
+            /*BlockGetter level,
+            *///?}
+
+            BlockPos pos,
+            BlockState state
+    ) {
         final Species species = this.getSpecies(level, pos);
         if (species.isValid()) {
             return species.getSeedStack(1);
@@ -193,10 +234,17 @@ public class PottedSaplingBlock extends BaseEntityBlock {
         }
     }
 
+    //? if >= 1.21 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
+    //?} else {
+    /*@Override
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
+        return false;
+    }
+    *///?}
 
     ///////////////////////////////////////////
     // PHYSICAL BOUNDS
@@ -212,14 +260,22 @@ public class PottedSaplingBlock extends BaseEntityBlock {
     // RENDERING
     ///////////////////////////////////////////
 
+    //? if >= 1.21 {
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return null;
     }
+    //? }
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
+    //? if < 1.21 {
+    /*@Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
+    }
+    *///? }
 }

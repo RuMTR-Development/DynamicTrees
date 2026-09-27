@@ -67,10 +67,17 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
         return this.effect;
     }
 
+    //? if >= 1.21 {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(effectorDataParameter, new CompoundTag());
     }
+    //? } else {
+    /*@Override
+    protected void defineSynchedData() {
+        getEntityData().define(effectorDataParameter, new CompoundTag());
+    }
+    *///? }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
@@ -110,7 +117,7 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
     public void tick() {
         super.tick();
 
-        if (level().isClientSide() && !clientBuilt){
+        if (level.isClientSide() && !clientBuilt){
             setEffectorData(getEffectorData());
             clientBuilt = true;
         }
@@ -125,10 +132,10 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
 
         if (this.blockPos == null) return;
 
-        final BlockState blockState = this.level().getBlockState(this.blockPos);
+        final BlockState blockState = this.level.getBlockState(this.blockPos);
 
         if (blockState.getBlock() instanceof SoilBlock) {
-            if (!this.effect.update(this.level(), this.blockPos, this.tickCount, blockState.getValue(SoilBlock.FERTILITY))) {
+            if (!this.effect.update(this.level, this.blockPos, this.tickCount, blockState.getValue(SoilBlock.FERTILITY))) {
                 this.kill();
             }
         } else {

@@ -28,16 +28,16 @@ public class SwampSpecies extends Species {
     public boolean generate(DynamicTreeGenerationContext context) {
         if (isWater(context.level().getBlockState(context.rootPos()))) {
             switch (DTConfigs.SERVER.swampOaksInWater.get()) {
-                case WaterSurfaceGenerationState.SUNK: //generate 1 block down
+                case SUNK: //generate 1 block down
                     if (context.radius() >= minRadiusForSunkGeneration) {
                         context.rootPos().move(Direction.DOWN, countWaterBlocksBelow(context.level(), context.rootPos(), getAllowedWaterHeightForWorldgen()));
                         break;
                     } else {
                         return false;
                     }
-                case WaterSurfaceGenerationState.DISABLED: //do not generate
+                case DISABLED: //do not generate
                     return false;
-                case WaterSurfaceGenerationState.ROOTED: //just generate normally
+                case ROOTED: //just generate normally
             }
         }
         return super.generate(context);

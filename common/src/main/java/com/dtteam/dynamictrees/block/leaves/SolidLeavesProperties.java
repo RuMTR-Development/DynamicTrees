@@ -5,8 +5,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;import net.minecraft.world.level.material.PushReaction;
+
+//? if >= 1.21 {
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+//? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * An extension of {@link LeavesProperties} which provides {@link SolidDynamicLeavesBlock} for a solid version of {@link
@@ -25,13 +30,17 @@ public class SolidLeavesProperties extends LeavesProperties {
 
     @Override
     public BlockBehaviour.Properties getDefaultBlockProperties() {
+        //? if >= 1.21 {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
                 .ignitedByLava()
+                .forceSolidOn()
+        //? } else {
+        /*return BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.PLANT)
+        *///? }
                 .strength(0.2F)
                 .randomTicks()
-                .sound(SoundType.GRASS)
-                .forceSolidOn();
+                .sound(SoundType.GRASS);
     }
 
     @Override

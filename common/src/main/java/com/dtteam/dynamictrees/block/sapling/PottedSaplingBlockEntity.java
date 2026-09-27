@@ -60,12 +60,21 @@ public class PottedSaplingBlockEntity extends BlockEntity {
             level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
     }
 
+    //? if >= 1.21 {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
         this.saveAdditional(tag, registries);
         return tag;
     }
+    //? } else {
+    /*@Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        this.saveAdditional(tag);
+        return tag;
+    }
+    *///? }
 
     @Nullable
     @Override
@@ -73,6 +82,7 @@ public class PottedSaplingBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    //? if >= 1.21 {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains(POT_MIMIC_TAG)) {
@@ -84,11 +94,33 @@ public class PottedSaplingBlockEntity extends BlockEntity {
         }
         super.loadAdditional(tag, registries);
     }
+    //? } else {
+    /*@Override
+    public void load(CompoundTag tag) {
+        if (tag.contains(POT_MIMIC_TAG)) {
+            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString(POT_MIMIC_TAG)));
+            potState = block != Blocks.AIR ? block.defaultBlockState() : Blocks.FLOWER_POT.defaultBlockState();
+        }
+        if (tag.contains(SPECIES_TAG)) {
+            this.species = Species.findSpecies(tag.getString(SPECIES_TAG));
+        }
+        super.load(tag);
+    }
+    *///? }
 
+    //? if >= 1.21 {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putString(POT_MIMIC_TAG, BuiltInRegistries.BLOCK.getKey(potState.getBlock()).toString());
         tag.putString(SPECIES_TAG, this.species.getRegistryName().toString());
     }
+    //? } else {
+    /*@Override
+    protected void saveAdditional(CompoundTag tag) {
+        tag.putString(POT_MIMIC_TAG, BuiltInRegistries.BLOCK.getKey(potState.getBlock()).toString());
+        tag.putString(SPECIES_TAG, this.species.getRegistryName().toString());
+    }
+    *///? }
+
 
 }

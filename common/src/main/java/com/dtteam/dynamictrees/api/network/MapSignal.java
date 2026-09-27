@@ -57,7 +57,7 @@ public class MapSignal {
 
     public boolean doTrackingVisited(BlockPos pos) {
         if (!nodeInspectors.isEmpty()) {
-            final NodeInspector inspector = nodeInspectors.getFirst();
+            final NodeInspector inspector = nodeInspectors.get(0);
 
             if (inspector instanceof CollectorNode) {
                 return ((CollectorNode) inspector).contains(pos);

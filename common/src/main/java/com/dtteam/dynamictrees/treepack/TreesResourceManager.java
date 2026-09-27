@@ -111,7 +111,7 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
     @Override
     public Optional<Resource> getResource(final ResourceLocation location) {
         final List<Resource> resources = this.getResourceStack(location);
-        return resources.isEmpty() ? Optional.empty() : Optional.of(resources.getLast());
+        return resources.isEmpty() ? Optional.empty() : Optional.of(resources.get(resources.size() - 1));
     }
 
     @Override

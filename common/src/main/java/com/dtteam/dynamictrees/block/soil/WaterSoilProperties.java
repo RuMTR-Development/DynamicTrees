@@ -24,11 +24,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+//? if >= 1.21 {
+import net.minecraft.world.level.material.MapColor;
+//? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * @author Max Hyper
@@ -50,7 +55,11 @@ public class WaterSoilProperties extends SoilProperties {
 
     @Override
     public BlockBehaviour.Properties getDefaultBlockProperties() {
+        //? if >= 1.21 {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.WATER);
+        //? } else {
+        /*return BlockBehaviour.Properties.copy(Blocks.WATER);
+        *///? }
     }
 
     public static class SoilWaterBlock extends SoilBlock implements SimpleWaterloggedBlock {
@@ -74,7 +83,16 @@ public class WaterSoilProperties extends SoilProperties {
         }
 
         @Override
-        public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        public ItemStack getCloneItemStack(
+                //? if >= 1.21 {
+                LevelReader level,
+                 //?} else {
+                /*BlockGetter level,
+                *///?}
+
+                BlockPos pos,
+                BlockState state
+        ) {
             BlockState upState = level.getBlockState(pos.above());
             if (TreeHelper.isBranch(upState)) {
                 return TreeHelper.getBranch(upState).getFamily().getBranchItem()

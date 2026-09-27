@@ -5,7 +5,6 @@ import com.dtteam.dynamictrees.deserialization.deserializer.JsonDeserializer;
 import com.dtteam.dynamictrees.platform.Services;
 import com.google.gson.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;

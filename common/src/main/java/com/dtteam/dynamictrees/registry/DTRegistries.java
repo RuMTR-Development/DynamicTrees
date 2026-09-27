@@ -36,11 +36,8 @@ import com.dtteam.dynamictrees.worldgen.structure.TreePoolElement;
 import com.mojang.serialization.Codec;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -50,7 +47,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -70,6 +66,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+//? if >= 1.21 {
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.component.DyedItemColor;
+//? } else {
+
+//? }
 
 public class DTRegistries {
 
@@ -200,6 +205,7 @@ public class DTRegistries {
     // DATA COMPONENTS
     ///////////////////////////////////////////
 
+    //? if >= 1.21 {
     public static final Supplier<DataComponentType<DyedItemColor>> STAFF_HANDLE_COLOR_DATA_COMPONENT = Services.REGISTRY.getRegistryLoader().
             registerDataComponentType("handle_color", builder -> builder.persistent(DyedItemColor.CODEC).networkSynchronized(DyedItemColor.STREAM_CODEC));
     public static final Supplier<DataComponentType<DyedItemColor>> STAFF_CRYSTAL_COLOR_DATA_COMPONENT = Services.REGISTRY.getRegistryLoader().
@@ -214,6 +220,7 @@ public class DTRegistries {
             registerDataComponentType("species", builder -> builder.persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8));
     public static final Supplier<DataComponentType<Integer>> DENDRO_POTION_INDEX_DATA_COMPONENT = Services.REGISTRY.getRegistryLoader().
             registerDataComponentType("potion_index", builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+    //? }
 
     ///////////////////////////////////////////
     // COMMAND ARGUMENTS
@@ -226,6 +233,7 @@ public class DTRegistries {
     // LOOT
     ///////////////////////////////////////////
 
+    //? if >= 1.21 {
     public static final Supplier<LootItemConditionType> SPECIES_MATCHES = Services.REGISTRY.getRegistryLoader()
             .registerLootConditionType("species_matches", SpeciesMatches.CODEC);
     public static final Supplier<LootItemConditionType> SEASONAL_SEED_DROP_CHANCE = Services.REGISTRY.getRegistryLoader()
@@ -238,7 +246,7 @@ public class DTRegistries {
     public static final Supplier<LootPoolEntryType> SEED_ITEM = Services.REGISTRY.getRegistryLoader()
             .registerLootPoolEntryType("seed_item", SeedItemLootPoolEntry.CODEC);
     public static final Supplier<LootPoolEntryType> WEIGHTED_ITEM = Services.REGISTRY.getRegistryLoader()
-            .registerLootPoolEntryType("weighted_item", WeightedItemLootPoolEntry.CODEC);
+            .registerLootPoolEntryType("weighted_item", new WeightedItemLootPoolEntry.CODEC);
 
     public static final Supplier<LootItemFunctionType<MultiplyCount>> MULTIPLY_COUNT = Services.REGISTRY.getRegistryLoader()
             .registerLootFunctionType("multiply_count", MultiplyCount.CODEC);
@@ -246,6 +254,28 @@ public class DTRegistries {
             .registerLootFunctionType("multiply_logs_count", MultiplyByLogsCount.CODEC);
     public static final Supplier<LootItemFunctionType<MultiplyBySticksCount>> MULTIPLY_STICKS_COUNT = Services.REGISTRY.getRegistryLoader()
             .registerLootFunctionType("multiply_sticks_count", MultiplyBySticksCount.CODEC);
+    //? } else {
+    /*public static final Supplier<LootItemConditionType> SPECIES_MATCHES = Services.REGISTRY.getRegistryLoader()
+            .registerLootConditionType("species_matches", new SpeciesMatches.Serializer());
+    public static final Supplier<LootItemConditionType> SEASONAL_SEED_DROP_CHANCE = Services.REGISTRY.getRegistryLoader()
+            .registerLootConditionType("seasonal_seed_drop_chance", new SeasonalSeedDropChance.Serializer());
+    public static final Supplier<LootItemConditionType> VOLUNTARY_SEED_DROP_CHANCE = Services.REGISTRY.getRegistryLoader()
+            .registerLootConditionType("voluntary_seed_drop_chance", new VoluntarySeedDropChance.Serializer());
+
+    public static final Supplier<LootPoolEntryType> ITEM_BY_SPECIES = Services.REGISTRY.getRegistryLoader()
+            .registerLootPoolEntryType("item_by_species", new ItemBySpeciesLootPoolEntry.Serializer());
+    public static final Supplier<LootPoolEntryType> SEED_ITEM = Services.REGISTRY.getRegistryLoader()
+            .registerLootPoolEntryType("seed_item", new SeedItemLootPoolEntry.Serializer());
+    public static final Supplier<LootPoolEntryType> WEIGHTED_ITEM = Services.REGISTRY.getRegistryLoader()
+            .registerLootPoolEntryType("weighted_item", new WeightedItemLootPoolEntry.Serializer());
+
+    public static final Supplier<LootItemFunctionType> MULTIPLY_COUNT = Services.REGISTRY.getRegistryLoader()
+            .registerLootFunctionType("multiply_count", new MultiplyCount.Serializer());
+    public static final Supplier<LootItemFunctionType> MULTIPLY_LOGS_COUNT = Services.REGISTRY.getRegistryLoader()
+            .registerLootFunctionType("multiply_logs_count", new MultiplyByLogsCount.Serializer());
+    public static final Supplier<LootItemFunctionType> MULTIPLY_STICKS_COUNT = Services.REGISTRY.getRegistryLoader()
+            .registerLootFunctionType("multiply_sticks_count", new MultiplyBySticksCount.Serializer());
+    *///? }
 
     ///////////////////////////////////////////
     // WORLDGEN
@@ -258,7 +288,13 @@ public class DTRegistries {
     public static final ResourceKey<PlacedFeature> CAVE_ROOTED_TREE_PLACED_FEATURE = ResourceKey.create(Registries.PLACED_FEATURE,DynamicTrees.location("cave_rooted_tree"));
 
     public static final Supplier<PlacementModifierType<CaveRootedTreePlacement>> CAVE_ROOTED_TREE_PLACEMENT_MODIFIER_TYPE = Services.REGISTRY.getRegistryLoader()
-            .registerPlacementModifierType("cave_rooted_tree", () -> () -> CaveRootedTreePlacement.CODEC);
+            .registerPlacementModifierType("cave_rooted_tree", () -> () -> {
+                //? if >= 1.21 {
+                return CaveRootedTreePlacement.CODEC;
+                //? } else {
+                /*return CaveRootedTreePlacement.CODEC.codec();
+                *///? }
+            });
 
     public static final Supplier<DynamicTreeFeature> DYNAMIC_TREE_FEATURE = Services.REGISTRY.getRegistryLoader()
             .registerFeature("tree", DynamicTreeFeature::new);
@@ -266,13 +302,31 @@ public class DTRegistries {
             .registerFeature("cave_rooted_tree", CaveRootedTreeFeature::new);
 
     public static final Supplier<BlockStateProviderType<DTReplaceNyliumFungiBlockStateProvider>> REPLACE_NYLIUM_FUNGI_BLOCK_STATE_PROVIDER_TYPE = Services.REGISTRY.getRegistryLoader()
-            .registerBlockStateProviderType("replace_nylium_fungi", () -> new BlockStateProviderType<>(DTReplaceNyliumFungiBlockStateProvider.CODEC));
+            .registerBlockStateProviderType("replace_nylium_fungi", () -> new BlockStateProviderType<>(
+                    //? if >= 1.21 {
+                    DTReplaceNyliumFungiBlockStateProvider.CODEC
+                    //? } else {
+                    /*DTReplaceNyliumFungiBlockStateProvider.CODEC.codec()
+                    *///? }
+            ));
 
     public static final Supplier<StructurePoolElementType<DTCancelVanillaTreePoolElement>> CANCEL_VANILLA_VILLAGE_TREE_STRUCTURE_POOL_ELEMENT_TYPE = Services.REGISTRY.getRegistryLoader()
-            .registerStructurePoolElementType("cancel_vanilla_village_tree_element", () -> () -> DTCancelVanillaTreePoolElement.CODEC);
+            .registerStructurePoolElementType("cancel_vanilla_village_tree_element", () -> () -> {
+                //? if >= 1.21 {
+                return DTCancelVanillaTreePoolElement.CODEC;
+                //? } else {
+                /*return DTCancelVanillaTreePoolElement.CODEC.codec();
+                *///?}
+            });
 
     public static final Supplier<StructurePoolElementType<TreePoolElement>> TREE_STRUCTURE_POOL_ELEMENT_TYPE = Services.REGISTRY.getRegistryLoader()
-            .registerStructurePoolElementType("tree_pool_element", () -> () -> TreePoolElement.CODEC);
+            .registerStructurePoolElementType("tree_pool_element", () -> () -> {
+                //? if >= 1.21 {
+                return TreePoolElement.CODEC;
+                 //? } else {
+                /*return TreePoolElement.CODEC.codec();
+                *///?}
+            });
 
     public static final Supplier<RecipeSerializer<SeedConversionRecipe>> SEED_CONVERSION_RECIPE_TYPE = Services.REGISTRY.getRegistryLoader()
             .registerRecipeType("seed_conversion", ()->new SimpleCraftingRecipeSerializer<>(SeedConversionRecipe::new));

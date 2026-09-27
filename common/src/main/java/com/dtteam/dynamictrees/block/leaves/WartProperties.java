@@ -9,11 +9,17 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.Collections;
 import java.util.List;
+
+//? if >= 1.21 {
+import net.minecraft.world.level.material.MapColor;
+ //? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -33,8 +39,12 @@ public class WartProperties extends SolidLeavesProperties {
 
     @Override
     public BlockBehaviour.Properties getDefaultBlockProperties() {
+        //? if >= 1.21 {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_RED)
+        //? } else {
+        /*return BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.COLOR_RED)
+        *///? }
                 .strength(1.0F)
                 .sound(SoundType.WART_BLOCK)
                 .randomTicks();

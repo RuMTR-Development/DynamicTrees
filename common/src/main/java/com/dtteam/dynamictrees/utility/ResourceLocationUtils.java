@@ -14,23 +14,44 @@ public final class ResourceLocationUtils {
         if (!string.contains(":")) {
             string = defaultNamespace + ":" + string;
         }
+
+        //? if >= 1.21 {
         return ResourceLocation.parse(string);
+        //? } else {
+        /*return new ResourceLocation(string);
+        *///? }
     }
 
     public static ResourceLocation namespace(final ResourceLocation resourceLocation, final String namespace) {
+        //? if >= 1.21 {
         return ResourceLocation.fromNamespaceAndPath(namespace, resourceLocation.getPath());
+        //? } else {
+        /*return new ResourceLocation(namespace, resourceLocation.getPath());
+        *///? }
     }
 
     public static ResourceLocation prefix(final ResourceLocation resourceLocation, final String prefix) {
+        //? if >= 1.21 {
         return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), prefix + resourceLocation.getPath());
+        //? } else {
+        /*return new ResourceLocation(resourceLocation.getNamespace(), prefix + resourceLocation.getPath());
+        *///? }
     }
 
     public static ResourceLocation suffix(final ResourceLocation resourceLocation, final String suffix) {
+        //? if >= 1.21 {
         return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), resourceLocation.getPath() + suffix);
+        //? } else {
+        /*return new ResourceLocation(resourceLocation.getNamespace(), resourceLocation.getPath() + suffix);
+        *///? }
     }
 
     public static ResourceLocation surround(final ResourceLocation resourceLocation, final String prefix, final String suffix) {
+        //? if >= 1.21 {
         return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), prefix + resourceLocation.getPath() + suffix);
+         //? } else {
+        /*return new ResourceLocation(resourceLocation.getNamespace(), prefix + resourceLocation.getPath() + suffix);
+        *///? }
     }
 
     /**

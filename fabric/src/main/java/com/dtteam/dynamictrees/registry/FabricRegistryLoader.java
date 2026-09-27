@@ -3,12 +3,10 @@ package com.dtteam.dynamictrees.registry;
 import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.recipe.DendroPotionRecipeHandler;
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -40,6 +38,14 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+//? if >= 1.21 {
+import net.minecraft.core.component.DataComponentType;
+import com.mojang.serialization.MapCodec;
+//? } else {
+/*import net.minecraft.world.level.storage.loot.Serializer;
+import net.fabricmc.fabric.impl.itemgroup.ItemGroupHelper;
+*///? }
+
 public class FabricRegistryLoader extends RegistryLoader {
 
     public static void setup (){
@@ -67,9 +73,18 @@ public class FabricRegistryLoader extends RegistryLoader {
 
     @Override
     public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, CreativeModeTab.DisplayItemsGenerator displayItems) {
+        //? if >= 1.21 {
         CreativeModeTab tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, DynamicTrees.location(DynamicTrees.MOD_ID),
                 FabricItemGroup.builder().icon(icon).title(title).displayItems(displayItems).build());
+
         return ()-> tab;
+        //? } else {
+        /*CreativeModeTab tab = FabricItemGroup.builder(DynamicTrees.location(DynamicTrees.MOD_ID)).icon(icon).title(title).displayItems(displayItems).build();
+
+        ItemGroupHelper.appendItemGroup(tab);
+
+        return () -> tab;
+        *///? }
     }
 
     @Override
@@ -93,11 +108,13 @@ public class FabricRegistryLoader extends RegistryLoader {
         return ()-> type;
     }
 
+    //? if >= 1.21 {
     @Override
     public <T> Supplier<DataComponentType<T>> registerDataComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> operator) {
         DataComponentType<T> type = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, DynamicTrees.location(name), operator.apply(DataComponentType.builder()).build());
         return ()-> type;
     }
+    //? }
 
     @Override
     public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>> Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo) {
@@ -106,6 +123,7 @@ public class FabricRegistryLoader extends RegistryLoader {
         return ()-> type;
     }
 
+    //? if >= 1.21 {
     @Override
     public Supplier<LootItemConditionType> registerLootConditionType(String name, MapCodec<? extends LootItemCondition> serializerFactory) {
         LootItemConditionType type = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, DynamicTrees.location(name), new LootItemConditionType(serializerFactory));
@@ -123,6 +141,25 @@ public class FabricRegistryLoader extends RegistryLoader {
         LootItemFunctionType<L> type = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, DynamicTrees.location(name), new LootItemFunctionType<>(serializerFactory));
         return ()-> type;
     }
+    //? } else {
+    /*@Override
+    public Supplier<LootItemConditionType> registerLootConditionType(String name, Serializer<? extends LootItemCondition> serializerFactory) {
+        LootItemConditionType type = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, DynamicTrees.location(name), new LootItemConditionType(serializerFactory));
+        return ()-> type;
+    }
+
+    @Override
+    public Supplier<LootPoolEntryType> registerLootPoolEntryType(String name, Serializer<? extends LootPoolEntryContainer> serializerFactory) {
+        LootPoolEntryType type = Registry.register(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, DynamicTrees.location(name), new LootPoolEntryType(serializerFactory));
+        return ()-> type;
+    }
+
+    @Override
+    public <L extends LootItemFunction> Supplier<LootItemFunctionType> registerLootFunctionType(String name, Serializer<L> serializerFactory) {
+        LootItemFunctionType type = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, DynamicTrees.location(name), new LootItemFunctionType(serializerFactory));
+        return ()-> type;
+    }
+    *///? }
 
     @Override
     public <T extends PlacementModifier> Supplier<PlacementModifierType<T>> registerPlacementModifierType(String name, Supplier<PlacementModifierType<T>> supplier) {

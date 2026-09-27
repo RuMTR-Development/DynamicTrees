@@ -130,7 +130,7 @@ public class LevelPoissonDiscProvider implements PoissonDiscProvider {
             this.debug.updateCount(count, unsolvedDiscs, allDiscs);
 
             // Step 6. Pick a random disc from the pool of unsolved discs this will be the master disc.
-            final PoissonDisc master = unsolvedDiscs.getFirst(); // Any circle will do. May as well be the first.
+            final PoissonDisc master = unsolvedDiscs.get(0); // Any circle will do. May as well be the first.
             this.debug.pickMasterDisc(master, unsolvedDiscs, allDiscs);
 
             // The goal here is to try both directions and prefer the direction that creates an intersection with an existing disc.

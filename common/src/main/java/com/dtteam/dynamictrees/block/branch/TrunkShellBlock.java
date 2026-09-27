@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +40,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
+//? if >= 1.21 {
+import net.minecraft.world.ItemInteractionResult;
+//? } else {
+/*import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.material.Material;
+*///? }
+
 public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleWaterloggedBlock {
 
     public static final EnumProperty<CoordUtils.Surround> CORE_DIR = EnumProperty.create("coredir", CoordUtils.Surround.class);
@@ -54,9 +60,11 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
     }
 
     public TrunkShellBlock() {
+        //? if >= 1.21 {
         super(Properties.of()
-                .ignitedByLava()
-                .pushReaction(PushReaction.BLOCK)
+        //? } else {
+        /*super(Properties.of(Material.WOOD)
+        *///? }
                 .sound(SoundType.WOOD)
                 .explosionResistance(3.0F)
                 .noOcclusion());
@@ -94,7 +102,14 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
     }
 
     @Override
-    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+
+    //? if >= 1.21 {
+    protected
+    //?} else {
+    /*public
+    *///?}
+
+    float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
         return NullUtils.applyIfNonnull(this.getMuse(level, state, pos), muse -> muse.state.getDestroyProgress(player, level, muse.pos), 0f);
     }
 
@@ -102,10 +117,16 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
     }
 
+    //? if >= 1.20 {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         return state;
+    }//?} else {
+    /*@Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+
     }
+    *///?}
 
     @Override
     public float getHardness(BlockState state, BlockGetter level, BlockPos pos) {
@@ -114,7 +135,14 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
 
     //Better than nothing, for now.
     @Override
-    protected SoundType getSoundType(BlockState state) {
+
+    //? if >= 1.21 {
+    protected
+    //?} else {
+    /*public
+    *///?}
+
+    SoundType getSoundType(BlockState state) {
         return SoundType.WOOD;
     }
 
@@ -221,16 +249,34 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(
+            //? if >= 1.21 {
+            LevelReader level,
+             //?} else {
+            /*BlockGetter level,
+            *///?}
+
+            BlockPos pos,
+            BlockState state
+    ) {
         return NullUtils.applyIfNonnull(this.getMuse(level, state, pos), muse ->
                 muse.state.getBlock().getCloneItemStack(level, muse.pos, muse.state), ItemStack.EMPTY);
     }
 
+    //? if >= 1.21 {
     @Override
     protected void onExplosionHit(BlockState state, Level level, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> dropConsumer) {
         NullUtils.consumeIfNonnull(this.getMuse(level, state, pos), muse ->
                 muse.state.onExplosionHit(level, muse.pos, explosion, dropConsumer));
+    }//? } else {
+    /*@Override
+    public void wasExploded(Level level, BlockPos pos, Explosion explosion) {
+        BlockState state = level.getBlockState(pos);
+
+        NullUtils.consumeIfNonnull(this.getMuse(level, state, pos), muse ->
+                muse.state.getBlock().wasExploded(level, muse.pos, explosion));
     }
+    *///? }
 
     //TODO: This may not even be necessary
     @Nullable
@@ -256,6 +302,8 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
                 surround -> level.setBlock(pos, defaultBlockState().setValue(CORE_DIR, surround), 1));
     }
 
+
+    //? if >= 1.21 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return NullUtils.applyIfNonnull(this.getMuse(level, state, pos), muse -> {
@@ -271,6 +319,15 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
             return muse.state.useWithoutItem(level, player, newHit);
         }, InteractionResult.FAIL);
     }
+    //? } else {
+    /*@Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return NullUtils.applyIfNonnull(this.getMuse(level, state, pos), muse -> {
+            var newHit = hit.withPosition(muse.pos);
+            return muse.state.use(level, player, hand, newHit);
+        }, InteractionResult.FAIL);
+    }
+    *///? }
 
     /** NeoForge override */
     @SuppressWarnings("unused")
@@ -296,10 +353,17 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
         return (radius - 8) % 16 == 0;
     }
 
+    //? if >= 1.21 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
+    //?} else {
+    /*@Override
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
+        return false;
+    }
+    *///?}
 
     ///////////////////////////////////////////
     // WATER LOGGING
@@ -319,11 +383,30 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(
+            //? if >= 1.21 {
+            @Nullable Player player,
+            //? }
+
+            BlockGetter level,
+            BlockPos pos,
+            BlockState state,
+            Fluid fluid
+    ) {
         if (isFullBlockShell(level, pos)) {
             return false;
         }
-        return SimpleWaterloggedBlock.super.canPlaceLiquid(player, level, pos, state, fluid);
+
+        return SimpleWaterloggedBlock.super.canPlaceLiquid(
+                //? if >= 1.21 {
+                player,
+                 //? }
+
+                level,
+                pos,
+                state,
+                fluid
+        );
     }
 
     public boolean isWaterLogged(BlockState state) {
@@ -411,4 +494,10 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
 //        });
 //    }
 
+    //? if < 1.21 {
+    /*@Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.BLOCK;
+    }
+    *///? }
 }

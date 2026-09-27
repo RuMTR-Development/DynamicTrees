@@ -40,12 +40,16 @@ public class DTLootTableBuilder {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
         return MatchTool.toolMatches(
                 ItemPredicate.Builder.item()
+                        //? if >= 1.21 {
                         .withSubPredicate(
                                 ItemSubPredicates.ENCHANTMENTS,
                                 ItemEnchantmentsPredicate.enchantments(
                                         List.of(new EnchantmentPredicate(registrylookup.getOrThrow(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.atLeast(1)))
                                 )
                         )
+                        //? } else {
+                        /*.hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)))
+                        *///? }
         );
     }
 
@@ -68,7 +72,13 @@ public class DTLootTableBuilder {
                 hasShearsOrSilkTouch(registries),
                 SeedItemLootPoolEntry.lootTableSeedItem()
                         .when(ExplosionCondition.survivesExplosion())
+
+                        //? if >= 1.21 {
                         .when(BonusLevelTableCondition.bonusLevelFlatChance(ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), seedChances))
+                        //? } else {
+                        /*.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, seedChances))
+                        *///? }
+
                         .when(SeasonalSeedDropChance.seasonalSeedDropChance())
         ).withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(hasNoShearsOrSilkTouch(registries))
@@ -77,8 +87,14 @@ public class DTLootTableBuilder {
                                         UniformGenerator.between(1.0F, 2.0F)
                                 ))
                                 .apply(ApplyExplosionDecay.explosionDecay())
+
+                                //? if >= 1.21 {
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), 0.02F,
                                         0.022222223F, 0.025F, 0.033333335F, 0.1F)))
+                                //? } else {
+                                /*.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.02F,
+                                        0.022222223F, 0.025F, 0.033333335F, 0.1F)))
+                                *///? }
         ).setParamSet(DTLootParameterSets.LEAVES_BLOCK);
     }
 
@@ -88,7 +104,13 @@ public class DTLootTableBuilder {
                 hasShearsOrSilkTouch(registries),
                 SeedItemLootPoolEntry.lootTableSeedItem()
                         .when(ExplosionCondition.survivesExplosion())
+
+                        //? if >= 1.21 {
                         .when(BonusLevelTableCondition.bonusLevelFlatChance(ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), seedChances))
+                        //? } else {
+                        /*.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, seedChances))
+                        *///? }
+
                         .when(SeasonalSeedDropChance.seasonalSeedDropChance())
         ).setParamSet(DTLootParameterSets.LEAVES_BLOCK);
     }
@@ -109,7 +131,13 @@ public class DTLootTableBuilder {
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(
                         SeedItemLootPoolEntry.lootTableSeedItem()
                                 .when(ExplosionCondition.survivesExplosion())
+
+                                //? if >= 1.21 {
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), seedChances))
+                                //? } else {
+                                /*.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, seedChances))
+                                *///? }
+
                                 .when(SeasonalSeedDropChance.seasonalSeedDropChance())
                 )
         ).withPool(
@@ -120,7 +148,11 @@ public class DTLootTableBuilder {
                                 ))
                                 .apply(ApplyExplosionDecay.explosionDecay())
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(
+                                        //? if >= 1.21 {
                                         ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F
+                                        //? } else {
+                                        /*Enchantments.BLOCK_FORTUNE, 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F
+                                        *///? }
                                 ))
                 )
         ).setParamSet(parameterSet);
@@ -131,7 +163,13 @@ public class DTLootTableBuilder {
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(
                         SeedItemLootPoolEntry.lootTableSeedItem()
                                 .when(ExplosionCondition.survivesExplosion())
+
+                                //? if >= 1.21 {
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), seedChances))
+                                //? } else {
+                                /*.when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, seedChances))
+                                *///? }
+
                                 .when(SeasonalSeedDropChance.seasonalSeedDropChance())
                 )
         ).setParamSet(parameterSet);
@@ -143,7 +181,11 @@ public class DTLootTableBuilder {
                         .add(LootItem.lootTableItem(primitiveWartBlock))
                         .when(ExplosionCondition.survivesExplosion())
                         .when(BonusLevelTableCondition.bonusLevelFlatChance(
+                                //? if >= 1.21 {
                                 ItemUtils.getEnchantment(Enchantments.FORTUNE, registries), 0.1F, 0.1333333F, 0.1666666F, 0.2F
+                                //? } else {
+                                /*Enchantments.BLOCK_FORTUNE, 0.1F, 0.1333333F, 0.1666666F, 0.2F
+                                *///? }
                         ))
         );
     }

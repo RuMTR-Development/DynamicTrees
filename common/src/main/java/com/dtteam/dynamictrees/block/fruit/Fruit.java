@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,6 +40,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
+
+//? if >= 1.21 {
+import net.minecraft.world.level.material.MapColor;
+//? } else {
+/*import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * Stores properties and implements functionality of fruits which grow from the leaves of a tree.
@@ -132,17 +138,28 @@ public class Fruit extends RegistryEntry<Fruit> implements Resettable<Fruit> {
         return new FruitBlock(properties, this);
     }
 
+    //? if >= 1.21 {
     public MapColor getDefaultMapColor() {
         return MapColor.PLANT;
     }
+    //? } else {
+    /*public MaterialColor getDefaultMapColor() {
+        return MaterialColor.PLANT;
+    }
+    *///? }
 
     public BlockBehaviour.Properties getDefaultBlockProperties() {
         return getDefaultBlockProperties(this.getDefaultMapColor());
     }
 
+    //? if >= 1.21 {
     public BlockBehaviour.Properties getDefaultBlockProperties(MapColor mapColor) {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
+    //? } else {
+    /*public BlockBehaviour.Properties getDefaultBlockProperties(MaterialColor mapColor) {
+        return BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.PLANT)
+    *///? }
                 .noCollission()
                 .sound(SoundType.CROP)
                 .randomTicks()

@@ -53,7 +53,11 @@ public final class BiomeDatabases {
 
     private static void tryBlacklist(String location) {
         try {
+            //? if >= 1.21 {
             BLACKLIST.add(ResourceLocation.parse(location));
+            //? } else {
+            /*BLACKLIST.add(new ResourceLocation(location));
+            *///? }
         } catch (ResourceLocationException e) {
             LogManager.getLogger().error("Couldn't get location for dimension blacklist in config.", e);
         }

@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Arrays;
@@ -46,7 +47,12 @@ public class DynamicTreeFeature extends Feature<NoneFeatureConfiguration> {
 
     public static void setup() {
         concreteBlocks = Arrays.stream(DyeColor.values())
+                //? if >= 1.21 {
                 .map(color -> BuiltInRegistries.BLOCK.get(ResourceLocation.parse(color.getName() + "_concrete")))
+                //? } else {
+                /*.map(color -> BuiltInRegistries.BLOCK.get(new ResourceLocation(color.getName() + "_concrete")))
+                *///? }
+
                 .toArray(Block[]::new);
     }
 
@@ -90,8 +96,12 @@ public class DynamicTreeFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     public static boolean validTreePos(LevelSimulatedReader pLevel, BlockPos pPos) {
+        //? if >= 1.21 {
         return pLevel.isStateAtPosition(pPos, (state) ->
                 state.isAir() || state.is(BlockTags.REPLACEABLE_BY_TREES) || isFoliage(pLevel, pPos));
+        //? } else {
+        /*return isFoliage(pLevel, pPos) || TreeFeature.validTreePos(pLevel, pPos);
+        *///? }
     }
 
     public static boolean isFoliage(LevelSimulatedReader pLevel, BlockPos pPos) {

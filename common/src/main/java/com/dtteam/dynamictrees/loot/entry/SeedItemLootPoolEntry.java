@@ -3,6 +3,9 @@ package com.dtteam.dynamictrees.loot.entry;
 import com.dtteam.dynamictrees.loot.DTLootContextParams;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +22,7 @@ import java.util.function.Consumer;
  * @author Harley O'Connor
  */
 public final class SeedItemLootPoolEntry extends LootPoolSingletonContainer {
-
+    //? if >= 1.21 {
     public static final MapCodec<SeedItemLootPoolEntry> CODEC = RecordCodecBuilder.mapCodec(
             instance -> singletonFields(instance)
                     .apply(instance, SeedItemLootPoolEntry::new));
@@ -29,6 +32,25 @@ public final class SeedItemLootPoolEntry extends LootPoolSingletonContainer {
                                  List<LootItemFunction> functions) {
         super(weight, quality, conditions, functions);
     }
+    //? } else {
+    /*public static class Serializer extends LootPoolSingletonContainer.Serializer<SeedItemLootPoolEntry> {
+        public Serializer() {}
+
+        @Override
+        protected SeedItemLootPoolEntry deserialize(JsonObject object, JsonDeserializationContext context, int weight, int quality, LootItemCondition[] conditions, LootItemFunction[] functions) {
+            return new SeedItemLootPoolEntry(weight, quality, conditions, functions);
+        }
+
+        @Override
+        public void serializeCustom(JsonObject object, SeedItemLootPoolEntry context, JsonSerializationContext conditions) {
+            super.serializeCustom(object, context, conditions);
+        }
+    }
+
+    public SeedItemLootPoolEntry(int weight, int quality, LootItemCondition[] conditions, LootItemFunction[] functions) {
+        super(weight, quality, conditions, functions);
+    }
+    *///? }
 
     @Override
     public LootPoolEntryType getType() {

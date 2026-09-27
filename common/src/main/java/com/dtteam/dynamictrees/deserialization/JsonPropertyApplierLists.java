@@ -2,7 +2,13 @@ package com.dtteam.dynamictrees.deserialization;
 
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+
+//? if >= 1.21 {
+
 import net.minecraft.world.level.material.MapColor;
+//? } else {
+/*import net.minecraft.world.level.material.MaterialColor;
+*///? }
 
 /**
  * Holds common {@link JsonPropertyAppliers} objects.
@@ -27,7 +33,12 @@ public final class JsonPropertyApplierLists {
             .registerIfTrueApplier("no_loot_table", BlockBehaviour.Properties::noLootTable)
             .registerIfTrueApplier("air", BlockBehaviour.Properties::air)
             .registerIfTrueApplier("requires_correct_tool_for_drops", BlockBehaviour.Properties::requiresCorrectToolForDrops)
+
+            //? if >= 1.21 {
             .register("map_color", MapColor.class, BlockBehaviour.Properties::mapColor)
+            //? } else {
+            /*.register("map_color", MaterialColor.class, BlockBehaviour.Properties::color)
+            *///? }
             ;
 
 }

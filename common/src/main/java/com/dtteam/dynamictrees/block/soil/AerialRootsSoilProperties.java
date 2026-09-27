@@ -29,6 +29,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -151,17 +152,38 @@ public class AerialRootsSoilProperties extends SoilProperties {
         }
 
         @Override
-        protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+
+        //? if >= 1.21 {
+        protected
+        //?} else {
+        /*public
+        *///?}
+
+        VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
             return getShape(state, level, pos, context);
         }
 
         @Override
-        protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+
+        //? if >= 1.21 {
+        protected
+        //?} else {
+        /*public
+        *///?}
+
+        VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
             return getShape(state, level, pos, context);
         }
 
         @Override
-        protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+
+        //? if >= 1.21 {
+        protected
+        //?} else {
+        /*public
+        *///?}
+
+        VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
             return getShape(state, level, pos, CollisionContext.empty());
         }
 
@@ -190,7 +212,14 @@ public class AerialRootsSoilProperties extends SoilProperties {
         }
 
         @Override
-        protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+
+        //? if >= 1.21 {
+        protected
+        //?} else {
+        /*public
+        *///?}
+
+        void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
             if (!state.is(this)) return;
 
             if (isStructurallyUnstable(level, pos)){
@@ -265,7 +294,13 @@ public class AerialRootsSoilProperties extends SoilProperties {
             if (destroyData != null){
 
                 final ItemStack heldItem = player == null ? ItemStack.EMPTY : player.getMainHandItem();
+
+                //? if >= 1.20 {
                 final int fortune = ItemUtils.getEnchantmentLevel(Enchantments.FORTUNE, heldItem, level.registryAccess());
+                //?} else {
+                /*final int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, heldItem);
+                *///?}
+
                 final float fortuneFactor = 1.0f + 0.25f * fortune;
                 final NetVolumeNode.Volume woodVolume = destroyData.woodVolume; // The amount of wood calculated from the body of the tree network.
                 woodVolume.multiplyVolume(fortuneFactor);

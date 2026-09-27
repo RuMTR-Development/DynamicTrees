@@ -45,12 +45,26 @@ public final class RegistrySubCommand<V extends RegistryEntry<V>> extends SubCom
 
     private void listEntries(final CommandSourceStack source, final boolean raw) {
         if (raw) {
-            this.registry.getAll().forEach(entry -> source.sendSuccess(() -> Component.literal(entry.getRegistryName().toString()), false));
+            this.registry.getAll().forEach(entry -> source.sendSuccess(
+                    //? if >= 1.21 {
+                    () -> Component.literal(entry.getRegistryName().toString()),
+                    //? } else {
+                    /*Component.literal(entry.getRegistryName().toString()),
+                    *///? }
+
+                    false));
             return;
         }
 
-        this.registry.getAll().forEach(entry -> source.sendSuccess(() -> Component.literal("- ")
-                .append(entry.getTextComponent()).withStyle(ChatFormatting.GREEN), false));
+        this.registry.getAll().forEach(entry -> source.sendSuccess(
+                //? if >= 1.21 {
+                () -> Component.literal("- ")
+                //? } else {
+                /*Component.literal("- ")
+                *///? }
+
+                .append(entry.getTextComponent()).withStyle(ChatFormatting.GREEN), false)
+        );
     }
 
 }

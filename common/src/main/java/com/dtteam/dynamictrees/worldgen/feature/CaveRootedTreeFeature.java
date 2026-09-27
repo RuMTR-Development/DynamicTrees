@@ -58,7 +58,7 @@ public class CaveRootedTreeFeature extends DynamicTreeFeature {
         if (groundPositions.isEmpty()) return false;
 
         if (caveRootedData.shouldGenerateOnSurface()) {
-            groundPositions = List.of(groundPositions.getLast());
+            groundPositions = List.of(groundPositions.get(groundPositions.size() - 1));
         }
 
         AtomicBoolean generated = new AtomicBoolean(false);
