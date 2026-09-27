@@ -1,6 +1,5 @@
 package com.dtteam.dynamictrees;
 
-
 import com.dtteam.dynamictrees.block.leaves.LeavesProperties;
 import com.dtteam.dynamictrees.block.soil.SoilProperties;
 import com.dtteam.dynamictrees.client.BlockColorMultipliers;
@@ -14,6 +13,7 @@ import com.dtteam.dynamictrees.registry.NeoForgeRegistryLoader;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.treepack.Resources;
+import fuzs.forgeconfigapiport.neoforge.api.forge.v4.ForgeConfigRegistry;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -30,9 +30,9 @@ public class DynamicTreesNeoForge {
         eventBus.addListener(this::onCommonSetup);
         eventBus.addListener(this::gatherData);
 
-        container.registerConfig(ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
-        container.registerConfig(ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
-        container.registerConfig(ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+        ForgeConfigRegistry.INSTANCE.register(container, ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
+        ForgeConfigRegistry.INSTANCE.register(container, ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
+        ForgeConfigRegistry.INSTANCE.register(container, ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
 
         NeoForgeRegistryHandler.setup(DynamicTrees.MOD_ID, eventBus);
 

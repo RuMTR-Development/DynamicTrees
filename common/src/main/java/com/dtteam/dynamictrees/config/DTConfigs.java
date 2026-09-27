@@ -4,97 +4,97 @@ import com.dtteam.dynamictrees.*;
 import com.dtteam.dynamictrees.block.branch.*;
 import com.dtteam.dynamictrees.systems.season.*;
 import com.dtteam.dynamictrees.tree.species.*;
-import net.neoforged.neoforge.common.*;
+import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.*;
 
 import java.util.*;
 
 public class DTConfigs {
 
-    public static final ModConfigSpec SERVER_CONFIG;
+    public static final ForgeConfigSpec SERVER_CONFIG;
     public static final DTConfigs SERVER;
-    public static final ModConfigSpec COMMON_CONFIG;
+    public static final ForgeConfigSpec COMMON_CONFIG;
     public static final DTConfigs COMMON;
-    public static final ModConfigSpec CLIENT_CONFIG;
+    public static final ForgeConfigSpec CLIENT_CONFIG;
     public static final DTConfigs CLIENT;
 
     static {
-        Pair<DTConfigs, ModConfigSpec> serverPair = new ModConfigSpec.Builder().configure(DTConfigs::buildServerConfig);
+        Pair<DTConfigs, ForgeConfigSpec> serverPair = new ForgeConfigSpec.Builder().configure(DTConfigs::buildServerConfig);
         SERVER_CONFIG = serverPair.getRight();
         SERVER = serverPair.getLeft();
 
-        Pair<DTConfigs, ModConfigSpec> commonPair = new ModConfigSpec.Builder().configure(DTConfigs::buildCommonConfig);
+        Pair<DTConfigs, ForgeConfigSpec> commonPair = new ForgeConfigSpec.Builder().configure(DTConfigs::buildCommonConfig);
         COMMON_CONFIG = commonPair.getRight();
         COMMON = commonPair.getLeft();
 
-        Pair<DTConfigs, ModConfigSpec> clientPair = new ModConfigSpec.Builder().configure(DTConfigs::buildClientConfig);
+        Pair<DTConfigs, ForgeConfigSpec> clientPair = new ForgeConfigSpec.Builder().configure(DTConfigs::buildClientConfig);
         CLIENT_CONFIG = clientPair.getRight();
         CLIENT = clientPair.getLeft();
     }
 
-    public ModConfigSpec.DoubleValue leavesSeedDropRate;
-    public ModConfigSpec.DoubleValue minSeasonalLeavesSeedDropRate;
-    public ModConfigSpec.DoubleValue voluntarySeedDropRate;
-    public ModConfigSpec.DoubleValue minSeasonalVoluntarySeedDropRate;
-    public ModConfigSpec.DoubleValue seedPlantRate;
-    public ModConfigSpec.IntValue seedTimeToLive;
-    public ModConfigSpec.BooleanValue seedOnlyForest;
-    public ModConfigSpec.DoubleValue seedMinForestness;
-    public ModConfigSpec.BooleanValue climateAffectsFruitsAndPods;
+    public ForgeConfigSpec.DoubleValue leavesSeedDropRate;
+    public ForgeConfigSpec.DoubleValue minSeasonalLeavesSeedDropRate;
+    public ForgeConfigSpec.DoubleValue voluntarySeedDropRate;
+    public ForgeConfigSpec.DoubleValue minSeasonalVoluntarySeedDropRate;
+    public ForgeConfigSpec.DoubleValue seedPlantRate;
+    public ForgeConfigSpec.IntValue seedTimeToLive;
+    public ForgeConfigSpec.BooleanValue seedOnlyForest;
+    public ForgeConfigSpec.DoubleValue seedMinForestness;
+    public ForgeConfigSpec.BooleanValue climateAffectsFruitsAndPods;
 
-    public ModConfigSpec.DoubleValue treeGrowthMultiplier;
-    public ModConfigSpec.DoubleValue treeHarvestMultiplier;
-    public ModConfigSpec.DoubleValue maxTreeHardness;
-    public ModConfigSpec.DoubleValue treeHardnessMultiplier;
-    public ModConfigSpec.BooleanValue dropSticks;
-    public ModConfigSpec.DoubleValue scaleBiomeGrowthRate;
-    public ModConfigSpec.DoubleValue diseaseChance;
-    public ModConfigSpec.IntValue maxBranchRotRadius;
-    public ModConfigSpec.DoubleValue rootyBlockHardnessMultiplier;
-    public ModConfigSpec.EnumValue<SwampSpecies.WaterSurfaceGenerationState> swampOaksInWater;
-    public ModConfigSpec.IntValue boneMealGrowthPulses;
+    public ForgeConfigSpec.DoubleValue treeGrowthMultiplier;
+    public ForgeConfigSpec.DoubleValue treeHarvestMultiplier;
+    public ForgeConfigSpec.DoubleValue maxTreeHardness;
+    public ForgeConfigSpec.DoubleValue treeHardnessMultiplier;
+    public ForgeConfigSpec.BooleanValue dropSticks;
+    public ForgeConfigSpec.DoubleValue scaleBiomeGrowthRate;
+    public ForgeConfigSpec.DoubleValue diseaseChance;
+    public ForgeConfigSpec.IntValue maxBranchRotRadius;
+    public ForgeConfigSpec.DoubleValue rootyBlockHardnessMultiplier;
+    public ForgeConfigSpec.EnumValue<SwampSpecies.WaterSurfaceGenerationState> swampOaksInWater;
+    public ForgeConfigSpec.IntValue boneMealGrowthPulses;
 
-    public ModConfigSpec.BooleanValue isLeavesPassable;
-    public ModConfigSpec.BooleanValue vanillaLeavesCollision;
-    public ModConfigSpec.BooleanValue enableBranchClimbing;
-    public ModConfigSpec.BooleanValue enableCanopyCrash;
-    public ModConfigSpec.EnumValue<DynamicTrees.AxeDamage> axeDamageMode;
-    public ModConfigSpec.BooleanValue enableFallingTrees;
-    public ModConfigSpec.BooleanValue enableFallingTreeDamage;
-    public ModConfigSpec.DoubleValue fallingTreeDamageMultiplier;
-    public ModConfigSpec.BooleanValue dirtBucketPlacesDirt;
-    public ModConfigSpec.BooleanValue sloppyBreakDrops;
-    public ModConfigSpec.IntValue minRadiusForStrip;
-    public ModConfigSpec.BooleanValue enableStripRadiusReduction;
-    public ModConfigSpec.BooleanValue canBoneMealFruit;
-    public ModConfigSpec.BooleanValue canBoneMealPods;
-    public ModConfigSpec.BooleanValue dynamicSaplingDrops;
+    public ForgeConfigSpec.BooleanValue isLeavesPassable;
+    public ForgeConfigSpec.BooleanValue vanillaLeavesCollision;
+    public ForgeConfigSpec.BooleanValue enableBranchClimbing;
+    public ForgeConfigSpec.BooleanValue enableCanopyCrash;
+    public ForgeConfigSpec.EnumValue<DynamicTrees.AxeDamage> axeDamageMode;
+    public ForgeConfigSpec.BooleanValue enableFallingTrees;
+    public ForgeConfigSpec.BooleanValue enableFallingTreeDamage;
+    public ForgeConfigSpec.DoubleValue fallingTreeDamageMultiplier;
+    public ForgeConfigSpec.BooleanValue dirtBucketPlacesDirt;
+    public ForgeConfigSpec.BooleanValue sloppyBreakDrops;
+    public ForgeConfigSpec.IntValue minRadiusForStrip;
+    public ForgeConfigSpec.BooleanValue enableStripRadiusReduction;
+    public ForgeConfigSpec.BooleanValue canBoneMealFruit;
+    public ForgeConfigSpec.BooleanValue canBoneMealPods;
+    public ForgeConfigSpec.BooleanValue dynamicSaplingDrops;
 
-    public ModConfigSpec.BooleanValue replaceVanillaSaplings;
-    public ModConfigSpec.BooleanValue replaceNyliumFungi;
-    public ModConfigSpec.BooleanValue cancelVanillaVillageTrees;
-    public ModConfigSpec.IntValue maxFallingTreeLeavesParticles;
+    public ForgeConfigSpec.BooleanValue replaceVanillaSaplings;
+    public ForgeConfigSpec.BooleanValue replaceNyliumFungi;
+    public ForgeConfigSpec.BooleanValue cancelVanillaVillageTrees;
+    public ForgeConfigSpec.IntValue maxFallingTreeLeavesParticles;
 
-    public ModConfigSpec.BooleanValue generatePodzol;
-    public ModConfigSpec.BooleanValue worldGen;
-    public ModConfigSpec.ConfigValue<List<? extends String>> dimensionBlacklist;
-    public ModConfigSpec.BooleanValue sampleNoiseBiome;
+    public ForgeConfigSpec.BooleanValue generatePodzol;
+    public ForgeConfigSpec.BooleanValue worldGen;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> dimensionBlacklist;
+    public ForgeConfigSpec.BooleanValue sampleNoiseBiome;
 
-    public ModConfigSpec.BooleanValue generateDirtBucketRecipes;
-    public ModConfigSpec.BooleanValue generateMegaSeedRecipe;
-    public ModConfigSpec.ConfigValue<String> biocharBrewingBase;
+    public ForgeConfigSpec.BooleanValue generateDirtBucketRecipes;
+    public ForgeConfigSpec.BooleanValue generateMegaSeedRecipe;
+    public ForgeConfigSpec.ConfigValue<String> biocharBrewingBase;
 
-    public ModConfigSpec.ConfigValue<String> preferredSeasonMod;
-    public ModConfigSpec.BooleanValue enableSeasonalSeedDrop;
-    public ModConfigSpec.BooleanValue enableSeasonalGrowth;
-    public ModConfigSpec.BooleanValue enableSeasonalFruitProduction;
-    public ModConfigSpec.DoubleValue wetSeasonOffset;
+    public ForgeConfigSpec.ConfigValue<String> preferredSeasonMod;
+    public ForgeConfigSpec.BooleanValue enableSeasonalSeedDrop;
+    public ForgeConfigSpec.BooleanValue enableSeasonalGrowth;
+    public ForgeConfigSpec.BooleanValue enableSeasonalFruitProduction;
+    public ForgeConfigSpec.DoubleValue wetSeasonOffset;
 
-    public ModConfigSpec.BooleanValue debug;
+    public ForgeConfigSpec.BooleanValue debug;
 
     private DTConfigs() {}
 
-    private static DTConfigs buildServerConfig(ModConfigSpec.Builder builder) {
+    private static DTConfigs buildServerConfig(ForgeConfigSpec.Builder builder) {
         DTConfigs config = new DTConfigs();
 
         builder.comment("Seed Settings").push("seeds");
@@ -195,7 +195,7 @@ public class DTConfigs {
         return config;
     }
 
-    private static DTConfigs buildCommonConfig(ModConfigSpec.Builder builder) {
+    private static DTConfigs buildCommonConfig(ForgeConfigSpec.Builder builder) {
         DTConfigs config = new DTConfigs();
 
         builder.comment("Vanilla Trees Settings").push("vanilla");
@@ -234,7 +234,7 @@ public class DTConfigs {
         return config;
     }
 
-    private static DTConfigs buildClientConfig(ModConfigSpec.Builder builder) {
+    private static DTConfigs buildClientConfig(ForgeConfigSpec.Builder builder) {
         return new DTConfigs();
     }
 

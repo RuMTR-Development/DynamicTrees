@@ -65,13 +65,15 @@ repositories {
 }
 
 dependencies {
-    implementation "curse.maven:jade-324717:${jade_version}"
-    implementation "curse.maven:jei-238222:${jei_version}"
-    implementation "curse.maven:glitchcore-955399:${glitchcore_version}"
-    implementation "curse.maven:serene-seasons-291874:${serene_seasons_version}"
+    implementation "curse.maven:jade-324717:${neoforge_jade_version}"
+    implementation "curse.maven:jei-238222:${neoforge_jei_version}"
+    implementation "curse.maven:glitchcore-955399:${neoforge_glitchcore_version}"
+    implementation "curse.maven:serene-seasons-291874:${neoforge_serene_seasons_version}"
 
-    runtimeOnly "curse.maven:patchouli-306770:${patchouli_version}"
-    runtimeOnly "curse.maven:spark-361579:${spark_version}"
+    runtimeOnly "curse.maven:patchouli-306770:${neoforge_patchouli_version}"
+    runtimeOnly "curse.maven:spark-361579:${neoforge_spark_version}"
+
+    implementation "fuzs.forgeconfigapiport:forgeconfigapiport-neoforge:${forge_config_api_port_version}"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

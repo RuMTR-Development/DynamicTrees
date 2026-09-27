@@ -15,22 +15,25 @@ def versionKeys = [
     'parchment_version',
     'java_version',
     'forge_config_api_port_version',
+    'forge_config_api_port_variant',
     'fabric_version',
     'fabric_loader_version',
     'forge_version',
     'forge_loader_version_range',
     'neoforge_version',
     'neoforge_loader_version_range',
-    'jade_version',
-    'jei_version',
-    'glitchcore_version',
-    'serene_seasons_version',
-    'patchouli_version',
-    'spark_version'
+    'neoforge_jade_version',
+    'neoforge_jei_version',
+    'neoforge_glitchcore_version',
+    'neoforge_serene_seasons_version',
+    'neoforge_patchouli_version',
+    'neoforge_spark_version'
 ]
 
 versionKeys.each { key ->
-    ext.set(key, rootBranch.property(key))
+    if (rootBranch.hasProperty(key)) {
+        ext.set(key, rootBranch.property(key))
+    }
 }
 
 base {
