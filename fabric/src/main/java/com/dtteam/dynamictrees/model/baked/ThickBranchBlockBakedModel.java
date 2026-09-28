@@ -96,10 +96,11 @@ public class ThickBranchBlockBakedModel extends BasicBranchBlockBakedModel {
                             face,
                             BlockModelRotation.X0_Y0,
                             part.rotation,
-                            true,
+                            true
 
                             //? if < 1.21 {
-                            /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                            /*,
+                            new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
                             *///? }
                     ));
                 }
@@ -144,10 +145,11 @@ public class ThickBranchBlockBakedModel extends BasicBranchBlockBakedModel {
                     face,
                     BlockModelRotation.X0_Y0,
                     part.rotation,
-                    true,
+                    true
 
                     //? if < 1.21 {
-                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    /*,
+                    new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
                     *///? }
             ));
         }

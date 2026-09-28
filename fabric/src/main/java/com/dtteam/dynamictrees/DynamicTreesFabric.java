@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import net.minecraftforge.fml.config.ModConfig;
-
 //? if >= 1.21 {
 import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+import net.neoforged.fml.config.ModConfig;
 //? } else {
 /*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import net.minecraftforge.fml.config.ModConfig;
 *///? }
 
 public class DynamicTreesFabric implements ModInitializer {

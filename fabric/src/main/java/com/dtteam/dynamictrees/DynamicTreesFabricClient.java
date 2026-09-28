@@ -20,14 +20,13 @@ import net.fabricmc.api.*;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.*;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.item.v1.*;
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;import net.fabricmc.fabric.api.client.rendering.v1.*;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.fabricmc.fabric.impl.client.rendering.*;
 import net.minecraft.client.*;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.*;
-import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.*;
 import net.minecraft.resources.*;
@@ -37,7 +36,6 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.*;
-import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.*;
 import java.util.function.*;
@@ -50,6 +48,8 @@ import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.*;
 import net.fabricmc.fabric.api.client.model.loading.v1.*;
 //? } else {
 /*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 *///? }
 
 public class DynamicTreesFabricClient implements ClientModInitializer {

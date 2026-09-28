@@ -178,13 +178,15 @@ public class DTModelModifier {
     }
 
     public static BakedModel modifyModelAfterBake(BakedModel model, ModelResourceLocation modelId, Function<Material, TextureAtlasSprite> spriteGetter) {
+        if (modelId == null) {
+            return model;
+        }
+
         //? if >= 1.21 {
-        ResourceLocation id = modelId.id();
+        ResourceLocation blockId = modelId.id();
         //? } else {
         /*ResourceLocation blockId = ResourceLocation.fromNamespaceAndPath(modelId.getNamespace(), modelId.getPath());
         *///? }
-
-        if (modelId == null) return model;
 
         if (blockId.equals(POTTED_SAPLING_MODEL)) {
             return new BakedModelBlockPottedSapling(model);

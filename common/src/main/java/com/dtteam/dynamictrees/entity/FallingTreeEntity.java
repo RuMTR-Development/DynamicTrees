@@ -410,8 +410,8 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
      * @param entity The {@link FallingTreeEntity} object.
      */
     public static void standardDropLogsPayload(FallingTreeEntity entity) {
-        //~ if < 1.21 'level()' -> 'level'
-        Level level() = entity.level();
+        //~ if < 1.21 '.level()' -> '.level'
+        Level level = entity.level();
         if (!level.isClientSide) {
             BlockPos cutPos = entity.getDestroyData().cutPos;
             entity.getPayload().forEach(i -> spawnItemAsEntity(level, cutPos, i));
@@ -419,8 +419,8 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
     }
 
     public static void standardDropLeavesPayLoad(FallingTreeEntity entity) {
-        //~ if < 1.21 'level()' -> 'level'
-        Level level() = entity.level();
+        //~ if < 1.21 '.level()' -> '.level'
+        Level level = entity.level();
         if (!level.isClientSide) {
             BlockPos cutPos = entity.getDestroyData().cutPos;
             entity.getDestroyData().leavesDrops.forEach(bis -> Block.popResource(level, cutPos.offset(bis.pos), bis.stack));
