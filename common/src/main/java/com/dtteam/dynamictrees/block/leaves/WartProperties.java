@@ -9,7 +9,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.Collections;
@@ -19,6 +18,7 @@ import java.util.List;
 import net.minecraft.world.level.material.MapColor;
  //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.Material;
 *///? }
 
 /**

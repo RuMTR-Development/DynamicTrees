@@ -3,8 +3,31 @@ plugins {
     id 'fabric-loom'
     id "me.modmuss50.mod-publish-plugin"
 }
+
 mod_version = "${mod_version}-fabric${fabricVersionAppend}"
 version = mod_version
+
+stonecutter {
+    constants["serene_seasons"] = project.hasProperty("fabric_serene_seasons_version")
+}
+
+repositories {
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    flatDir {
+        dir 'libs'
+    }
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -16,6 +39,26 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.forge_config_api_port_version}"
 
+    implementation("net.jodah:typetools:0.6.3")
+
+    modImplementation "curse.maven:jade-324717:${fabric_jade_version}"
+    modImplementation "curse.maven:jei-238222:${fabric_jei_version}"
+
+    if (project.hasProperty("fabric_glitchcore_version")) {
+        modImplementation "curse.maven:glitchcore-955399:${fabric_glitchcore_version}"
+    }
+
+    if (project.hasProperty("fabric_serene_seasons_version")) {
+        modImplementation "curse.maven:serene-seasons-291874:${fabric_serene_seasons_version}"
+    }
+
+    modCompileOnly "curse.maven:continuity-531351:${fabric_continuity_version}"
+
+    modRuntimeOnly "maven.modrinth:sodium:${fabric_sodium_version}"
+
+    if (project.hasProperty("fabric_indium_version")) {
+        modRuntimeOnly "maven.modrinth:indium:${fabric_indium_version}"
+    }
 }
 
 loom {
@@ -48,36 +91,6 @@ loom {
             vmArg("-Dfabric-api.datagen.output-dir=${project(':common').file('src/generated/resources')}")
             vmArg("-Dfabric-api.datagen.modid=${mod_id}")
         }
-    }
-    repositories {
-        maven {
-            url "https://cursemaven.com"
-            content {
-                includeGroup "curse.maven"
-            }
-        }
-        maven {
-            url "https://api.modrinth.com/maven"
-            content {
-                includeGroup "maven.modrinth"
-            }
-        }
-        flatDir {
-            dir 'libs'
-        }
-    }
-    dependencies {
-        modImplementation "curse.maven:jade-324717:6011268"
-        modImplementation "curse.maven:jei-238222:5846878"
-
-        implementation("net.jodah:typetools:0.6.3")
-
-        modImplementation "curse.maven:glitchcore-955399:5660741"
-        modImplementation "curse.maven:serene-seasons-291874:5753502"
-
-        modCompileOnly "curse.maven:continuity-531351:5962881"
-
-        modRuntimeOnly "maven.modrinth:sodium:u1OEbNKx"
     }
 
 }

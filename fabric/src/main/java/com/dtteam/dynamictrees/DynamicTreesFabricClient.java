@@ -16,19 +16,18 @@ import com.dtteam.dynamictrees.systems.season.*;
 import com.dtteam.dynamictrees.tree.*;
 import com.dtteam.dynamictrees.tree.family.*;
 import com.dtteam.dynamictrees.tree.species.*;
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
-import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.*;
 import net.fabricmc.api.*;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.*;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.item.v1.*;
-import net.fabricmc.fabric.api.client.model.loading.v1.*;
-import net.fabricmc.fabric.api.client.rendering.v1.*;
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.fabricmc.fabric.impl.client.rendering.*;
 import net.minecraft.client.*;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.*;
 import net.minecraft.resources.*;
@@ -38,11 +37,20 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.*;
-import net.neoforged.fml.config.*;
+import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
+
+//? if >= 1.21 {
+import net.neoforged.fml.config.*;
+import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.*;
+import net.fabricmc.fabric.api.client.model.loading.v1.*;
+//? } else {
+/*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+*///? }
 
 public class DynamicTreesFabricClient implements ClientModInitializer {
 
@@ -52,7 +60,13 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ForgeConfigRegistry.INSTANCE.register(DynamicTrees.MOD_ID, ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+
+        //? if >= 1.21 {
         AtlasSourceTypeRegistryImpl.register(ThickBranchRingsSource.ID, ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC));
+        //? } else {
+        /*SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
+        *///? }
+
         registerModelLoaders();
         registerEntityRenderers();
         registerColorHandlers();
@@ -75,7 +89,8 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
     }
 
     private void registerModelLoaders() {
-        ModelLoadingPlugin.register(new DTModelLoadingPlugin());
+        //? if >= 1.21
+         ModelLoadingPlugin.register(new DTModelLoadingPlugin());
     }
 
     private void registerEntityRenderers() {
@@ -159,7 +174,16 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
     }
 
     private void registerTooltipCallback() {
-        ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
+        ItemTooltipCallback.EVENT.register((
+                stack,
+                context,
+
+                //? if >= 1.21 {
+                type,
+                //? }
+
+                lines
+        ) -> {
             Item item = stack.getItem();
             if (!(item instanceof Seed seed)) {
                 return;
@@ -170,6 +194,7 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
                 return;
             }
 
+            //~ if < 1.21 '.level()' -> '.level'
             LevelContext levelContext = LevelContext.create(player.level());
             Species species = seed.getSpecies();
             if(!species.isValid()) {
@@ -180,6 +205,7 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
             }
 
             BlockPos playerPos = BlockPos.containing(player.position());
+            //~ if < 1.21 '.level()' -> '.level'
             ClimateZoneType climate = ClimateHelper.getClimate(player.level(), playerPos);
             int flags = seed.getSpecies().getSeasonalTooltipFlags(levelContext, player);
             Tooltips.applySeasonalTooltips(lines, flags, climate);
@@ -223,7 +249,7 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
             DynamicTrees.LOG.warn("Could not get color of {} side for {}! Branch needs to be handled manually!", face, state.getBlock());
             return 0;
         }
-        TextureAtlasSprite sprite = quads.getFirst().getSprite();
+        TextureAtlasSprite sprite = quads.get(0).getSprite();
         final TextureHelper.PixelBuffer pixelBuffer = new TextureHelper.PixelBuffer(sprite);
         final int u = pixelBuffer.w / 16;
         final TextureHelper.PixelBuffer center = new TextureHelper.PixelBuffer(u * 8, u * 8);

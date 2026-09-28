@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -57,6 +58,7 @@ public class WailaBranchHandler implements IBlockComponentProvider {
 
         //Attempt to get species from server via NBT data
         if (nbtData.contains("species")) {
+            //~ if < 1.21 'ResourceLocation.parse' -> 'new ResourceLocation'
             species = Species.findSpecies(ResourceLocation.parse(nbtData.getString("species")));
         }
 
@@ -111,8 +113,14 @@ public class WailaBranchHandler implements IBlockComponentProvider {
                 }
             }
 
-            int silkTouch = ItemUtils.getEnchantmentLevel(Enchantments.SILK_TOUCH, accessor.getPlayer().getMainHandItem(), accessor.getPlayer().registryAccess());
+            //? if >= 1.21 {
             int fortune = ItemUtils.getEnchantmentLevel(Enchantments.FORTUNE, accessor.getPlayer().getMainHandItem(), accessor.getPlayer().registryAccess());
+            int silkTouch = ItemUtils.getEnchantmentLevel(Enchantments.SILK_TOUCH, accessor.getPlayer().getMainHandItem(), accessor.getPlayer().registryAccess());
+            //?} else {
+            /*final int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, accessor.getPlayer().getMainHandItem());
+            final int silkTouch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, accessor.getPlayer().getMainHandItem());
+            *///?}
+
             if (lastVolume.getVolume() > 0) {
                 LogsAndSticks las = species.getLogsAndSticks(lastVolume, silkTouch > 0, fortune);
                 List<ItemStack> logStacks = las.logs;
@@ -129,7 +137,7 @@ public class WailaBranchHandler implements IBlockComponentProvider {
                 }
             }
 
-            tooltip.add(elements.removeFirst());
+            tooltip.add(elements.remove(0));
             elements.forEach(tooltip::append);
             tooltip.add(ElementHelper.INSTANCE.spacer(0, 2));
         }

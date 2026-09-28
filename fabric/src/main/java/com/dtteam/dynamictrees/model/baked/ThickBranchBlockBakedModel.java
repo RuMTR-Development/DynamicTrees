@@ -1,5 +1,6 @@
 package com.dtteam.dynamictrees.model.baked;
 
+import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.block.branch.BranchBlock;
 import com.dtteam.dynamictrees.block.branch.ThickBranchBlock;
 import com.dtteam.dynamictrees.utility.CoordUtils;
@@ -21,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -29,10 +31,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
@@ -89,7 +88,20 @@ public class ThickBranchBlockBakedModel extends BasicBranchBlockBakedModel {
                     mapFacesIn.put(face, new BlockElementFace(null, -1, null, uvface));
 
                     BlockElement part = new BlockElement(limits[0], limits[1], mapFacesIn, null, true);
-                    quads.add(faceBakery.bakeQuad(part.from, part.to, part.faces.get(face), bark, face, BlockModelRotation.X0_Y0, part.rotation, true));
+                    quads.add(faceBakery.bakeQuad(
+                            part.from,
+                            part.to,
+                            part.faces.get(face),
+                            bark,
+                            face,
+                            BlockModelRotation.X0_Y0,
+                            part.rotation,
+                            true,
+
+                            //? if < 1.21 {
+                            /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                            *///? }
+                    ));
                 }
             }
         }
@@ -124,7 +136,20 @@ public class ThickBranchBlockBakedModel extends BasicBranchBlockBakedModel {
             mapFacesIn.put(face, new BlockElementFace(null, -1, null, uvFace));
 
             BlockElement part = new BlockElement(posFrom, posTo, mapFacesIn, null, true);
-            quads.add(faceBakery.bakeQuad(part.from, part.to, part.faces.get(face), ring, face, BlockModelRotation.X0_Y0, part.rotation, true));
+            quads.add(faceBakery.bakeQuad(
+                    part.from,
+                    part.to,
+                    part.faces.get(face),
+                    ring,
+                    face,
+                    BlockModelRotation.X0_Y0,
+                    part.rotation,
+                    true,
+
+                    //? if < 1.21 {
+                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    *///? }
+            ));
         }
 
         return quads;

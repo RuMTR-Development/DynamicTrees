@@ -79,7 +79,8 @@ public class Seed extends Item {//implements IPlantable {
         int lifespan = Services.INTERACTION.setSeedItemEntityLifespan(entityItem, this);
 
         if (entityItem.tickCount >= lifespan - 20) {//Perform this action 20 ticks(1 second) before dying
-            final Level level = entityItem.level;
+            //~ if < 1.21 '.level()' -> '.level'
+            final Level level = entityItem.level();
             if (!level.isClientSide) {//Server side only
                 final ItemStack seedStack = entityItem.getItem();
                 final BlockPos pos = new BlockPos(entityItem.blockPosition());

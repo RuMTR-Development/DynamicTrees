@@ -9,16 +9,23 @@ import com.dtteam.dynamictrees.platform.FabricMiscHelper;
 import com.dtteam.dynamictrees.registry.FabricRegistryHandler;
 import com.dtteam.dynamictrees.registry.FabricRegistryLoader;
 import com.dtteam.dynamictrees.worldgen.FabricBiomeModifications;
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.neoforged.fml.config.*;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import net.minecraftforge.fml.config.ModConfig;
+
+//? if >= 1.21 {
+import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+//? } else {
+/*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+*///? }
 
 public class DynamicTreesFabric implements ModInitializer {
 

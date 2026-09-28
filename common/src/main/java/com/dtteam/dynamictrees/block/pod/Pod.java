@@ -31,7 +31,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -48,6 +47,7 @@ import java.util.function.Supplier;
 import net.minecraft.world.level.material.MapColor;
  //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.Material;
 *///? }
 
 /**

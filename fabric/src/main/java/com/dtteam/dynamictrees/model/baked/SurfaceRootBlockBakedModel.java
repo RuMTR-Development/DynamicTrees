@@ -1,5 +1,6 @@
 package com.dtteam.dynamictrees.model.baked;
 
+import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.api.network.RootConnections;
 import com.dtteam.dynamictrees.block.branch.SurfaceRootBlock;
 import com.dtteam.dynamictrees.utility.CoordUtils;
@@ -22,6 +23,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -108,7 +110,20 @@ public class SurfaceRootBlockBakedModel implements BakedModel, FabricBakedModel 
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            quads.add(faceBakery.bakeQuad(part.from, part.to, e.getValue(), barkTexture, face, BlockModelRotation.X0_Y0, part.rotation, true));
+            quads.add(faceBakery.bakeQuad(
+                    part.from,
+                    part.to,
+                    e.getValue(),
+                    barkTexture,
+                    face,
+                    BlockModelRotation.X0_Y0,
+                    part.rotation,
+                    true,
+
+                    //? if < 1.21 {
+                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    *///? }
+            ));
         }
 
         return quads;
@@ -134,7 +149,19 @@ public class SurfaceRootBlockBakedModel implements BakedModel, FabricBakedModel 
                 Vector3f[] limits = AABBLimits(pieceBoundary);
 
                 BlockElement part = new BlockElement(limits[0], limits[1], mapFacesIn, null, true);
-                quads.add(faceBakery.bakeQuad(part.from, part.to, part.faces.get(face), barkTexture, face, BlockModelRotation.X0_Y0, part.rotation, true));
+                quads.add(faceBakery.bakeQuad(part.from,
+                        part.to,
+                        part.faces.get(face),
+                        barkTexture,
+                        face,
+                        BlockModelRotation.X0_Y0,
+                        part.rotation,
+                        true,
+
+                        //? if < 1.21 {
+                        /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                        *///? }
+                ));
             }
         }
 
@@ -167,7 +194,19 @@ public class SurfaceRootBlockBakedModel implements BakedModel, FabricBakedModel 
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            quads.add(faceBakery.bakeQuad(part.from, part.to, e.getValue(), barkTexture, face, BlockModelRotation.X0_Y0, part.rotation, true));
+            quads.add(faceBakery.bakeQuad(part.from,
+                    part.to,
+                    e.getValue(),
+                    barkTexture,
+                    face,
+                    BlockModelRotation.X0_Y0,
+                    part.rotation,
+                    true,
+
+                    //? if < 1.21 {
+                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    *///? }
+            ));
         }
 
         return quads;

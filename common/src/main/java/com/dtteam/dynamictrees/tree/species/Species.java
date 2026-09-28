@@ -1912,7 +1912,8 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     public int getSeasonalTooltipFlags(LevelContext levelContext, Player player) {
         if (showSeasonalTooltip()) {
             BlockPos playerPos = BlockPos.containing(player.position());
-            ClimateZoneType climate = ClimateHelper.getClimate(player.level, playerPos);
+            //~ if < 1.21 '.level()' -> '.level'
+            ClimateZoneType climate = ClimateHelper.getClimate(player.level(), playerPos);
             float suitability = (float) (DTConfigs.SERVER.climateAffectsFruitsAndPods.get()
                     ? ClimateHelper.climateMultiplier(this, climate, climateTolerance) : 1.0);
             if (suitability < 0.3) return 0; //No seasons, still display

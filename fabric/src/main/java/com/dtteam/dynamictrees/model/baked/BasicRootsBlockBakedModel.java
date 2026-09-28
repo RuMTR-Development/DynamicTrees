@@ -1,5 +1,6 @@
 package com.dtteam.dynamictrees.model.baked;
 
+import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.block.branch.BasicRootsBlock;
 import com.dtteam.dynamictrees.block.branch.BranchBlock;
 import com.google.common.collect.Maps;
@@ -15,16 +16,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
@@ -72,7 +71,19 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            quads.add(faceBakery.bakeQuad(part.from, part.to, e.getValue(), rings, face, BlockModelRotation.X0_Y0, part.rotation, true));
+            quads.add(faceBakery.bakeQuad(part.from,
+                    part.to,
+                    e.getValue(),
+                    rings,
+                    face,
+                    BlockModelRotation.X0_Y0,
+                    part.rotation,
+                    true,
+
+                    //? if < 1.21 {
+                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    *///? }
+            ));
         }
 
         return quads;

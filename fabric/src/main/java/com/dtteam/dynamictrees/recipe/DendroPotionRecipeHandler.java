@@ -4,7 +4,6 @@ import com.dtteam.dynamictrees.config.DTConfigs;
 import com.dtteam.dynamictrees.item.DendroPotion;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -12,12 +11,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionContents;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+//? if >= 1.21 {
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.alchemy.PotionContents;
+//? } else {
+/*import net.minecraft.world.item.alchemy.PotionUtils;
+*///? }
 
 public class DendroPotionRecipeHandler {
 
@@ -27,6 +32,7 @@ public class DendroPotionRecipeHandler {
     public static boolean isIngredient(ItemStack stack){
         AtomicBoolean found = new AtomicBoolean(false);
         ingredients.forEach(ingredient -> {
+            //~ if < 1.21 'isSameItemSameComponents' -> 'isSameItemSameTags'
             if (ItemStack.isSameItemSameComponents(ingredient, stack))
                 found.set(true);
         });
@@ -55,8 +61,14 @@ public class DendroPotionRecipeHandler {
     }
 
     public static ItemStack setPotion(ItemStack pStack, String potionName) {
+        //~ if < 1.21 'ResourceLocation.parse' -> 'new ResourceLocation'
         Optional<Holder.Reference<Potion>> potion = BuiltInRegistries.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
+
+        //? if >= 1.21 {
         potion.ifPresent(holder -> pStack.set(DataComponents.POTION_CONTENTS, new PotionContents(holder)));
+        //? } else {
+        /*potion.ifPresent(holder -> PotionUtils.setPotion(pStack, holder.value()));
+        *///? }
 
         return pStack;
     }

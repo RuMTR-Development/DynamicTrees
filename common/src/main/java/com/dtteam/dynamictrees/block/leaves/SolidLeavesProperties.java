@@ -5,12 +5,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.PushReaction;
 
 //? if >= 1.21 {
 import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.Material;
 *///? }
 
 /**

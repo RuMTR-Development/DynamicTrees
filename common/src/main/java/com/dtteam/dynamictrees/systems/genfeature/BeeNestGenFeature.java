@@ -151,18 +151,22 @@ public class BeeNestGenFeature extends GenFeature {
             int j = 2 + random.nextInt(2);
 
             for(int k = 0; k < j; ++k) {
-                storeBee(random, blockEntity);
+                storeBee(random, blockEntity, world);
             }
 
         });
         return true;
     }
 
-    protected void storeBee(RandomSource random, BeehiveBlockEntity blockEntity) {
+    protected void storeBee(RandomSource random, BeehiveBlockEntity blockEntity, LevelAccessor world) {
         //? if >= 1.21 {
         blockEntity.storeBee(BeehiveBlockEntity.Occupant.create(random.nextInt(599)));
         //? } else {
-        /*Bee entity = new Bee(EntityType.BEE, blockEntity.getLevel());
+        /*if (!(world instanceof Level level)) {
+            return;
+        }
+
+        Bee entity = new Bee(EntityType.BEE, level);
         blockEntity.addOccupantWithPresetTicks(entity, false, random.nextInt(599));
         *///? }
     }

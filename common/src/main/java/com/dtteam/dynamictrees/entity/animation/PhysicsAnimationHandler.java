@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 
+//~ if < 1.21 '.level()' -> '.level' {
 public class PhysicsAnimationHandler implements AnimationHandler {
     @Override
     public String getName() {
@@ -42,7 +43,7 @@ public class PhysicsAnimationHandler implements AnimationHandler {
     }
 
     protected void playEndSound(FallingTreeEntity entity, boolean onWater){
-        if (!getData(entity).endSoundPlayed && !entity.level.isClientSide()){
+        if (!getData(entity).endSoundPlayed && !entity.level().isClientSide()){
             SoundInstance fallingInstance = getData(entity).fallingSoundInstance;
             if (fallingInstance != null)
                 Minecraft.getInstance().getSoundManager().stop(fallingInstance);
@@ -60,7 +61,7 @@ public class PhysicsAnimationHandler implements AnimationHandler {
 
         //playStartSound(entity);
 
-        final long seed = entity.level.random.nextLong();
+        final long seed = entity.level().random.nextLong();
         final RandomSource random = RandomSource.create(seed ^ (((long) cutPos.getX()) << 32 | ((long) cutPos.getZ())));
         final float mass = entity.getDestroyData().woodVolume.getVolume();
         final float inertialMass = Mth.clamp(mass, 1, 3);
@@ -105,7 +106,7 @@ public class PhysicsAnimationHandler implements AnimationHandler {
             radius = ((BranchBlock) state.getBlock()).getRadius(state);
         }
 
-        final Level level = entity.level;
+        final Level level = entity.level();
         final AABB fallBox = new AABB(entity.getX() - radius, entity.getY(), entity.getZ() - radius, entity.getX() + radius, entity.getY() + 1.0, entity.getZ() + radius);
         final BlockPos pos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
         final BlockState collState = level.getBlockState(pos);
@@ -139,8 +140,8 @@ public class PhysicsAnimationHandler implements AnimationHandler {
                     entity.landed = true;
                     entity.setOnGround(true);
                     if (entity.onFire) {
-                        if (entity.level.isEmptyBlock(pos.above())) {
-                            entity.level.setBlockAndUpdate(pos.above(), Blocks.FIRE.defaultBlockState());
+                        if (entity.level().isEmptyBlock(pos.above())) {
+                            entity.level().setBlockAndUpdate(pos.above(), Blocks.FIRE.defaultBlockState());
                         }
                     }
                 }
@@ -151,7 +152,7 @@ public class PhysicsAnimationHandler implements AnimationHandler {
 
     @Override
     public void dropPayload(FallingTreeEntity entity) {
-        final Level level = entity.level;
+        final Level level = entity.level();
         entity.getPayload().forEach(i -> Block.popResource(level, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), i));
     }
 
@@ -177,3 +178,4 @@ public class PhysicsAnimationHandler implements AnimationHandler {
         return true;
     }
 }
+//~ }

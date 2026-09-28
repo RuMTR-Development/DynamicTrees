@@ -1,3 +1,4 @@
+//? if serene_seasons {
 package com.dtteam.dynamictrees.compat;
 
 import com.dtteam.dynamictrees.DynamicTrees;
@@ -43,3 +44,4 @@ public class SereneSeasonsSeasonProvider implements SeasonProvider {
         });
     }
 }
+//? }

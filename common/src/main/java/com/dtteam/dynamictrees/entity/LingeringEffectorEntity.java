@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
+//~ if < 1.21 '.level()' -> '.level' {
 public class LingeringEffectorEntity extends Entity {// implements IEntityAdditionalSpawnData {
 
     public static final EntityDataAccessor<CompoundTag> effectorDataParameter = SynchedEntityData.defineId(LingeringEffectorEntity.class, EntityDataSerializers.COMPOUND_TAG);
@@ -117,7 +118,8 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
     public void tick() {
         super.tick();
 
-        if (level.isClientSide() && !clientBuilt){
+        //~ if < 1.21 'level()' -> 'level'
+        if (level().isClientSide() && !clientBuilt){
             setEffectorData(getEffectorData());
             clientBuilt = true;
         }
@@ -132,10 +134,10 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
 
         if (this.blockPos == null) return;
 
-        final BlockState blockState = this.level.getBlockState(this.blockPos);
+        final BlockState blockState = this.level().getBlockState(this.blockPos);
 
         if (blockState.getBlock() instanceof SoilBlock) {
-            if (!this.effect.update(this.level, this.blockPos, this.tickCount, blockState.getValue(SoilBlock.FERTILITY))) {
+            if (!this.effect.update(this.level(), this.blockPos, this.tickCount, blockState.getValue(SoilBlock.FERTILITY))) {
                 this.kill();
             }
         } else {
@@ -144,3 +146,4 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
     }
 
 }
+//~ }

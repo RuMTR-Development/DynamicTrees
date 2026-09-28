@@ -14,21 +14,46 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPotionBrewing {
 
     @Inject(at = @At("HEAD"), method = "isIngredient", cancellable = true)
-    private void isIngredient(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    private
+
+    //? if < 1.21
+    //static
+
+    void isIngredient(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (DendroPotionRecipeHandler.isIngredient(stack)){
             cir.setReturnValue(true);
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "isContainer", cancellable = true)
-    private void isContainer(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(
+            at = @At("HEAD"),
+
+            //? if >= 1.21 {
+            method = "isContainer",
+            //? } else {
+            /*method = "isContainerIngredient",
+            *///? }
+
+            cancellable = true
+    )
+    private
+
+    //? if < 1.21
+    //static
+
+    void isContainer(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (stack.getItem() instanceof DendroPotion){ //Add the dendro potion as a valid container
             cir.setReturnValue(true);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "hasMix", cancellable = true)
-    private void hasMix(ItemStack potionBase, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
+    private
+
+    //? if < 1.21
+    //static
+
+    void hasMix(ItemStack potionBase, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
         for (DendroBrewingMix mix : DendroPotionRecipeHandler.getAllDendroRecipes()){
             if (mix.isInput(potionBase) && mix.isIngredient(ingredient)){
                 cir.setReturnValue(true);
@@ -38,7 +63,12 @@ public class MixinPotionBrewing {
     }
 
     @Inject(at = @At("HEAD"), method = "mix", cancellable = true)
-    private void mix(ItemStack ingredient, ItemStack potionBase, CallbackInfoReturnable<ItemStack> cir) {
+    private
+
+    //? if < 1.21
+    //static
+
+    void mix(ItemStack ingredient, ItemStack potionBase, CallbackInfoReturnable<ItemStack> cir) {
         for (DendroBrewingMix mix : DendroPotionRecipeHandler.getAllDendroRecipes()){
             ItemStack result = mix.getOutput(potionBase, ingredient);
             if (!result.isEmpty()){

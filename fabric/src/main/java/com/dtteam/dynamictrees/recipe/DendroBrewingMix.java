@@ -9,10 +9,12 @@ import net.minecraft.world.item.ItemStack;
 public record DendroBrewingMix(ItemStack input, ItemStack ingredient, ItemStack output) {
 
 	public boolean isInput(final ItemStack inputStack) {
+		//~ if < 1.21 'isSameItemSameComponents' -> 'isSameItemSameTags'
 		return ItemStack.isSameItemSameComponents(input, inputStack);
 	}
 
 	public boolean isIngredient(final ItemStack ingredientStack) {
+		//~ if < 1.21 'isSameItemSameComponents' -> 'isSameItemSameTags'
 		return ItemStack.isSameItemSameComponents(ingredient, ingredientStack);
 	}
 

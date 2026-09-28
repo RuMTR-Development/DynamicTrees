@@ -209,9 +209,12 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
                 BlockPos pos = destroyData.getBranchRelPos(i).offset(cutPos);
                 for (Surround dir : Surround.values()) {
                     BlockPos dPos = pos.offset(dir.getOffset());
-                    if (level.getBlockState(dPos).getBlock() instanceof TrunkShellBlock) {
-                        level.removeBlock(dPos, false);
+
+                    //~ if < 1.21 'level()' -> 'level' {
+                    if (level().getBlockState(dPos).getBlock() instanceof TrunkShellBlock) {
+                        level().removeBlock(dPos, false);
                     }
+                    //~ }
                 }
             }
         }
@@ -285,14 +288,16 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
     public void tick() {
         super.tick();
 
-        if (this.level.isClientSide && !this.clientBuilt) {
+        //~ if < 1.21 'level()' -> 'level'
+        if (this.level().isClientSide && !this.clientBuilt) {
             this.buildClient();
             if (!isAlive()) {
                 return;
             }
         }
 
-        if (!this.level.isClientSide && this.firstUpdate) {
+        //~ if < 1.21 'level()' -> 'level'
+        if (!this.level().isClientSide && this.firstUpdate) {
             this.updateNeighbors();
         }
 
@@ -331,7 +336,8 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
         }
 
         //Update each of the blocks that need to be updated
-        toUpdate.forEach(pos -> level.neighborChanged(pos, Blocks.AIR, pos));
+        //~ if < 1.21 'level()' -> 'level'
+        toUpdate.forEach(pos -> level().neighborChanged(pos, Blocks.AIR, pos));
     }
 
     protected AnimationHandler selectAnimationHandler() {
@@ -364,9 +370,11 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
 
     @Override
     public void modelCleanup() {
-        if (level.isClientSide()){
-            FallingTreeEntityModelTrackerCache.cleanupModels(level, this);
+        //~ if < 1.21 'level()' -> 'level' {
+        if (level().isClientSide()){
+            FallingTreeEntityModelTrackerCache.cleanupModels(level(), this);
         }
+        //~ }
     }
 
     public void handleMotion() {
@@ -379,7 +387,8 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
     }
 
     public void dropPayLoad() {
-        if (!level.isClientSide) {
+        //~ if < 1.21 'level()' -> 'level'
+        if (!level().isClientSide) {
             currentAnimationHandler.dropPayload(this);
         }
     }
@@ -401,7 +410,8 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
      * @param entity The {@link FallingTreeEntity} object.
      */
     public static void standardDropLogsPayload(FallingTreeEntity entity) {
-        Level level = entity.level;
+        //~ if < 1.21 'level()' -> 'level'
+        Level level() = entity.level();
         if (!level.isClientSide) {
             BlockPos cutPos = entity.getDestroyData().cutPos;
             entity.getPayload().forEach(i -> spawnItemAsEntity(level, cutPos, i));
@@ -409,7 +419,8 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
     }
 
     public static void standardDropLeavesPayLoad(FallingTreeEntity entity) {
-        Level level = entity.level;
+        //~ if < 1.21 'level()' -> 'level'
+        Level level() = entity.level();
         if (!level.isClientSide) {
             BlockPos cutPos = entity.getDestroyData().cutPos;
             entity.getDestroyData().leavesDrops.forEach(bis -> Block.popResource(level, cutPos.offset(bis.pos), bis.stack));
@@ -465,7 +476,7 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
             for (Tag tag : Objects.requireNonNull(nbtList)) {
                 if (tag instanceof CompoundTag compTag) {
                     //? if >= 1.21 {
-                    ItemStack.parse(level.registryAccess(), compTag).ifPresent(t->this.payload.add(t)); ;
+                    ItemStack.parse(level().registryAccess(), compTag).ifPresent(t->this.payload.add(t)); ;
                     //? } else {
                     /*final ItemStack stack = ItemStack.of(compTag);
 
@@ -487,7 +498,7 @@ public class FallingTreeEntity extends Entity implements ModelTracker {
 
             for (ItemStack stack : payload) {
                 //? if >= 1.21 {
-                list.add(stack.save(level.registryAccess(), compound));
+                list.add(stack.save(level().registryAccess(), compound));
                 //? } else {
                 /*list.add(stack.save(compound));
                 *///? }

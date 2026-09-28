@@ -14,6 +14,8 @@
     "MixinSaplingBlock"
   ],
   "client": [
+    "ModelBakeryMixin",
+    "ModelManagerMixin"
   ],
   "server": [],
   "injectors": {

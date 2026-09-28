@@ -27,7 +27,14 @@ def versionKeys = [
     'neoforge_glitchcore_version',
     'neoforge_serene_seasons_version',
     'neoforge_patchouli_version',
-    'neoforge_spark_version'
+    'neoforge_spark_version',
+    'fabric_jade_version',
+    'fabric_jei_version',
+    'fabric_glitchcore_version',
+    'fabric_serene_seasons_version',
+    'fabric_continuity_version',
+    'fabric_sodium_version',
+    'fabric_indium_version'
 ]
 
 versionKeys.each { key ->
@@ -132,13 +139,19 @@ processResources {
             'mod_id'                       : mod_id,
             'license'                      : license,
             'description'                  : project.description,
-            'neoforge_version'             : neoforge_version,
-            'neoforge_loader_version_range': neoforge_loader_version_range,
             "forge_version": forge_version,
             "forge_loader_version_range": forge_loader_version_range,
             'credits'                      : credits,
             'java_version'                 : java_version
     ]
+
+    if (ext.hasProperty("neoforge_version")) {
+        expandProps['neoforge_version'] = property("neoforge_version")
+    }
+
+    if (ext.hasProperty("neoforge_loader_version_range")) {
+        expandProps['neoforge_loader_version_range'] = property("neoforge_loader_version_range")
+    }
 
     filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
         expand expandProps

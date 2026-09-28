@@ -33,6 +33,7 @@ public class FabricRegistryHandler extends RegistryHandler {
     }
 
     public FabricRegistryHandler(String modId) {
+        //~ if < 1.21 'ResourceLocation.fromNamespaceAndPath' -> 'new ResourceLocation'
         super(ResourceLocation.fromNamespaceAndPath(modId, modId));
         RegistryHandler.REGISTRY.register(this);
     }

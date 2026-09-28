@@ -1,5 +1,6 @@
 package com.dtteam.dynamictrees.model.baked;
 
+import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.block.branch.BranchBlock;
 import com.dtteam.dynamictrees.block.branch.ThickBranchBlock;
 import com.google.common.collect.Maps;
@@ -23,6 +24,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -112,7 +114,19 @@ public class BasicBranchBlockBakedModel implements BakedModel, FabricBakedModel 
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            quads.add(faceBakery.bakeQuad(part.from, part.to, e.getValue(), bark, face, BlockModelRotation.X0_Y0, part.rotation, true));
+            quads.add(faceBakery.bakeQuad(part.from,
+                    part.to,
+                    e.getValue(),
+                    bark,
+                    face,
+                    BlockModelRotation.X0_Y0,
+                    part.rotation,
+                    true,
+
+                    //? if < 1.21 {
+                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    *///? }
+            ));
         }
 
         return quads;
@@ -139,7 +153,19 @@ public class BasicBranchBlockBakedModel implements BakedModel, FabricBakedModel 
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            quads.add(faceBakery.bakeQuad(part.from, part.to, e.getValue(), icon, face, BlockModelRotation.X0_Y0, part.rotation, true));
+            quads.add(faceBakery.bakeQuad(part.from,
+                    part.to,
+                    e.getValue(),
+                    icon,
+                    face,
+                    BlockModelRotation.X0_Y0,
+                    part.rotation,
+                    true,
+
+                    //? if < 1.21 {
+                    /*new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString())
+                    *///? }
+            ));
         }
 
         return quads;

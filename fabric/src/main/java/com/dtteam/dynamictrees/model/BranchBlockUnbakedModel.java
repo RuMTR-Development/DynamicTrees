@@ -41,7 +41,15 @@ public class BranchBlockUnbakedModel implements UnbakedModel {
     }
 
     @Override
-    public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState state) {
+    public BakedModel bake(
+            ModelBaker baker,
+            Function<Material, TextureAtlasSprite> spriteGetter, ModelState state
+
+            //? if < 1.21 {
+            /*,
+            ResourceLocation location
+            *///? }
+    ) {
         TextureAtlasSprite barkSprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, barkTextureLocation));
         TextureAtlasSprite ringsSprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, ringsTextureLocation));
 

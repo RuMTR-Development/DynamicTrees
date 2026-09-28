@@ -81,7 +81,9 @@ public class FabricRegistryLoader extends RegistryLoader {
         //? } else {
         /*CreativeModeTab tab = FabricItemGroup.builder(DynamicTrees.location(DynamicTrees.MOD_ID)).icon(icon).title(title).displayItems(displayItems).build();
 
-        ItemGroupHelper.appendItemGroup(tab);
+        try {
+            ItemGroupHelper.appendItemGroup(tab);
+        } catch (IllegalStateException ignored) {}
 
         return () -> tab;
         *///? }

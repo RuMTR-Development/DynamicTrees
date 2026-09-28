@@ -246,7 +246,7 @@ public class DTRegistries {
     public static final Supplier<LootPoolEntryType> SEED_ITEM = Services.REGISTRY.getRegistryLoader()
             .registerLootPoolEntryType("seed_item", SeedItemLootPoolEntry.CODEC);
     public static final Supplier<LootPoolEntryType> WEIGHTED_ITEM = Services.REGISTRY.getRegistryLoader()
-            .registerLootPoolEntryType("weighted_item", new WeightedItemLootPoolEntry.CODEC);
+            .registerLootPoolEntryType("weighted_item", WeightedItemLootPoolEntry.CODEC);
 
     public static final Supplier<LootItemFunctionType<MultiplyCount>> MULTIPLY_COUNT = Services.REGISTRY.getRegistryLoader()
             .registerLootFunctionType("multiply_count", MultiplyCount.CODEC);

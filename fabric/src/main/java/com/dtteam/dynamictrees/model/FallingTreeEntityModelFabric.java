@@ -45,7 +45,12 @@ public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
             BlockPos cutPos = destructionData.cutPos;
             if (exState != null) {
                 Species species = destructionData.species;
+
+                //? if >= 1.21 {
                 RandomSource random = entity.getRandom();
+                //? } else {
+                /*RandomSource random = entity.level.getRandom();
+                *///? }
 
                 boolean rootyBlockAdded = false;
                 if (destructionData.soilState != null) {
@@ -95,6 +100,7 @@ public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
                     List<BakedQuad> bakedQuads = getQuadsWithOffset(dispatcher.getBlockModel(leafState), leafState,
                             new Vec3(leafLoc.getKey().getX(), leafLoc.getKey().getY(), leafLoc.getKey().getZ()), random);
 
+                    //~ if < 1.21 '.level()' -> '.level'
                     treeQuads.addAll(toTreeQuadData(bakedQuads, species.leafColorMultiplier(entity.level(),
                             cutPos.offset(leafLoc.getKey())), leafState));
                 }

@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -35,6 +34,7 @@ import static com.dtteam.dynamictrees.utility.ResourceLocationUtils.prefix;
 import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.Material;
 *///? }
 
 /**
