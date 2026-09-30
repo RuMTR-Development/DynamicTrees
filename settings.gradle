@@ -55,6 +55,10 @@ stonecutter {
         branch "common"
         branch "fabric"
 
+        branch("forge") {
+            versions "1.19.4"
+        }
+
         branch("neoforge") {
             versions "1.21.1"
         }

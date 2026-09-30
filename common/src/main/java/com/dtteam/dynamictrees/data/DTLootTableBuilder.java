@@ -37,7 +37,9 @@ import java.util.List;
 public class DTLootTableBuilder {
 
     protected static LootItemCondition.Builder hasSilkTouch(HolderLookup.Provider registries) {
-        HolderLookup.RegistryLookup<Enchantment> registrylookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
+        //? if >= 1.21
+         HolderLookup.RegistryLookup<Enchantment> registrylookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
+
         return MatchTool.toolMatches(
                 ItemPredicate.Builder.item()
                         //? if >= 1.21 {

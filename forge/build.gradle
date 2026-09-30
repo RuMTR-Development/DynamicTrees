@@ -1,0 +1,107 @@
+plugins {
+    id 'multiloader-loader'
+    id "net.neoforged.moddev.legacyforge"
+}
+
+stonecutter {
+    constants["serene_seasons"] = project.hasProperty("forge_serene_seasons_version")
+}
+
+legacyForge {
+    enable {
+        forgeVersion = "${minecraft_version}-${forge_version}"
+    }
+
+    validateAccessTransformers = stonecutter.current.isActive
+
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+
+    def mainResources = project(":common").file("src/main/resources")
+    def genResources = sc.node.sibling("common").project.file("src/generated/resources")
+
+    runs {
+        configureEach {
+            ideName = "Forge ${it.name.capitalize()} (${project.path})"
+        }
+
+        client {
+            client()
+        }
+
+        data {
+            data()
+            programArgument ('--all')
+            programArgument ('--existing')
+            programArgument (mainResources.absolutePath)
+            programArgument ('--output')
+            programArgument (genResources.absolutePath)
+            programArgument ('--mod')
+            programArgument ("${mod_id}")
+        }
+
+        server {
+            server()
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets.main {
+    resources.srcDir("src/generated/resources")
+}
+
+tasks {
+    jar {
+        finalizedBy("reobfJar")
+    }
+}
+
+repositories {
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
+dependencies {
+    compileOnly("org.jetbrains:annotations:24.1.0")
+
+    modImplementation "curse.maven:jade-324717:${forge_jade_version}"
+    modImplementation "curse.maven:jei-238222:${forge_jei_version}"
+    modImplementation "curse.maven:serene-seasons-291874:${forge_serene_seasons_version}"
+
+    modRuntimeOnly "curse.maven:patchouli-306770:${forge_patchouli_version}"
+    modRuntimeOnly "curse.maven:spark-361579:${forge_spark_version}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(Integer.parseInt(java_version))
+    }
+}
+
+tasks.named('createMinecraftArtifacts') {
+    dependsOn ":forge:${minecraft_version}:stonecutterGenerate"
+}

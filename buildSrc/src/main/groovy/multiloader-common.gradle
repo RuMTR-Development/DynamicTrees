@@ -34,7 +34,12 @@ def versionKeys = [
     'fabric_serene_seasons_version',
     'fabric_continuity_version',
     'fabric_sodium_version',
-    'fabric_indium_version'
+    'fabric_indium_version',
+    'forge_jade_version',
+    'forge_jei_version',
+    'forge_serene_seasons_version',
+    'forge_patchouli_version',
+    'forge_spark_version'
 ]
 
 versionKeys.each { key ->

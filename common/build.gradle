@@ -46,7 +46,7 @@ configurations {
 
 artifacts {
     sourceSets.main.resources {
-        srcDir project(":common").file("src/generated/resources")
+        srcDir sc.node.sibling("common").project.file("src/generated/resources")
         srcDir project(":common").file("src/localization/resources")
     }
 
