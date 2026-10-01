@@ -130,7 +130,7 @@ public class JoCode {
     public JoCode setFacing(Direction facing) {
         int faceNum = facing.ordinal();
         facingMap = dirmap[faceNum];
-        faceNum = (faceNum == 4) ? 5 : (faceNum == 5) ? 4 : faceNum;//Swap West and East
+        faceNum = (faceNum == 4) ? 5 : ((faceNum == 5) ? 4 : faceNum);//Swap West and East
         unfacingMap = dirmap[faceNum];
         return this;
     }
