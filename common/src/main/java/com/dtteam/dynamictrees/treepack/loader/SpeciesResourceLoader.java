@@ -21,8 +21,7 @@ import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.tree.species.UndergroundRootsSpecies;
 import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
 import com.google.gson.JsonObject;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -34,6 +33,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -161,6 +164,7 @@ public final class SpeciesResourceLoader extends JsonRegistryResourceLoader<Spec
         species.setShouldGenerateSeed(false);
         species.setShouldGenerateSapling(false);
         DynamicTrees.runOnCommonSetup(() -> {
+            //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'Registry.ITEM'
             final Item seed = BuiltInRegistries.ITEM.get(processedSeedName);
             if (seed instanceof Seed) {
                 species.setSeed(() -> (Seed) seed);

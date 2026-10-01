@@ -2,13 +2,18 @@ package com.dtteam.dynamictrees.worldgen.featurecancellation;
 
 import com.dtteam.dynamictrees.api.worldgen.BiomePropertySelectors;
 import com.dtteam.dynamictrees.api.worldgen.FeatureCanceller;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraft.core.Registry;
+*///? }
 
 public class TreeFeatureCanceller<T extends FeatureConfiguration> extends FeatureCanceller {
 
@@ -35,7 +40,7 @@ public class TreeFeatureCanceller<T extends FeatureConfiguration> extends Featur
             String nameSpace = "";
             final ConfiguredFeature<?, ?> nextConfiguredFeature = configuredFeature.getFeatures().findFirst().get();
             final FeatureConfiguration nextFeatureConfig = nextConfiguredFeature.config();
-            final ResourceLocation featureRegistryName = BuiltInRegistries.FEATURE.getKey(nextConfiguredFeature.feature());
+            final ResourceLocation featureRegistryName = Registry.FEATURE.getKey(nextConfiguredFeature.feature());
             if (featureRegistryName != null) {
                 nameSpace = featureRegistryName.getNamespace();
             }
@@ -55,7 +60,7 @@ public class TreeFeatureCanceller<T extends FeatureConfiguration> extends Featur
     private boolean doesContainTrees(RandomFeatureConfiguration featureConfig, BiomePropertySelectors.NormalFeatureCancellation featureCancellations) {
         for (WeightedPlacedFeature feature : featureConfig.features) {
             final PlacedFeature currentConfiguredFeature = feature.feature.value();
-            final ResourceLocation featureRegistryName = BuiltInRegistries.FEATURE.getKey(currentConfiguredFeature.getFeatures().findFirst().get().feature());
+            final ResourceLocation featureRegistryName = Registry.FEATURE.getKey(currentConfiguredFeature.getFeatures().findFirst().get().feature());
 
             if (this.treeFeatureConfigClass.isInstance(currentConfiguredFeature.placement()) && featureRegistryName != null &&
                 featureCancellations.shouldCancelNamespace(featureRegistryName.getNamespace())) {

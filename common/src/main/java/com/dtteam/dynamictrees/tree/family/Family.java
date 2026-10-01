@@ -28,8 +28,7 @@ import com.dtteam.dynamictrees.treepack.Resettable;
 import com.dtteam.dynamictrees.utility.Optionals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -58,12 +57,19 @@ import java.util.function.Supplier;
 
 import static com.dtteam.dynamictrees.utility.ResourceLocationUtils.*;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 
 import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.material.Material;
+*///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+//? } else {
+/*import net.minecraft.data.tags.BlockTagsProvider;
 *///? }
 
 /**
@@ -822,6 +828,7 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
                 Collections.singletonList(DTBlockTags.STRIPPED_BRANCHES_THAT_BURN);
     }
 
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     public void addGeneratedBlockTags (Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender){
         getBranch().ifPresent(branch -> {
             tierTag(getDefaultBranchHarvestTier(), tagAppender).ifPresent(tagBuilder -> tagBuilder.add(branch));
@@ -829,6 +836,7 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
                 if (!isOnlyIfLoaded()) {
                     tagAppender.apply(tag).add(branch);
                 } else {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     tagAppender.apply(tag).addOptional(BuiltInRegistries.BLOCK.getKey(branch));
                 }
             });
@@ -842,14 +850,16 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
                 if (!isOnlyIfLoaded()) {
                     tagAppender.apply(tag).add(strippedBranch);
                 } else {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     tagAppender.apply(tag).addOptional(BuiltInRegistries.BLOCK.getKey(strippedBranch));
                 }
             });
         });
     }
 
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     protected Optional<IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tierTag(@Nullable Tier tier, Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (tier == null)
             return Optional.empty();
 
@@ -861,11 +871,12 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
         *///? }
     }
 
-    public void addGeneratedItemTags (Function<TagKey<Item>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item>> tagAppender){
+    public void addGeneratedItemTags (Function<TagKey<Item>, BlockTagsProvider.TagAppender<Item>> tagAppender){
         getBranchItem().ifPresent(item -> {
                     if (!isOnlyIfLoaded()) {
                         defaultBranchItemTags().forEach(tag -> tagAppender.apply(tag).add(item));
                     } else {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         defaultBranchItemTags().forEach(tag -> tagAppender.apply(tag).addOptional(BuiltInRegistries.ITEM.getKey(item)));
                     }
                 }
@@ -1017,6 +1028,7 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
         if (textureOverrides.containsKey(key)){
             return textureOverrides.get(key);
         } else {
+            //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
             ResourceLocation textureLoc = BuiltInRegistries.BLOCK.getKey(block);
             textureLoc = surround(textureLoc, "block/", "_top");
             return textureLoc;

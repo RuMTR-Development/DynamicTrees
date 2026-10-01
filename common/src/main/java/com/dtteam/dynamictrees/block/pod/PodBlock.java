@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
 //? } else {
 
@@ -40,7 +40,7 @@ import net.minecraft.world.ItemInteractionResult;
  * @author Harley O'Connor
  */
 public class PodBlock extends HorizontalDirectionalBlock implements BonemealableBlock, Growable {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<PodBlock> CODEC = simpleCodec(PodBlock::new);
     //? }
 
@@ -61,7 +61,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
         this.registerDefaultState(this.stateDefinition.any());
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return CODEC;
@@ -82,7 +82,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -150,7 +150,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -199,7 +199,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -220,7 +220,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
         return false;
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return harvest(state, level, pos) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -245,11 +245,16 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
 
     @Override
     public boolean isValidBonemealTarget(
+            //? if >= 1.19.4 {
             LevelReader levelReader,
+             //? } else {
+            /*BlockGetter levelReader,
+            *///? }
+
             BlockPos blockPos,
             BlockState blockState
 
-            //? if < 1.21 {
+            //? if < 1.21.1 {
             /*,
             boolean isClient
             *///?}
@@ -309,7 +314,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
         return null;
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
@@ -321,7 +326,7 @@ public class PodBlock extends HorizontalDirectionalBlock implements Bonemealable
     }
     *///? }
 
-    //? if < 1.21 {
+    //? if < 1.21.1 {
 
     /*@Override
     public PushReaction getPistonPushReaction(BlockState state) {

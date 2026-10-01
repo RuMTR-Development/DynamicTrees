@@ -1,18 +1,22 @@
 package com.dtteam.dynamictrees.worldgen.structure;
 
+import com.dtteam.dynamictrees.api.registry.Registries;import com.dtteam.dynamictrees.data.CustomBootstrapContext;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;import net.minecraft.core.RegistryAccess;import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 //? if >= 1.21 {
 import net.minecraft.data.worldgen.BootstrapContext;
- //? } else {
+//? } else if >= 1.19.4 {
 /*import net.minecraft.data.worldgen.BootstapContext;
 *///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 // @author Harley O'Connor
 public class RegularTemplatePoolModifier implements TemplatePoolModifier {
@@ -55,30 +59,61 @@ public class RegularTemplatePoolModifier implements TemplatePoolModifier {
     public void registerPool(
             //? if >= 1.21 {
             BootstrapContext<StructureTemplatePool> context
-             //? } else {
+            //? } else if >= 1.19.4 {
             /*BootstapContext<StructureTemplatePool> context
+            *///? } else {
+            /*CustomBootstrapContext<StructureTemplatePool> context
             *///? }
     ) {
         context.register(this.key, this.templatePool);
     }
 
-    public static TemplatePoolModifier village(HolderLookup.Provider lookupProvider, String type, String patternGroup) {
+    public static TemplatePoolModifier village(
+            //? if >= 1.19.4
+             HolderLookup.Provider lookupProvider,
+
+            String type,
+            String patternGroup
+    ) {
         //? if >= 1.21 {
         ResourceLocation patternName = ResourceLocation.parse("village/" + type + "/" + patternGroup);
         //? } else {
         /*ResourceLocation patternName = new ResourceLocation("village/" + type + "/" + patternGroup);
         *///? }
 
-        return create(lookupProvider, ResourceKey.create(Registries.TEMPLATE_POOL, patternName));
+        return create(
+                //? if >= 1.19.4 {
+                lookupProvider,
+                ResourceKey.create(Registries.TEMPLATE_POOL, patternName)
+                //? } else {
+                /*ResourceKey.create(Registry.TEMPLATE_POOL_REGISTRY, patternName)
+                *///? }
+        );
     }
 
-    public static TemplatePoolModifier create(HolderLookup.Provider lookupProvider, ResourceKey<StructureTemplatePool> key) {
+    public static TemplatePoolModifier create(
+            //? if >= 1.19.4
+             HolderLookup.Provider lookupProvider,
+
+            ResourceKey<StructureTemplatePool> key
+    ) {
+        //? if >= 1.19.4 {
         StructureTemplatePool pattern = lookupProvider.lookupOrThrow(Registries.TEMPLATE_POOL).getOrThrow(key).value();
+        //? } else {
+        /*StructureTemplatePool pattern = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrThrow(key);
+        *///? }
+
         // if (pattern == null) {
         //     VillageTreeReplacement.LOGGER.error("Could not find StructureTemplatePool with name {}.", patternName);
         //     return TemplatePoolModifier.NULL;
         // }
-        return new RegularTemplatePoolModifier(key, new StructureTemplatePool(pattern.getFallback(), pattern.rawTemplates));
+        return new RegularTemplatePoolModifier(key, new StructureTemplatePool(
+                //? if < 1.19.4
+                //pattern.getName(),
+
+                pattern.getFallback(),
+                pattern.rawTemplates
+        ));
     }
 
 }

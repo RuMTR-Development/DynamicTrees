@@ -91,6 +91,7 @@ public final class CoordUtils {
         final HitResult result = branchRayTrace(level, species, treePos, branchPos, 45, 60, 4 + level.getRandom().nextInt(3));
 
         if (result != null) {
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             BlockPos hitPos = BlockPos.containing(result.getLocation());
             if (hitPos != BlockPos.ZERO) {
                 do { // Run straight down until we hit a block that's non compatible leaves.
@@ -127,12 +128,14 @@ public final class CoordUtils {
 
         final Vec3 branchVec = new Vec3(branchPos.getX(), branchPos.getY(), branchPos.getZ()).add(0.5, 0.5, 0.5); // Get the vector of the middle of the branch block.
         final Vec3 vantageVec = branchVec.add(vOut); // Make a vantage point to look at the branch.
+        //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
         final BlockPos vantagePos = BlockPos.containing(vantageVec); // Convert Vector to BlockPos for testing.
 
         //!safeBounds.inBounds(vantagePos, false) ||
         if (level.isEmptyBlock(vantagePos)) { // The observing block must be in free space.
             final BlockHitResult result = rayTraceBlocks(level, new CustomRayTraceContext(vantageVec, branchVec, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE));
             // Beyond here should be safe since the only blocks that can possibly be hit are in loaded chunks.
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             final BlockPos hitPos = BlockPos.containing(result.getLocation());
             if (result.getType() == HitResult.Type.BLOCK && !hitPos.equals(BlockPos.ZERO)) { // We found a block.
                 if (species.getFamily().isCompatibleGenericLeaves(species, level.getBlockState(hitPos), level, hitPos)) { // Test if it's the right kind of leaves for the species.
@@ -162,6 +165,7 @@ public final class CoordUtils {
             return d0 <= d1 ? blockraytraceresult : blockraytraceresult1;
         }, (context1) -> {
             Vec3 vec3d = context1.getStartVector().subtract(context1.getEndVector());
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             return BlockHitResult.miss(context1.getEndVector(), Direction.getNearest(vec3d.x, vec3d.y, vec3d.z), BlockPos.containing(context1.getEndVector()));
         });
     }

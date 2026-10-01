@@ -2,9 +2,13 @@ package com.dtteam.dynamictrees.data.tags;
 
 import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.systems.substance.GrowthSubstance;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -29,6 +33,7 @@ public final class DTItemTags {
     public static final TagKey<Item> ENHANCED_FERTILIZER = bind("enhanced_fertilizer");
 
     private static TagKey<Item> bind(String identifier) {
+        //~ if < 1.19.4 'Registries.ITEM' -> 'Registry.ITEM_REGISTRY'
         return TagKey.create(Registries.ITEM, DynamicTrees.location(identifier));
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-//? if < 1.21 {
+//? if < 1.21.1 {
 /*import net.minecraft.world.level.storage.loot.Serializer;
 *///? }
 
@@ -22,7 +22,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
  * @author Harley O'Connor
  */
 public final class VoluntarySeedDropChance implements LootItemCondition {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<VoluntarySeedDropChance> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
                     .group(Codec.FLOAT.fieldOf("rarity").forGetter((c)->c.rarity))

@@ -1,15 +1,20 @@
 package com.dtteam.dynamictrees.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.SpriteContents;
-import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
-import net.minecraft.client.resources.metadata.animation.FrameSize;
+import net.minecraft.client.renderer.texture.TextureAtlas;import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 
+//? if >= 1.19.4 {
+import net.minecraft.client.renderer.texture.SpriteContents;
+import net.minecraft.client.resources.metadata.animation.FrameSize;
+//? } else {
+/*import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+*///? }
 
+//~ if < 1.19.4 'SpriteContents' -> 'TextureAtlasSprite'
 public class ThickBranchRingsSprite extends SpriteContents {
     private static final int RESOLUTION = 16;
     private static final int LAYERS = 3;
@@ -18,17 +23,40 @@ public class ThickBranchRingsSprite extends SpriteContents {
             {0, 0, 1, 1}
     };
 
+    //? if >= 1.21.1 {
     public ThickBranchRingsSprite(ResourceLocation name, SpriteContents originalSprite){
-        //? if >= 1.21 {
         super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), originalSprite.metadata());
-        //? } else {
-        /*super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), new AnimationMetadataSection(new ArrayList<>(), 0, 0, 0, false));
-        *///? }
     }
+    //? } else if >= 1.19.4 {
+    /*public ThickBranchRingsSprite(ResourceLocation name, SpriteContents originalSprite){
+        super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), new AnimationMetadataSection(new ArrayList<>(), 0, 0, 0, false));
+    }
+    *///? } else {
+    /*public ThickBranchRingsSprite(TextureAtlas atlas, TextureAtlasSprite originalSprite, int mipmapLevels, int atlasWidth, int atlasHeight, int x, int y) {
+        super(
+                atlas,
+                new TextureAtlasSprite.Info(
+                        originalSprite.getName(),
+                        originalSprite.getWidth() * LAYERS,
+                        originalSprite.getHeight() * LAYERS,
+                        AnimationMetadataSection.EMPTY
+                ),
+                mipmapLevels,
+                atlasWidth,
+                atlasHeight,
+                x,
+                y,
+                processImage(originalSprite.mainImage[0])
+        );
+    }
+    *///? }
 
+    //? if >= 1.19.4 {
     private static FrameSize getFrameSize(SpriteContents sprite){
         return new FrameSize(sprite.width() * LAYERS, sprite.height() * LAYERS);
     }
+    //? }
+
     private static int centerCorner(){
         return (RESOLUTION/2) * (LAYERS-1);
     }

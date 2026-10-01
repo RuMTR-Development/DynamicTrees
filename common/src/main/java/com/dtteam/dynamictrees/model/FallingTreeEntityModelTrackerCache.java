@@ -16,7 +16,7 @@ public class FallingTreeEntityModelTrackerCache {
 
     @Nullable
     public static FallingTreeEntityModel getOrCreateModel(FallingTreeEntity entity) {
-        //~ if < 1.21 '.level()' -> '.level'
+        //~ if < 1.21.1 '.level()' -> '.level'
         if (entity.level().isClientSide())
             return models.computeIfAbsent(entity.getId(), i -> ClientServices.CLIENT.newFallingTreeEntityModel(entity));
         return null;

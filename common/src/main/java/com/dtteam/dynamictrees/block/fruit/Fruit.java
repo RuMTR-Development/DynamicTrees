@@ -17,8 +17,7 @@ import com.dtteam.dynamictrees.treepack.Resettable;
 import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -41,12 +40,16 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 *///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 /**
  * Stores properties and implements functionality of fruits which grow from the leaves of a tree.
@@ -138,7 +141,7 @@ public class Fruit extends RegistryEntry<Fruit> implements Resettable<Fruit> {
         return new FruitBlock(properties, this);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public MapColor getDefaultMapColor() {
         return MapColor.PLANT;
     }
@@ -152,7 +155,7 @@ public class Fruit extends RegistryEntry<Fruit> implements Resettable<Fruit> {
         return getDefaultBlockProperties(this.getDefaultMapColor());
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public BlockBehaviour.Properties getDefaultBlockProperties(MapColor mapColor) {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
@@ -305,16 +308,32 @@ public class Fruit extends RegistryEntry<Fruit> implements Resettable<Fruit> {
     }
 
     private final LazyValue<ResourceLocation> blockDropsPath = LazyValue.supplied(() ->
+            //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
             ResourceLocationUtils.prefix(BuiltInRegistries.BLOCK.getKey(block.get()),"blocks/"));
 
     public ResourceLocation getBlockDropsPath() {
         return blockDropsPath.get();
     }
 
-    public LootTable.Builder createBlockDrops(HolderLookup.Provider registries) {
+    public LootTable.Builder createBlockDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
         if (minDropCount > maxDropCount || maxDropCount <= 0)
             throw new IllegalArgumentException("Attempted to create loot tables for "+getRegistryName()+" with an invalid drop count range ["+minDropCount+","+maxDropCount+"].");
-        return DTLootTableBuilder.createFruitPodDrops(block.get(), getItemStack().getItem(), ageProperty, maxAge, minDropCount, maxDropCount, registries);
+        return DTLootTableBuilder.createFruitPodDrops(
+                block.get(),
+                getItemStack().getItem(),
+                ageProperty,
+                maxAge,
+                minDropCount,
+                maxDropCount
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
     @NotNull

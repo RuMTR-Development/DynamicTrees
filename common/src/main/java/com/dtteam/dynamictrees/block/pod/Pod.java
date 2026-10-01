@@ -18,8 +18,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -43,12 +42,16 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.level.material.MapColor;
  //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.material.Material;
 *///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 /**
  * Stores properties and implements functionality of pods which grow from the branches of a tree.
@@ -170,7 +173,7 @@ public class Pod extends RegistryEntry<Pod> implements Resettable<Pod> {
         else return new PodBlock(properties, this);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public MapColor getDefaultMapColor() {
         return MapColor.PLANT;
     }
@@ -184,7 +187,7 @@ public class Pod extends RegistryEntry<Pod> implements Resettable<Pod> {
         return getDefaultBlockProperties(this.getDefaultMapColor());
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public BlockBehaviour.Properties getDefaultBlockProperties(MapColor mapColor) {
         return BlockBehaviour.Properties.of()
                 .mapColor(mapColor)
@@ -340,16 +343,32 @@ public class Pod extends RegistryEntry<Pod> implements Resettable<Pod> {
     }
 
     private final LazyValue<ResourceLocation> blockDropsPath = LazyValue.supplied(() ->
+            //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
             ResourceLocationUtils.prefix(BuiltInRegistries.BLOCK.getKey(block.get()), "blocks/"));
 
     public ResourceLocation getBlockDropsPath() {
         return blockDropsPath.get();
     }
 
-    public LootTable.Builder createBlockDrops(HolderLookup.Provider registries) {
+    public LootTable.Builder createBlockDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
         if (minDropCount > maxDropCount || maxDropCount <= 0)
             throw new IllegalArgumentException("Attempted to create loot tables for "+getRegistryName()+" with an invalid drop count range ["+minDropCount+","+maxDropCount+"].");
-        return DTLootTableBuilder.createFruitPodDrops(block.get(), itemStack.getItem(), ageProperty, maxAge, minDropCount, maxDropCount, registries);
+        return DTLootTableBuilder.createFruitPodDrops(
+                block.get(),
+                itemStack.getItem(),
+                ageProperty,
+                maxAge,
+                minDropCount,
+                maxDropCount
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
     public void setMaxRadius(int maxRadius) {

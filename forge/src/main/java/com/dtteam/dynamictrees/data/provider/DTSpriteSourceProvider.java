@@ -43,7 +43,7 @@ public class DTSpriteSourceProvider extends SpriteSourceProvider {
     }
 
     private void gatherForFamily(Family family, SourceList atlasList){
-//        family.topBranchTextureLocations().forEach(location ->
-//                atlasList.addSource(new ThickBranchRingsSource(location)));
+        family.topBranchTextureLocations().forEach(location ->
+                atlasList.addSource(new ThickBranchRingsSource(location)));
     }
 }

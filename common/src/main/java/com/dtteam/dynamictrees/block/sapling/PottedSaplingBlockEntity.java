@@ -4,7 +4,7 @@ import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -16,6 +16,10 @@ import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+ //? }
 
 /**
  * A TileEntity that holds a species value.
@@ -60,7 +64,7 @@ public class PottedSaplingBlockEntity extends BlockEntity {
             level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
@@ -82,7 +86,7 @@ public class PottedSaplingBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains(POT_MIMIC_TAG)) {
@@ -98,6 +102,7 @@ public class PottedSaplingBlockEntity extends BlockEntity {
     /*@Override
     public void load(CompoundTag tag) {
         if (tag.contains(POT_MIMIC_TAG)) {
+            //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
             Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString(POT_MIMIC_TAG)));
             potState = block != Blocks.AIR ? block.defaultBlockState() : Blocks.FLOWER_POT.defaultBlockState();
         }
@@ -108,7 +113,7 @@ public class PottedSaplingBlockEntity extends BlockEntity {
     }
     *///? }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putString(POT_MIMIC_TAG, BuiltInRegistries.BLOCK.getKey(potState.getBlock()).toString());
@@ -117,6 +122,7 @@ public class PottedSaplingBlockEntity extends BlockEntity {
     //? } else {
     /*@Override
     protected void saveAdditional(CompoundTag tag) {
+        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
         tag.putString(POT_MIMIC_TAG, BuiltInRegistries.BLOCK.getKey(potState.getBlock()).toString());
         tag.putString(SPECIES_TAG, this.species.getRegistryName().toString());
     }

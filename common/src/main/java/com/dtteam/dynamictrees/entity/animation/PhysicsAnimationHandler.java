@@ -7,7 +7,6 @@ import com.dtteam.dynamictrees.tree.TreeHelper;
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.utility.MathUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
@@ -23,8 +22,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+//? if >= 1.19.4 {
+import com.mojang.math.Axis;
+ //? } else {
+/*import com.mojang.math.Vector3f;
+*///? }
 
-//~ if < 1.21 '.level()' -> '.level' {
+//~ if < 1.21.1 '.level()' -> '.level' {
 public class PhysicsAnimationHandler implements AnimationHandler {
     @Override
     public String getName() {
@@ -108,6 +112,7 @@ public class PhysicsAnimationHandler implements AnimationHandler {
 
         final Level level = entity.level();
         final AABB fallBox = new AABB(entity.getX() - radius, entity.getY(), entity.getZ() - radius, entity.getX() + radius, entity.getY() + 1.0, entity.getZ() + radius);
+        //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
         final BlockPos pos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
         final BlockState collState = level.getBlockState(pos);
 
@@ -153,6 +158,7 @@ public class PhysicsAnimationHandler implements AnimationHandler {
     @Override
     public void dropPayload(FallingTreeEntity entity) {
         final Level level = entity.level();
+        //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
         entity.getPayload().forEach(i -> Block.popResource(level, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), i));
     }
 
@@ -167,8 +173,12 @@ public class PhysicsAnimationHandler implements AnimationHandler {
 
         final Vec3 mc = entity.getMassCenter();
         poseStack.translate(mc.x, mc.y, mc.z);
+
+        //~ if < 1.19.4 'Axis' -> 'Vector3f' {
         poseStack.mulPose(Axis.YN.rotationDegrees(yaw));
         poseStack.mulPose(Axis.XP.rotationDegrees(pit));
+        //~ }
+
         poseStack.translate(-mc.x - 0.5, -mc.y, -mc.z - 0.5);
     }
 

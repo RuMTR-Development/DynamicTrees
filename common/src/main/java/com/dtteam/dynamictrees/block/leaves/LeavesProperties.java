@@ -29,8 +29,7 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -60,8 +59,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-//? if >= 1.21 {
-
+//? if >= 1.21.1 {
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -70,6 +68,13 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+*///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+//? } else {
+/*import net.minecraft.data.tags.BlockTagsProvider;
 *///? }
 
 /**
@@ -236,7 +241,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         return blockLootTableSupplier.getName();
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public LootTable getBlockLootTable(ReloadableServerRegistries.Holder lootTables, Species species) {
         return blockLootTableSupplier.get(lootTables, species);
     }
@@ -250,11 +255,32 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         return shouldGenerateDrops();
     }
 
-    public LootTable.Builder createBlockDrops(HolderLookup.Provider registries) {
+    public LootTable.Builder createBlockDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
         if (primitiveLeaves != null && getPrimitiveLeavesBlock().isPresent()) {
-            return DTLootTableBuilder.createLeavesBlockDrops(primitiveLeaves.getBlock(), seedDropChances, getFamily().getStick(1).getItem(), registries);
+            return DTLootTableBuilder.createLeavesBlockDrops(
+                    primitiveLeaves.getBlock(),
+                    seedDropChances,
+                    getFamily().getStick(1).getItem()
+
+                    //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+            );
         }
-        return DTLootTableBuilder.createLeavesDrops(seedDropChances, DTLootParameterSets.LEAVES_BLOCK, getFamily().getStick(1).getItem(), registries);
+        return DTLootTableBuilder.createLeavesDrops(
+                seedDropChances,
+                DTLootParameterSets.LEAVES_BLOCK,
+                getFamily().getStick(1).getItem()
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
     private final LootTableSupplier lootTableSupplier;
@@ -263,7 +289,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         return lootTableSupplier.getName();
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public LootTable getLootTable(ReloadableServerRegistries.Holder lootTables, Species species) {
         return lootTableSupplier.get(lootTables, species);
     }
@@ -277,8 +303,20 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         return getPrimitiveLeavesBlock().isPresent();
     }
 
-    public LootTable.Builder createDrops(HolderLookup.Provider registries) {
-        return DTLootTableBuilder.createLeavesDrops(seedDropChances, DTLootParameterSets.LEAVES, getFamily().getStick(1).getItem(), registries);
+    public LootTable.Builder createDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
+        return DTLootTableBuilder.createLeavesDrops(
+                seedDropChances,
+                DTLootParameterSets.LEAVES,
+                getFamily().getStick(1).getItem()
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
     public List<ItemStack> getDrops(Level level, BlockPos pos, ItemStack tool, Species species) {
@@ -287,7 +325,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         }
         if (level.getServer() == null) return List.of();
         return getLootTable(
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 level.getServer().reloadableRegistries(),
                 //? } else {
                 /*level.getServer().getLootTables(),
@@ -297,7 +335,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         ).getRandomItems(createLootParams(level, pos, tool, species));
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     private LootParams createLootParams(Level level, BlockPos pos, ItemStack tool, Species species) {
         return new LootParams.Builder(LevelContext.getServerLevelOrThrow(level))
                 .withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
@@ -610,7 +648,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         this.connectAnyRadius = connectAnyRadius;
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Deprecated(forRemoval = true)
     public MapColor getDefaultMapColor() {
         return MapColor.PLANT;
@@ -632,7 +670,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
     *///? }
 
     public BlockBehaviour.Properties getDefaultBlockProperties() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return BlockBehaviour.Properties.of()
                 .ignitedByLava()
                 .pushReaction(PushReaction.DESTROY)
@@ -770,10 +808,12 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
                 Pair.of("connectAnyRadius", this.connectAnyRadius));
     }
 
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     public void addGeneratedBlockTags (Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender){
         getDynamicLeavesBlock().ifPresent(leaves ->
                 defaultLeavesTags().forEach(tag -> {
                     if (isOnlyIfLoaded()) {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         tagAppender.apply(tag).addOptional(BuiltInRegistries.BLOCK.getKey(leaves));
                     } else {
                         tagAppender.apply(tag).add(leaves);

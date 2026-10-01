@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +17,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+
+//? if >= 1.21.1 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -87,7 +90,7 @@ public final class ItemUtils {
                     damage,
                     entity,
 
-                    //? if >= 1.20 {
+                    //? if >= 1.21.1 {
                     EquipmentSlot.MAINHAND
                      //?} else {
                     /*LivingEntity::tick
@@ -96,7 +99,7 @@ public final class ItemUtils {
         }
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     public static int getEnchantmentLevel (ResourceKey<Enchantment> enchantment, ItemStack stack, RegistryAccess registryAccess){
         return EnchantmentHelper.getItemEnchantmentLevel(getEnchantment(enchantment, registryAccess), stack);
     }

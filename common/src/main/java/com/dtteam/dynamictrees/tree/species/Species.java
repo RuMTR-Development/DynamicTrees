@@ -76,13 +76,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -124,13 +118,21 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
-//? if >= 1.20 {
+//? if >= 1.21.1 {
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.core.registries.Registries;
 //?} else {
 /*import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 *///?}
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+//? } else {
+/*import net.minecraft.data.tags.BlockTagsProvider;
+*///? }
 
 public class Species extends RegistryEntry<Species> implements Resettable<Species> {
 
@@ -205,7 +207,13 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
 
     private static DataResult<Species> read(ResourceLocation name) {
         final Species species = Species.REGISTRY.get(name);
-        return species == null ? DataResult.error(() -> "Species not found: " + name) : DataResult.success(species);
+        return species == null ? DataResult.error(
+                //? if >= 1.19.4 {
+                () -> "Species not found: " + name
+                //? } else {
+                /*"Species not found: " + name
+                *///? }
+        ) : DataResult.success(species);
     }
 
     /**
@@ -570,7 +578,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         if (seedName == null) {
             return ResourceLocationUtils.suffix(getRegistryName(), "_seed");
         } else {
-            //? if >= 1.20 {
+            //? if >= 1.21.1 {
             return ResourceLocation.fromNamespaceAndPath(getRegistryName().getNamespace(), seedName);
             //?} else {
             /*return new ResourceLocation(getRegistryName().getNamespace(), seedName);
@@ -616,7 +624,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         }
         if (level.getServer() == null) return List.of();
         return getLootTable(
-            //? if >= 1.20 {
+            //? if >= 1.21.1 {
             level.getServer().reloadableRegistries(),
             //?} else {
             /*level.getServer().getLootTables(),
@@ -627,7 +635,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     }
 
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     private LootParams createVoluntaryLootParams(Level level, BlockPos rootPos, int fertility) {
         return new LootParams.Builder(LevelContext.getServerLevelOrThrow(level))
                 .withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(rootPos))
@@ -647,7 +655,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     }
     *///?}
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     public LootTable getLootTable(ReloadableServerRegistries.Holder lootTables, Function<Species, ResourceLocation> nameFunction) {
         final LootTable table = lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, nameFunction.apply(this)));
         return table == LootTable.EMPTY ? (this.isCommonSpecies() ? lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, nameFunction.apply(getCommonSpecies()))) : LootTable.EMPTY) : table;
@@ -695,7 +703,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
                                                   int branchVolume, BranchBlock branchBlock) {
         if (level.getServer() == null) return List.of();
         return branchBlock.getLootTable(
-                //? if >= 1.20 {
+                //? if >= 1.21.1 {
                 level.getServer().reloadableRegistries(),
                  //?} else {
                 /*level.getServer().getLootTables(),
@@ -705,7 +713,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         ).getRandomItems(createBranchesLootParams(level, branchVolume, tool, explosionRadius));
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     private LootParams createBranchesLootParams(Level level, int volume, ItemStack tool,
                                                   @Nullable Float explosionRadius) {
         return new LootParams.Builder(LevelContext.getServerLevelOrThrow(level))
@@ -940,6 +948,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         DynamicSaplingBlock commonSapling = getCommonSpecies().getSapling().orElse(null);
         final DynamicSaplingBlock sapling = locationOverride ? commonSapling : getSapling().orElse(commonSapling);
 
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         if (sapling == null || !level.getBlockState(pos).canBeReplaced() ||
                 !DynamicSaplingBlock.canSaplingStay(level, this, pos)) {
             return false;
@@ -962,7 +971,15 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      * @param pos   The {@link BlockPos} the sapling is on.
      * @return True if it can grow.
      */
-    public boolean canSaplingGrow(LevelReader level, BlockPos pos) {
+    public boolean canSaplingGrow(
+            //? if >= 1.19.4 {
+            LevelReader level,
+             //? } else {
+            /*BlockGetter level,
+            *///? }
+
+            BlockPos pos
+    ) {
         return this.acceptableBlocksForGrowth.isEmpty() || this.acceptableBlocksForGrowth.stream().anyMatch(block -> block == level.getBlockState(pos.below()).getBlock());
     }
 
@@ -987,7 +1004,15 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
 
     //Returns if sapling should consume bonemeal when used on it.
     //if true is returned canSaplingUseBoneMeal is then run to determine if the sapling grows or not.
-    public boolean canSaplingConsumeBoneMeal(LevelReader level, BlockPos pos) {
+    public boolean canSaplingConsumeBoneMeal(
+            //? if >= 1.19.4 {
+            LevelReader level,
+            //? } else {
+            /*BlockGetter level,
+            *///? }
+
+            BlockPos pos
+    ) {
         return canBoneMealTree() && canSaplingGrow(level, pos);
     }
 
@@ -1049,7 +1074,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         if (saplingName == null) {
             return ResourceLocationUtils.suffix(this.getRegistryName(), "_sapling");
         } else {
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             return ResourceLocation.fromNamespaceAndPath(getRegistryName().getNamespace(), saplingName);
             //?} else {
             /*return new ResourceLocation(getRegistryName().getNamespace(), saplingName);
@@ -1113,6 +1138,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
 
         if (!SoilHelper.isSoilRegistered(dirt) && !(dirt instanceof SoilBlock)) {
             //soil is not valid so we default to dirt
+            //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
             DynamicTrees.LOG.warn("Rooty Dirt block NOT FOUND for soil {}", BuiltInRegistries.BLOCK.getKey(dirt)); //default to dirt and print error
             this.placeRootyDirtBlock(level, rootPos, Blocks.DIRT.defaultBlockState(), fertility);
             return false;
@@ -1911,8 +1937,9 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      */
     public int getSeasonalTooltipFlags(LevelContext levelContext, Player player) {
         if (showSeasonalTooltip()) {
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             BlockPos playerPos = BlockPos.containing(player.position());
-            //~ if < 1.21 '.level()' -> '.level'
+            //~ if < 1.21.1 '.level()' -> '.level'
             ClimateZoneType climate = ClimateHelper.getClimate(player.level(), playerPos);
             float suitability = (float) (DTConfigs.SERVER.climateAffectsFruitsAndPods.get()
                     ? ClimateHelper.climateMultiplier(this, climate, climateTolerance) : 1.0);
@@ -2148,7 +2175,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     }
 
     public boolean leavesAreSolid() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return getLeavesProperties().getPrimitiveLeaves().isSolid();
         //?} else {
         /*return getLeavesProperties().getPrimitiveLeaves().getMaterial().isSolidBlocking();
@@ -2533,6 +2560,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         return DynamicTrees.location("item/standard_seed");
     }
 
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     public void addGeneratedBlockTags (Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender){
         // Create dynamic sapling block tags.
         getSapling().ifPresent(sapling ->
@@ -2540,12 +2568,14 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
                     if (!isOnlyIfLoaded()) {
                         tagAppender.apply(tag).add(sapling);
                     } else {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         tagAppender.apply(tag).addOptional(BuiltInRegistries.BLOCK.getKey(sapling));
                     }
                 })
         );
     }
 
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     public void addGeneratedItemTags (Function<TagKey<Item>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item>> tagAppender){
         // Some species return the common seed, so only return if the species has its own seed.
         if (!hasSeed()) {
@@ -2557,6 +2587,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
                     if (!isOnlyIfLoaded()) {
                         tagAppender.apply(tag).add(seed);
                     } else {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         tagAppender.apply(tag).addOptional(BuiltInRegistries.ITEM.getKey(seed));
                     }
                 })
@@ -2574,8 +2605,17 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
         return voluntaryDropsPath.get();
     }
 
-    public LootTable.Builder createVoluntaryDrops(HolderLookup.Provider registries) {
-        return DTLootTableBuilder.createVoluntaryDrops(seed.get(), registries);
+    public LootTable.Builder createVoluntaryDrops(
+        //? if >= 1.19.4
+         HolderLookup.Provider registries
+    ) {
+        return DTLootTableBuilder.createVoluntaryDrops(
+                seed.get()
+
+                //? if >= 1.19.4 {
+                , registries
+                //? }
+        );
     }
 
     public void setDropSeeds(boolean dropSeeds) {
@@ -2597,8 +2637,10 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     @Override
     public String toLoadDataString() {
         final RegistryHandler registryHandler = RegistryHandler.get(this.getRegistryName().getNamespace());
+        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
         return this.getString(Pair.of("seed", this.seed != null ? BuiltInRegistries.ITEM.getKey(this.seed.get()) : null),
                 Pair.of("sapling",
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         this.saplingBlock != null ? "Block{" + BuiltInRegistries.BLOCK.getKey(this.saplingBlock.get()) + "}" :
                                 null));
     }

@@ -1,9 +1,12 @@
 package com.dtteam.dynamictrees.data.tags;
 
 import com.dtteam.dynamictrees.DynamicTrees;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.TagKey;
+import net.minecraft.core.Registry;import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+ //? }
 
 /**
  * @author Harley O'Connor
@@ -26,6 +29,7 @@ public final class DTBlockTags {
     public static final TagKey<Block> ROOTS = bind("roots");
 
     private static TagKey<Block> bind(String identifier) {
+        //~ if < 1.19.4 'Registries.BLOCK' -> 'Registry.BLOCK_REGISTRY'
         return TagKey.create(Registries.BLOCK, DynamicTrees.location(identifier));
     }
 }

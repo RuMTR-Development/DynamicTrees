@@ -13,8 +13,7 @@ import com.dtteam.dynamictrees.treepack.Resettable;
 import com.dtteam.dynamictrees.utility.Optionals;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -35,6 +34,13 @@ import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.material.Material;
+*///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+//? } else {
+/*import net.minecraft.data.tags.BlockTagsProvider;
 *///? }
 
 /**
@@ -95,7 +101,7 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
         this(primitiveBlock, name);
         this.soilFlags = soilFlags;
         if (generate) {
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             generateBlock(BlockBehaviour.Properties.ofFullCopy(primitiveBlock));
             //? } else {
             /*generateBlock(BlockBehaviour.Properties.copy(primitiveBlock));
@@ -222,7 +228,7 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
     // MATERIAL
     ///////////////////////////////////////////
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Deprecated(forRemoval = true)
     public MapColor getDefaultMapColor() {
         return MapColor.DIRT;
@@ -235,7 +241,7 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
     *///? }
 
     public BlockBehaviour.Properties getDefaultBlockProperties() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.DIRT)
         //? } else {
@@ -245,7 +251,7 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
                 .strength(0.5F);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Deprecated(forRemoval = true)
     public BlockBehaviour.Properties getDefaultBlockProperties(final MapColor mapColor) {
         return this.getDefaultBlockProperties();
@@ -324,6 +330,7 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
         this.onlyIfLoaded.add(onlyIfLoaded);
     }
 
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     public void addGeneratedBlockTags (Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender){
         // add rooty blocks to the rooty soil tag.
         getBlock().ifPresent(rootyBlock ->
@@ -331,6 +338,7 @@ public class SoilProperties extends RegistryEntry<SoilProperties> implements Res
                     if (!isOnlyIfLoaded()) {
                         tagAppender.apply(tag).add(rootyBlock);
                     } else {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         tagAppender.apply(tag).addOptional(BuiltInRegistries.BLOCK.getKey(rootyBlock));
                     }
                 }));

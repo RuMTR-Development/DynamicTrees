@@ -154,6 +154,7 @@ public class ThickBranchBlock extends BasicBranchBlock implements Musable {
             return pos.offset(surr.getOffset()).equals(corePos) ? ReplaceableState.SHELL : ReplaceableState.BLOCKING;
         }
 
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         if (state.canBeReplaced() || state.is(DTBlockTags.FOLIAGE)) {
             return ReplaceableState.REPLACEABLE;
         }

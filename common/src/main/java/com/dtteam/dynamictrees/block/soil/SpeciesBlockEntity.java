@@ -32,7 +32,7 @@ public class SpeciesBlockEntity extends BlockEntity {
         this.setChanged();
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("species")) {
@@ -45,7 +45,7 @@ public class SpeciesBlockEntity extends BlockEntity {
     /*@Override
     public void load(CompoundTag tag) {
         if (tag.contains("species")) {
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             ResourceLocation speciesName = ResourceLocation.parse(tag.getString("species"));
             //? } else {
             /^ResourceLocation speciesName = new ResourceLocation(tag.getString("species"));
@@ -58,7 +58,7 @@ public class SpeciesBlockEntity extends BlockEntity {
     }
     *///? }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putString("species", species.getRegistryName().toString());
@@ -75,7 +75,7 @@ public class SpeciesBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);

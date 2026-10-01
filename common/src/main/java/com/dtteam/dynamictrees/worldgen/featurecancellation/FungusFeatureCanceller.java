@@ -2,10 +2,15 @@ package com.dtteam.dynamictrees.worldgen.featurecancellation;
 
 import com.dtteam.dynamictrees.api.worldgen.BiomePropertySelectors;
 import com.dtteam.dynamictrees.api.worldgen.FeatureCanceller;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+ //? } else {
+/*import net.minecraft.core.Registry;
+*///? }
 
 /**
  * This class is an alternate version of {@link TreeFeatureCanceller} specifically made for cancelling fungus features.
@@ -24,7 +29,7 @@ public class FungusFeatureCanceller<T extends FeatureConfiguration> extends Feat
 
     @Override
     public boolean shouldCancel(ConfiguredFeature<?, ?> configuredFeature, BiomePropertySelectors.NormalFeatureCancellation featureCancellations) {
-        final ResourceLocation featureRegistryName = BuiltInRegistries.FEATURE.getKey(configuredFeature.feature());
+        final ResourceLocation featureRegistryName = Registry.FEATURE.getKey(configuredFeature.feature());
 
         return featureRegistryName != null && this.fungusFeatureConfigClass.isInstance(configuredFeature.config()) &&
                 featureCancellations.shouldCancelNamespace(featureRegistryName.getNamespace());

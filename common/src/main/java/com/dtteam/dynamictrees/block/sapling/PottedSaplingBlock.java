@@ -29,7 +29,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
 //? } else {
 /*import net.minecraft.world.level.material.Material;
@@ -41,7 +41,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
 
     public PottedSaplingBlock() {
         super(
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 Properties.of()
                 //? } else {
                 /*Properties.of(Material.PLANT)
@@ -97,7 +97,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
     // INTERACTION
     ///////////////////////////////////////////
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
     //?} else {
@@ -108,7 +108,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
 
         final Species species = this.getSpecies(level, pos);
         if (!species.isValid()) {
-            //? if >= 1.20 {
+            //? if >= 1.21.1 {
             return ItemInteractionResult.FAIL;
             //?} else {
             /*return InteractionResult.FAIL;
@@ -117,14 +117,14 @@ public class PottedSaplingBlock extends BaseEntityBlock {
 
         removeSaplingFromPot(stack, species, player, level, pos);
 
-        //? if >= 1.20 {
+        //? if >= 1.21.1 {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
          //?} else {
         /*return InteractionResult.sidedSuccess(level.isClientSide);
         *///? }
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         final Species species = this.getSpecies(level, pos);
@@ -162,7 +162,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
      */
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -234,7 +234,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
         }
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
@@ -260,7 +260,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
     // RENDERING
     ///////////////////////////////////////////
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return null;
@@ -272,7 +272,7 @@ public class PottedSaplingBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*@Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;

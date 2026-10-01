@@ -49,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 
 import net.minecraft.world.level.storage.loot.LootParams;
 //? } else {
@@ -67,7 +67,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     }
 
     public DynamicLeavesBlock(Properties properties) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         super(properties.pushReaction(PushReaction.DESTROY));
          //? } else {
         /*super(properties);
@@ -118,7 +118,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -161,7 +161,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -338,7 +338,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
                 level.setBlock(
                         pos.below(),
 
-                        //? if >= 1.21 {
+                        //? if >= 1.21.1 {
                         Blocks.SHORT_GRASS.defaultBlockState(),
                          //? } else {
                         /*Blocks.GRASS.defaultBlockState(),
@@ -352,6 +352,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
             level.removeBlock(pos, false);
         }
 
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         return (level.isEmptyBlock(pos) || level.getBlockState(pos).canBeReplaced()) && hasAdequateLight(blockState, level, leavesProperties, pos);
     }
 
@@ -709,7 +710,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     public List<ItemStack> getDrops(
             BlockState state,
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LootParams.Builder builder
              //? } else {
             /*LootContext.Builder builder
@@ -722,17 +723,18 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         ServerLevel level = builder.getLevel();
 
         if (originPos == null) {
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             lootTable = level.getServer().reloadableRegistries().getLootTable(getLootTable());
              //? } else {
             /*lootTable = level.getServer().getLootTables().get(getLootTable());
             *///? }
         } else {
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             pos = BlockPos.containing(originPos.x, originPos.y, originPos.z);
             LeavesProperties leavesProperties = getLeavesProperties();
             species = getExactSpecies(level, pos, leavesProperties);
             lootTable = leavesProperties.getBlockLootTable(
-                    //? if >= 1.21 {
+                    //? if >= 1.21.1 {
                     level.getServer().reloadableRegistries(),
                      //? } else {
                     /*level.getServer().getLootTables(),
@@ -745,7 +747,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         if (lootTable == LootTable.EMPTY) {
             return Collections.emptyList();
         } else {
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LootParams context = createLootParams(state, builder, species, level, pos);
              //? } else {
             /*LootContext context = createLootParams(state, builder, species, level, pos);
@@ -755,7 +757,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         }
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     private LootParams createLootParams
      //? } else {
     /*private LootContext createLootParams
@@ -885,7 +887,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         }
     }
 
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*@Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;

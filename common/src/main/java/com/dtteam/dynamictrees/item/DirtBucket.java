@@ -51,6 +51,7 @@ public class DirtBucket extends Item {
                 if (!world.mayInteract(player, pos)) {
                     return new InteractionResultHolder<>(InteractionResult.FAIL, itemStack);
                 } else {
+                    //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
                     final boolean isReplaceable = world.getBlockState(pos).canBeReplaced();
                     final BlockPos workingPos = isReplaceable && blockRayTraceResult.getDirection() == Direction.UP ? pos : pos.relative(blockRayTraceResult.getDirection());
 
@@ -71,6 +72,7 @@ public class DirtBucket extends Item {
 
     public boolean tryPlaceContainedDirt(@Nullable Player player, Level world, BlockPos posIn) {
         BlockState blockState = world.getBlockState(posIn);
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         if (blockState.canBeReplaced()) {
             if (!world.isClientSide && !blockState.isAir()) {
                 world.destroyBlock(posIn, true);

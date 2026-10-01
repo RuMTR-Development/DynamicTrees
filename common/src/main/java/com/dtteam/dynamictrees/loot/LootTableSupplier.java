@@ -2,16 +2,17 @@ package com.dtteam.dynamictrees.loot;
 
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-//? if >= 1.20 {
+//? if >= 1.21.1 {
 import net.minecraft.server.ReloadableServerRegistries;
+import net.minecraft.core.registries.Registries;
 //?} else {
 /*import net.minecraft.world.level.storage.loot.LootTables;
 *///?}
+
 
 /**
  * @author Harley O'Connor
@@ -28,7 +29,7 @@ public final class LootTableSupplier {
         this.baseName = ResourceLocationUtils.prefix(name, path);
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     public LootTable get(ReloadableServerRegistries.Holder lootTables, Species species) {
         final LootTable speciesOverrideTable = lootTables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, getName(species)));
         if (speciesOverrideTable != LootTable.EMPTY) {

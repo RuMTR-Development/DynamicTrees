@@ -72,7 +72,7 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -267,7 +267,7 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -284,7 +284,7 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
         }
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         BlockState destroyed = super.playerWillDestroy(level, pos, state, player);

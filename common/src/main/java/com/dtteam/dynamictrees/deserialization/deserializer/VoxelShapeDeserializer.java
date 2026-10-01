@@ -51,7 +51,7 @@ public final class VoxelShapeDeserializer implements JsonDeserializer<VoxelShape
                         functionId,
                         getParametersJson(json)
                 ).getOrThrow(
-                        //? if < 1.21 {
+                        //? if < 1.21.1 {
                         /*true,
                         s -> {}
                         *///? }

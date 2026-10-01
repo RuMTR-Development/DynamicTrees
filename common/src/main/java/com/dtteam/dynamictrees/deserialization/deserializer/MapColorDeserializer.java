@@ -22,8 +22,8 @@ public final class MapColorDeserializer implements JsonDeserializer<
         //$ if >= 1.21 'MapColor' else 'MaterialColor'
         MapColor
 > {
-    //~ if < 1.21 'MapColor' -> 'MaterialColor' {
-    //~ if < 1.21 'ResourceLocation.parse' -> 'new ResourceLocation' {
+    //~ if < 1.21.1 'MapColor' -> 'MaterialColor' {
+    //~ if < 1.21.1 'ResourceLocation.parse' -> 'new ResourceLocation' {
     private static final Map<ResourceLocation, MapColor> MATERIAL_COLORS =
             Util.make(new HashMap<>(), MapColors -> {
                 MapColors.put(ResourceLocation.parse("none"), MapColor.NONE);
@@ -101,7 +101,7 @@ public final class MapColorDeserializer implements JsonDeserializer<
     public static void registerMapColor(
             ResourceLocation name,
 
-            //~ if < 1.21 'MapColor' -> 'MaterialColor'
+            //~ if < 1.21.1 'MapColor' -> 'MaterialColor'
             MapColor color
     ) {
         MATERIAL_COLORS.putIfAbsent(name, color);

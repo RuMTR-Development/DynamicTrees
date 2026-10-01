@@ -13,9 +13,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.ResourceLocationException;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.HolderLookup;import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
@@ -24,6 +23,10 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.function.Supplier;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -34,6 +37,8 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         MinecraftServer currentServer = Services.MISC.getCurrentServer();
         if (currentServer == null)
             throw new IllegalStateException("Queried biome registry too early; server does not exist yet!");
+
+        //~ if < 1.19.4 'Registries.BIOME' -> 'Registry.BIOME_REGISTRY'
         return currentServer.registryAccess().registryOrThrow(Registries.BIOME);
     };
 
@@ -51,6 +56,8 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
             //? } else {
             /*ResourceLocation tagLocation = new ResourceLocation(tagRegex);
             *///? }
+
+            //~ if < 1.19.4 'Registries.BIOME' -> 'Registry.BIOME_REGISTRY'
             TagKey<Biome> tagKey = TagKey.create(Registries.BIOME, tagLocation);
 
             // TODO UPDATE: This is used as a regex in 1.19.2. Double check!!!
@@ -73,7 +80,13 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         String finalNameRegex = nameRegex;
         biomeList.addNameRegexMatch(
                 (notOperator ? biomeList.getExcludeComponents() : biomeList.getIncludeComponents()),
-                ()->DELAYED_BIOME_REGISTRY.get().asLookup(), finalNameRegex);
+                () -> {
+                    //? if >= 1.19.4 {
+                    return DELAYED_BIOME_REGISTRY.get().asLookup();
+                    //? } else {
+                    /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
+                    *///? }
+                }, finalNameRegex);
     };
 
     private static boolean usingNotOperator(String categoryString) {
@@ -96,7 +109,13 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
             String finalNameRegex = nameRegex;
             biomeList.addNameRegexMatch(
                     (notOperator ? orExcludes : orIncludes),
-                    ()->DELAYED_BIOME_REGISTRY.get().asLookup(), finalNameRegex);
+                    () -> {
+                        //? if >= 1.19.4 {
+                        return DELAYED_BIOME_REGISTRY.get().asLookup();
+                         //? } else {
+                        /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
+                        *///? }
+                    }, finalNameRegex);
         });
 
         if (!orIncludes.isEmpty())
@@ -122,7 +141,13 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
 
             biomeList.addTagsRegexMatch(
                     (notOperator ? orExcludes : orIncludes),
-                    ()->DELAYED_BIOME_REGISTRY.get().asLookup(), tagRegex);
+                    () -> {
+                        //? if >= 1.19.4 {
+                        return DELAYED_BIOME_REGISTRY.get().asLookup();
+                         //? } else {
+                        /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
+                        *///? }
+                    }, tagRegex);
         });
 
         if (!orIncludes.isEmpty())
@@ -184,7 +209,13 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         return JsonResult.forInput(input)
                 .mapIfType(String.class, biomeName -> {
                     IDTBiomeHolderSet biomes = Services.MISC.newDTBiomeHolderSet();
-                    biomes.addNameRegexMatch(biomes.getIncludeComponents(), ()->DELAYED_BIOME_REGISTRY.get().asLookup(), biomeName.toLowerCase(Locale.ENGLISH));
+                    biomes.addNameRegexMatch(biomes.getIncludeComponents(), () -> {
+                        //? if >= 1.19.4 {
+                        return DELAYED_BIOME_REGISTRY.get().asLookup();
+                         //? } else {
+                        /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
+                        *///? }
+                    }, biomeName.toLowerCase(Locale.ENGLISH));
                     return biomes;
                 })
                 .elseMapIfType(JsonObject.class, selectorObject -> {

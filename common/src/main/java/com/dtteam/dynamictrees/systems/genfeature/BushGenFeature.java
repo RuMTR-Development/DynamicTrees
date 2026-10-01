@@ -90,6 +90,8 @@ public class BushGenFeature extends GenFeature {
         for (int i = 0; i < 2; i++) {
             int rad = Mth.clamp(random.nextInt(radius - 2) + 2, 2, radius - 1);
             Vec3 v = vTree.add(new Vec3(1, 0, 0).scale(rad).yRot((float) (random.nextFloat() * Math.PI * 2)));
+
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             BlockPos vPos = BlockPos.containing(v);
 
             final BlockPos groundPos = CoordUtils.findWorldSurface(level, vPos, worldGen);
@@ -111,6 +113,7 @@ public class BushGenFeature extends GenFeature {
                 for (BlockPos.MutableBlockPos dPos : leafMap.getAllNonZero()) {
                     leafPos.set(pos.getX() + dPos.getX(), pos.getY() + dPos.getY(), pos.getZ() + dPos.getZ());
                     if ((coordHashCode(leafPos) % 5) != 0 &&
+                            //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
                             level.getBlockState(leafPos).canBeReplaced()) {
                         placeLeaves(configuration, level, random, leafPos);
                     }

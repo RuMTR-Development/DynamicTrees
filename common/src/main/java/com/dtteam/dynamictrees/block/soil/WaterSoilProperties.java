@@ -29,7 +29,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
@@ -55,7 +55,7 @@ public class WaterSoilProperties extends SoilProperties {
 
     @Override
     public BlockBehaviour.Properties getDefaultBlockProperties() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.WATER);
         //? } else {
         /*return BlockBehaviour.Properties.copy(Blocks.WATER);
@@ -84,7 +84,7 @@ public class WaterSoilProperties extends SoilProperties {
 
         @Override
         public ItemStack getCloneItemStack(
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 LevelReader level,
                  //?} else {
                 /*BlockGetter level,

@@ -26,7 +26,7 @@ public class BlockColorMultipliers {
 
     @Nullable
     public static BlockColor find(String label) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return find(ResourceLocation.parse(label));
         //? } else {
         /*return find(new ResourceLocation(label));

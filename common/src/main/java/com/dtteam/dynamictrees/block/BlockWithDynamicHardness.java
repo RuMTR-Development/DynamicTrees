@@ -66,7 +66,7 @@ public abstract class BlockWithDynamicHardness extends Block {
         public DynamicHardnessBlockState(
                 Block block,
 
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 Reference2ObjectArrayMap<Property<?>, Comparable<?>> propertiesToValueMap,
                 //? } else {
                 /*ImmutableMap<Property<?>, Comparable<?>> propertiesToValueMap,

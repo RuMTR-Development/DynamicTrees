@@ -24,7 +24,7 @@ import java.util.List;
  */
 public final class MultiplyByLogsCount extends LootItemConditionalFunction {
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<MultiplyByLogsCount> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance)
                     .apply(instance, MultiplyByLogsCount::new));
@@ -43,7 +43,7 @@ public final class MultiplyByLogsCount extends LootItemConditionalFunction {
     }
     *///? }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public MultiplyByLogsCount(List<LootItemCondition> conditions) {
         super(conditions);
     }
@@ -53,7 +53,7 @@ public final class MultiplyByLogsCount extends LootItemConditionalFunction {
     }
     *///? }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
         return DTRegistries.MULTIPLY_LOGS_COUNT.get();
@@ -74,7 +74,7 @@ public final class MultiplyByLogsCount extends LootItemConditionalFunction {
     }
 
     public static LootItemFunction.Builder multiplyByLogsCount() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return () -> new MultiplyByLogsCount(List.of());
         //? } else {
         /*return () -> new MultiplyByLogsCount(new LootItemCondition[0]);

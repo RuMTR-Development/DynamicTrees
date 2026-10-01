@@ -9,7 +9,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -19,20 +18,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.item.crafting.CraftingInput;
 //? } else {
 /*import net.minecraft.world.inventory.CraftingContainer;
 *///? }
 
+//? if >= 1.19.4 {
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+//? }
+
 public class SeedConversionRecipe extends CustomRecipe {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public SeedConversionRecipe(CraftingBookCategory pCategory) {
         super(pCategory);
     }
-    //? } else {
+    //? } else if >= 1.19.4 {
     /*public SeedConversionRecipe(ResourceLocation pId, CraftingBookCategory pCategory) {
         super(pId, pCategory);
+    }
+    *///? } else {
+    /*public SeedConversionRecipe(ResourceLocation pId) {
+        super(pId);
     }
     *///? }
 
@@ -66,12 +73,14 @@ public class SeedConversionRecipe extends CustomRecipe {
 
     @Override
     public ItemStack assemble(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             CraftingInput craftingInput,
             HolderLookup.Provider registryAccess
-             //? } else {
+             //? } else if >= 1.19.4 {
             /*CraftingContainer craftingInput,
             RegistryAccess registryAccess
+            *///? } else {
+            /*CraftingContainer craftingInput
             *///? }
     ) {
         for(Species species : Species.REGISTRY) {

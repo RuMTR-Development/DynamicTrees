@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * @author Harley O'Connor
  */
 public final class SeedItemLootPoolEntry extends LootPoolSingletonContainer {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<SeedItemLootPoolEntry> CODEC = RecordCodecBuilder.mapCodec(
             instance -> singletonFields(instance)
                     .apply(instance, SeedItemLootPoolEntry::new));

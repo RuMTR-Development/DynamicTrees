@@ -5,6 +5,8 @@ import com.dtteam.dynamictrees.block.soil.SoilBlock;
 import com.dtteam.dynamictrees.systems.substance.LingeringSubstances;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
-//~ if < 1.21 '.level()' -> '.level' {
+//~ if < 1.21.1 '.level()' -> '.level' {
 public class LingeringEffectorEntity extends Entity {// implements IEntityAdditionalSpawnData {
 
     public static final EntityDataAccessor<CompoundTag> effectorDataParameter = SynchedEntityData.defineId(LingeringEffectorEntity.class, EntityDataSerializers.COMPOUND_TAG);
@@ -68,7 +70,7 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
         return this.effect;
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(effectorDataParameter, new CompoundTag());
@@ -91,6 +93,13 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.put("effector", getEffectorData());
     }
+
+    //? if < 1.19.4 {
+    /*@Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
+    }
+    *///? }
 
     public CompoundTag buildEffectorData(BlockPos pos, @Nullable SubstanceEffect substance) {
         CompoundTag tag = new CompoundTag();
@@ -118,7 +127,7 @@ public class LingeringEffectorEntity extends Entity {// implements IEntityAdditi
     public void tick() {
         super.tick();
 
-        //~ if < 1.21 'level()' -> 'level'
+        //~ if < 1.21.1 'level()' -> 'level'
         if (level().isClientSide() && !clientBuilt){
             setEffectorData(getEffectorData());
             clientBuilt = true;

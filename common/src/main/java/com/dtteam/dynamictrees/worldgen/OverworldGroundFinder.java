@@ -3,7 +3,7 @@ package com.dtteam.dynamictrees.worldgen;
 import com.dtteam.dynamictrees.api.worldgen.GroundFinder;
 import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelAccessor;
@@ -12,6 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -28,6 +32,7 @@ public final class OverworldGroundFinder implements GroundFinder {
 		boolean caveBiomeFound = false;
 		while (CoordUtils.inRange(pos, level.getMinBuildHeight(), surfaceBlock.getY())) {
 			if (level.getBiome(pos).is(TagKey.create(
+					//~ if < 1.19.4 'Registries.BIOME' -> 'Registry.BIOME_REGISTRY'
 					Registries.BIOME,
 
 					//? if >= 1.21 {

@@ -10,6 +10,7 @@ import java.util.List;
 
 public abstract class BiomeGenSettingsBuilderWrapper {
 
+    //~ if < 1.19.4 'BiomeGenerationSettings.PlainBuilder' -> 'BiomeGenerationSettings.Builder'
     public abstract BiomeGenerationSettings.PlainBuilder getPlainBuilder ();
 
     public abstract List<Holder<PlacedFeature>> getFeatures(GenerationStep.Decoration stage);

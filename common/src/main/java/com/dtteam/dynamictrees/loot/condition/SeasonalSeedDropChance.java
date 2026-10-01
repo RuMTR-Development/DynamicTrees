@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
  * @author Harley O'Connor
  */
 public final class SeasonalSeedDropChance implements LootItemCondition {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<SeasonalSeedDropChance> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
                     .group(Codec.EMPTY.forGetter(a-> Unit.INSTANCE))

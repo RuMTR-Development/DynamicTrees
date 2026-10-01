@@ -16,7 +16,7 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 public class DendroPotion extends Item implements SubstanceEffectProvider, Emptiable {
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*public static final String INDEX_TAG_KEY = "potion_index";
     public static final String TREE_TAG_KEY = "target";
     *///? }
@@ -83,7 +83,7 @@ public class DendroPotion extends Item implements SubstanceEffectProvider, Empti
     }
 
     public static ItemStack applyIndexTag(final ItemStack potionStack, final int potionIndex) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         potionStack.set(DTRegistries.DENDRO_POTION_INDEX_DATA_COMPONENT.get(), potionIndex);
         //? } else {
         /*potionStack.getOrCreateTag().putInt(INDEX_TAG_KEY, potionIndex);
@@ -93,7 +93,7 @@ public class DendroPotion extends Item implements SubstanceEffectProvider, Empti
     }
 
     public static DendroPotionType getPotionType(ItemStack stack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         int index = stack.getOrDefault(DTRegistries.DENDRO_POTION_INDEX_DATA_COMPONENT.get(), 0);
         return DendroPotionType.values()[Math.clamp(index, 0, DendroPotionType.values().length-1)];
         //? } else {

@@ -7,34 +7,43 @@ import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-import java.util.ArrayList;import java.util.Arrays;import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.core.HolderLookup;
 //? } else {
 /*import net.minecraft.core.RegistryAccess;
 *///? }
 
+//? if >= 1.19.4 {
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+//? }
+
 public class MegaSeedRecipe extends CustomRecipe {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public MegaSeedRecipe(CraftingBookCategory pCategory) {
         super(pCategory);
     }
-    //? } else {
+    //? } else if >= 1.19.4 {
     /*public MegaSeedRecipe(ResourceLocation pId, CraftingBookCategory pCategory) {
         super(pId, pCategory);
+    }
+    *///? } else {
+    /*public MegaSeedRecipe(ResourceLocation pId) {
+        super(pId);
     }
     *///? }
 
     @Override
     public boolean matches(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             CraftingInput craftingInput,
             //? } else {
             /*CraftingContainer craftingInput,
@@ -52,14 +61,17 @@ public class MegaSeedRecipe extends CustomRecipe {
         return false;
     }
 
+
     @Override
     public ItemStack assemble(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             CraftingInput craftingInput,
             HolderLookup.Provider registryAccess
-             //? } else {
+             //? } else if >= 1.19.4 {
             /*CraftingContainer craftingInput,
             RegistryAccess registryAccess
+            *///? } else {
+            /*CraftingContainer craftingInput
             *///? }
     ) {
         for (Species species : Species.REGISTRY) {
@@ -71,7 +83,7 @@ public class MegaSeedRecipe extends CustomRecipe {
     }
 
     private static boolean atLeastHasSeed(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             CraftingInput craftingInput
              //? } else {
             /*CraftingContainer craftingInput

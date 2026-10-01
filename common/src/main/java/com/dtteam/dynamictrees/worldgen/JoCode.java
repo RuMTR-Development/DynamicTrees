@@ -388,6 +388,7 @@ public class JoCode {
     }
 
     protected boolean isReplaceable(BlockState state, boolean airOnly) {
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         boolean isEmpty = airOnly ? state.isAir() : state.canBeReplaced();
         return isEmpty || state.is(DTBlockTags.FOLIAGE) || state.is(BlockTags.FLOWERS);
     }

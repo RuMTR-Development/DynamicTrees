@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -47,7 +47,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     public DynamicSaplingBlock(Species species) {
         super(
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 Properties.of()
                         .mapColor(MapColor.PLANT)
                         .pushReaction(PushReaction.DESTROY)
@@ -89,7 +89,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
      //?} else {
     /*public
@@ -122,11 +122,16 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     @Override
     public boolean isValidBonemealTarget(
+            //? if >= 1.19.4 {
             LevelReader levelReader,
+            //? } else {
+            /*BlockGetter levelReader,
+            *///? }
+
             BlockPos blockPos,
             BlockState blockState
 
-            //? if < 1.21 {
+            //? if < 1.21.1 {
             /*,
             boolean isClient
             *///?}
@@ -153,7 +158,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
      //?} else {
     /*public
@@ -179,7 +184,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
             getDrops(
                     state,
 
-                    //? if >= 1.21 {
+                    //? if >= 1.21.1 {
                     new LootParams.Builder(serverLevel)
                      //? } else {
                     /*new LootContext.Builder(serverLevel)
@@ -195,7 +200,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -211,7 +216,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     public List<ItemStack> getDrops(
             @NotNull BlockState state,
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             @NotNull LootParams.Builder builder
             //? } else {
             /*@NotNull  LootContext.Builder builder
@@ -221,7 +226,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
             return Collections.emptyList();
         // If a loot table has been added load those drops instead.
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         LootTable loottable = builder.getLevel().getServer().reloadableRegistries().getLootTable(getLootTable());
          //? } else {
         /*LootTable loottable = builder.getLevel().getServer().getLootTables().get(getLootTable());
@@ -264,7 +269,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
         return species.shouldReplaceSaplingWhenGrown(sapling);
     }
 
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*@Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;

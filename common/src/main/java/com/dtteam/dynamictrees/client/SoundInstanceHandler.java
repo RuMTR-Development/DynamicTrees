@@ -34,7 +34,7 @@ public class SoundInstanceHandler {
         Minecraft.getInstance().getSoundManager().stop(instance);
         instances.remove(entity.getId());
         //we also clean up invalid instances
-        //~ if < 1.21 '.level()' -> '.level'
+        //~ if < 1.21.1 '.level()' -> '.level'
         instances.keySet().removeIf((id)->entity.level().getEntity(id) == null);
     }
 

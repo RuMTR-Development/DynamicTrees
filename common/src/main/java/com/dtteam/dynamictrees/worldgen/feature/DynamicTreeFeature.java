@@ -17,8 +17,7 @@ import com.dtteam.dynamictrees.worldgen.BiomeDatabases;
 import com.dtteam.dynamictrees.worldgen.DynamicTreeGenerationContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
@@ -35,6 +34,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.Arrays;
 
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
+
 /**
  * @author Harley O'Connor
  */
@@ -50,7 +53,8 @@ public class DynamicTreeFeature extends Feature<NoneFeatureConfiguration> {
                 //? if >= 1.21 {
                 .map(color -> BuiltInRegistries.BLOCK.get(ResourceLocation.parse(color.getName() + "_concrete")))
                 //? } else {
-                /*.map(color -> BuiltInRegistries.BLOCK.get(new ResourceLocation(color.getName() + "_concrete")))
+                /*//~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
+                .map(color -> BuiltInRegistries.BLOCK.get(new ResourceLocation(color.getName() + "_concrete")))
                 *///? }
 
                 .toArray(Block[]::new);

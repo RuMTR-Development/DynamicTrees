@@ -123,7 +123,7 @@ public class BranchDestructionData {
     }
 
     public BranchDestructionData(CompoundTag nbt) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         this.species = Species.findSpecies(ResourceLocation.parse(nbt.getString("species")));
         //? } else {
         /*this.species = Species.findSpecies(new ResourceLocation(nbt.getString("species")));
@@ -143,7 +143,7 @@ public class BranchDestructionData {
         this.toolDir = Direction.values()[Mth.clamp(nbt.getInt("tooldir"), 0, Direction.values().length - 1)];
         this.trunkHeight = nbt.getInt("trunkheight");
         this.soilState = nbt.contains("soilblock") ?
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 Pair.of(ResourceLocation.parse(nbt.getString("soilblock")), nbt.getInt("soilstateid"))
                  //? } else {
                 /*Pair.of(new ResourceLocation(nbt.getString("soilblock")), nbt.getInt("soilstateid"))

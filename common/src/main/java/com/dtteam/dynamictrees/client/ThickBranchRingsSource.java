@@ -1,3 +1,5 @@
+//? if >= 1.19.4 {
+
 package com.dtteam.dynamictrees.client;
 
 import com.dtteam.dynamictrees.DynamicTrees;
@@ -35,7 +37,7 @@ public class ThickBranchRingsSource implements SpriteSource {
         if (optional.isPresent()) {
             ResourceLocation location = ResourceLocationUtils.suffix(this.resourceId, "_thick");
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             output.add(location, (spriteLoader) -> {
                 SpriteContents base = spriteLoader.loadSprite(location, optional.get());
             //? } else {
@@ -57,7 +59,7 @@ public class ThickBranchRingsSource implements SpriteSource {
 
     public static SpriteSourceType setType (MapCodec<ThickBranchRingsSource> codec){
         TYPE = new SpriteSourceType(
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 codec
                 //? } else {
                 /*codec.codec()
@@ -67,3 +69,4 @@ public class ThickBranchRingsSource implements SpriteSource {
     }
 
 }
+//? }

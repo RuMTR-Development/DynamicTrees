@@ -4,7 +4,7 @@ import com.dtteam.dynamictrees.api.configuration.ConfigurationProperty;
 import com.dtteam.dynamictrees.systems.genfeature.context.PostGenerationContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -15,6 +15,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Predicate;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 /**
  * Generates a column of rooted dirt beneath a tree, from the origin to the rooty block of the tree. Based on
@@ -75,6 +79,7 @@ public class RootSystemGenFeature extends GenFeature {
 
     private static void placeRootedDirt(LevelAccessor level, GenFeatureConfiguration configuration, RandomSource random, int x, int z, BlockPos.MutableBlockPos pos) {
         int radius = configuration.get(ROOT_RADIUS);
+        //~ if < 1.19.4 'Registries.BLOCK' -> 'Registry.BLOCK_REGISTRY'
         TagKey<Block> rootReplaceableTag = TagKey.create(Registries.BLOCK, configuration.get(ROOT_REPLACEABLE_TAG));
         Predicate<BlockState> stateReplaceable = (state) -> state.is(rootReplaceableTag);
 

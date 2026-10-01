@@ -229,7 +229,7 @@ public class ChunkTreeHelper {
         return canCheckSurroundings(
                 accessor,
 
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 AABB.encapsulatingFullBlocks(pos.offset(-r, -r, -r), pos.offset(r, r, r))
                 //? } else {
                 /*new AABB(pos.offset(-r, -r, -r), pos.offset(r, r, r))

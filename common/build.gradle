@@ -29,7 +29,8 @@ dependencies {
     modCompileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     if (forge_config_api_port_variant == "modrinth") {
-        compileOnly "maven.modrinth:forge-config-api-port:${forge_config_api_port_version}"
+        modCompileOnly "maven.modrinth:forge-config-api-port:${forge_config_api_port_version}"
+        compileOnly "com.electronwill.night-config:core:3.6.6"
     } else {
         compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-${forge_config_api_port_variant}:${forge_config_api_port_version}"
     }

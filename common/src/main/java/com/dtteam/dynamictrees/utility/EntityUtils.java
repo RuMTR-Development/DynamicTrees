@@ -23,7 +23,7 @@ public class EntityUtils {
         Vec3 vec3d = entity.getEyePosition(partialTick);
         Vec3 vec3d1 = entity.getViewVector(partialTick);
         Vec3 vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
-        //~ if < 1.21 '.level()' -> '.level'
+        //~ if < 1.21.1 '.level()' -> '.level'
         return entity.level().clip(new ClipContext(vec3d, vec3d2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
     }
 

@@ -10,7 +10,6 @@ import com.dtteam.dynamictrees.tree.TreeHelper;
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.utility.MathUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +31,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//~ if < 1.21 '.level()' -> '.level' {
+//? if >= 1.19.4 {
+import com.mojang.math.Axis;
+//? } else {
+/*import com.mojang.math.Vector3f;
+*///? }
+
+//~ if < 1.21.1 '.level()' -> '.level' {
 public class FalloverAnimationHandler implements AnimationHandler {
 
     public static final int TICKS_BEFORE_CHECKING_COLLISION = 10;
@@ -138,7 +143,15 @@ public class FalloverAnimationHandler implements AnimationHandler {
     }
 
     protected void spawnParticlesAtLeaves(FallingTreeEntity entity, BlockPos leavesPos, BlockState leavesState, Vec3 velocity, RandomSource rand, int particleCount, double limitChance){
-        Vec3 newPos = getRelativeLeavesPosition(entity, leavesPos.getCenter());
+        Vec3 newPos = getRelativeLeavesPosition(
+                entity,
+
+                //? if >= 1.19.4 {
+                leavesPos.getCenter()
+                //? } else {
+                /*Vec3.atCenterOf(leavesPos)
+                *///? }
+        );
         for (int j=0; j<particleCount; j++){
             if (rand.nextDouble() < limitChance){
                 if (leavesState != null)
@@ -153,9 +166,21 @@ public class FalloverAnimationHandler implements AnimationHandler {
         BranchDestructionData data = entity.getDestroyData();
         float angle = (data.toolDir.getAxis() == Direction.Axis.X ? entity.getYRot() : entity.getXRot()) * -data.toolDir.getAxisDirection().getStep() * 0.0174533f;
         return rotateAroundAxis(
-                leaves.subtract(data.basePos.getCenter()),
+                leaves.subtract(
+                        //? if >= 1.19.4 {
+                        data.basePos.getCenter()
+                        //? } else {
+                        /*Vec3.atCenterOf(data.basePos)
+                        *///? }
+                ),
                 new Vec3(-data.toolDir.getStepZ(),0, data.toolDir.getStepX()),
-                angle).add(data.basePos.getCenter()).subtract(0.5,0.5,0.5);
+                angle).add(
+                        //? if >= 1.19.4 {
+                        data.basePos.getCenter()
+                        //? } else {
+                        /*Vec3.atCenterOf(data.basePos)
+                        *///? }
+                ).subtract(0.5,0.5,0.5);
     }
 
     @Override
@@ -176,7 +201,7 @@ public class FalloverAnimationHandler implements AnimationHandler {
 
         float fallSpeed = getData(entity).fallSpeed;
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (entity.onGround()) {
         //? } else {
         /*if (entity.isOnGround()) {
@@ -197,6 +222,7 @@ public class FalloverAnimationHandler implements AnimationHandler {
                 radius = ((BranchBlock) state.getBlock()).getRadius(state);
             }
             AABB fallBox = new AABB(entity.getX() - radius, entity.getY(), entity.getZ() - radius, entity.getX() + radius, entity.getY() + 1.0, entity.getZ() + radius);
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             BlockPos pos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
             BlockState collState = level.getBlockState(pos);
 
@@ -400,8 +426,12 @@ public class FalloverAnimationHandler implements AnimationHandler {
         Vec3 toolVec = new Vec3(toolDir.getStepX(), toolDir.getStepY(), toolDir.getStepZ()).scale(radius / 16.0f);
 
         poseStack.translate(-toolVec.x, -toolVec.y, -toolVec.z);
+
+        //~ if < 1.19.4 'Axis' -> 'Vector3f' {
         poseStack.mulPose(Axis.ZN.rotationDegrees(yaw));
         poseStack.mulPose(Axis.XP.rotationDegrees(pit));
+        //~ }
+
         poseStack.translate(toolVec.x, toolVec.y, toolVec.z);
 
         poseStack.translate(-0.5, 0, -0.5);

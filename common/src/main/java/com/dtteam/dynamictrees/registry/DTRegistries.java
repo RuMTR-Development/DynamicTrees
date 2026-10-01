@@ -36,7 +36,7 @@ import com.dtteam.dynamictrees.worldgen.structure.TreePoolElement;
 import com.mojang.serialization.Codec;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -72,8 +72,10 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.component.DyedItemColor;
-//? } else {
+//? }
 
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
 //? }
 
 public class DTRegistries {
@@ -147,7 +149,7 @@ public class DTRegistries {
             .registerCreativeTab(DynamicTrees.MOD_ID,
                     ()-> Species.findSpecies(DynamicTrees.OAK).getSeedStack(1),
                     Component.translatable("itemGroup.dynamictrees"),
-                    (parameters, output) -> {
+                    (output) -> {
                         for (final DendroPotion.DendroPotionType potion : DendroPotion.DendroPotionType.values()) {
                             if (potion.isActive()) {
                                 output.accept(DendroPotion.applyIndexTag(new ItemStack(DENDRO_POTION.get()), potion.getIndex()));
@@ -281,11 +283,16 @@ public class DTRegistries {
     // WORLDGEN
     ///////////////////////////////////////////
 
+    //~ if < 1.19.4 'Registries.CONFIGURED_FEATURE' -> 'Registry.CONFIGURED_FEATURE_REGISTRY' {
     public static final ResourceKey<ConfiguredFeature<?, ?>> DYNAMIC_TREE_CONFIGURED_FEATURE = ResourceKey.create(Registries.CONFIGURED_FEATURE, DynamicTrees.location("dynamic_tree"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> CAVE_ROOTED_TREE_CONFIGURED_FEATURE = ResourceKey.create(Registries.CONFIGURED_FEATURE,DynamicTrees.location("cave_rooted_tree"));
+    //~ }
+
+    //~ if < 1.19.4 'Registries.PLACED_FEATURE' -> 'Registry.PLACED_FEATURE_REGISTRY' {
     public static final ResourceKey<PlacedFeature> DYNAMIC_TREE_PLACED_FEATURE = ResourceKey.create(Registries.PLACED_FEATURE,DynamicTrees.location("dynamic_tree"));
     /** Placement for trees that generate on the surface above the target biome. This is used for trees like the azalea. */
     public static final ResourceKey<PlacedFeature> CAVE_ROOTED_TREE_PLACED_FEATURE = ResourceKey.create(Registries.PLACED_FEATURE,DynamicTrees.location("cave_rooted_tree"));
+    //~ }
 
     public static final Supplier<PlacementModifierType<CaveRootedTreePlacement>> CAVE_ROOTED_TREE_PLACEMENT_MODIFIER_TYPE = Services.REGISTRY.getRegistryLoader()
             .registerPlacementModifierType("cave_rooted_tree", () -> () -> {
@@ -329,7 +336,10 @@ public class DTRegistries {
             });
 
     public static final Supplier<RecipeSerializer<SeedConversionRecipe>> SEED_CONVERSION_RECIPE_TYPE = Services.REGISTRY.getRegistryLoader()
+            //~ if < 1.19.4 'SimpleCraftingRecipeSerializer' -> 'SimpleRecipeSerializer'
             .registerRecipeType("seed_conversion", ()->new SimpleCraftingRecipeSerializer<>(SeedConversionRecipe::new));
+
     public static final Supplier<RecipeSerializer<MegaSeedRecipe>> MEGA_SEED_RECIPE_TYPE = Services.REGISTRY.getRegistryLoader()
+            //~ if < 1.19.4 'SimpleCraftingRecipeSerializer' -> 'SimpleRecipeSerializer'
             .registerRecipeType("mega_seed", ()->new SimpleCraftingRecipeSerializer<>(MegaSeedRecipe::new));
 }

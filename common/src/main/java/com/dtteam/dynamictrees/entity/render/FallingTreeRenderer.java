@@ -48,7 +48,7 @@ public class FallingTreeRenderer extends EntityRenderer<FallingTreeEntity> {
 
         entity.currentAnimationHandler.renderTransform(entity, entityYaw, partialTick, poseStack);
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         treeModel.renderToBuffer(poseStack, vertexBuilder, packedLight, OverlayTexture.NO_OVERLAY, 1);
         //? } else {
         /*treeModel.renderToBuffer(poseStack, vertexBuilder, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1.0F);

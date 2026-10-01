@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
 //? } else {
 /*import net.minecraft.world.InteractionResult;
@@ -85,7 +85,7 @@ public class SpreadableSoilProperties extends SoilProperties {
             return SoilHelper.getProperties(block).getBlock();
         }
 
-        //? if >= 1.20 {
+        //? if >= 1.21.1 {
         @Override
         protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         //?} else {
@@ -120,7 +120,7 @@ public class SpreadableSoilProperties extends SoilProperties {
                             handStack.shrink(1);
                         }
                         ParticleHelper.spawnParticles(level, ParticleTypes.HAPPY_VILLAGER, pos.above(), 2 + level.random.nextInt(5), level.random);
-                        //? if >= 1.21 {
+                        //? if >= 1.21.1 {
                         return ItemInteractionResult.SUCCESS;
                         //? } else {
                         /*return InteractionResult.SUCCESS;
@@ -129,7 +129,7 @@ public class SpreadableSoilProperties extends SoilProperties {
                 }
             }
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
              return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
              
             //? } else {

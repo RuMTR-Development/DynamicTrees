@@ -1,5 +1,6 @@
 package com.dtteam.dynamictrees.treepack;
 
+import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.api.resource.ResourceAccessor;
 import com.dtteam.dynamictrees.api.resource.TreeResourceManager;
 import com.dtteam.dynamictrees.api.resource.TreeResourcePack;
@@ -128,7 +129,11 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
     }
 
     private Resource getResource(ResourceLocation path, TreeResourcePack resourcePack) {
+        //? if >= 1.19.4 {
         return new Resource(resourcePack, resourcePack.getResource(path));
+        //? } else {
+        /*return new Resource(DynamicTrees.MOD_ID, () -> resourcePack.getResource(path));
+        *///? }
     }
 
     @Override
@@ -137,7 +142,14 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
 
         for (TreeResourcePack pack : this.resourcePacks) {
             for (String namespace : pack.getNamespaces()) {
-                pack.listResources(namespace, path, (loc, resource) -> {
+                pack.listResources(namespace, path, (
+                        loc
+
+                        //? if >= 1.19.4 {
+                        ,
+                        resource
+                        //? }
+                ) -> {
                     // TODO Mcmeta files? See FallbackResourceManager#listResources for an example
                     if (filter.test(loc)) {
                         // TODO Should this throw or doing anything if the key already has an associated value?
@@ -156,7 +168,14 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
 
         for (TreeResourcePack pack : this.resourcePacks) {
             for (String namespace : pack.getNamespaces()) {
-                pack.listResources(namespace, path, (loc, resource) -> {
+                pack.listResources(namespace, path, (
+                        loc
+
+                        //? if >= 1.19.4 {
+                        ,
+                        resource
+                        //? }
+                ) -> {
                     // TODO Mcmeta files? See FallbackResourceManager#listResourceStacks for an example
                     if (filter.test(loc)) {
                         resources.computeIfAbsent(loc, this::getResourceStack);

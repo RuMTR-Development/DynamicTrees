@@ -153,7 +153,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
 
         @Override
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         protected
         //?} else {
         /*public
@@ -165,7 +165,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
 
         @Override
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         protected
         //?} else {
         /*public
@@ -177,7 +177,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
 
         @Override
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         protected
         //?} else {
         /*public
@@ -213,7 +213,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
 
         @Override
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         protected
         //?} else {
         /*public
@@ -295,7 +295,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
 
                 final ItemStack heldItem = player == null ? ItemStack.EMPTY : player.getMainHandItem();
 
-                //? if >= 1.20 {
+                //? if >= 1.21.1 {
                 final int fortune = ItemUtils.getEnchantmentLevel(Enchantments.FORTUNE, heldItem, level.registryAccess());
                 //?} else {
                 /*final int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, heldItem);

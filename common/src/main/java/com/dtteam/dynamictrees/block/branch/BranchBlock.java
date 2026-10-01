@@ -32,7 +32,6 @@ import com.dtteam.dynamictrees.utility.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -67,7 +66,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.ItemInteractionResult;
 //?} else {
@@ -76,6 +75,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.storage.loot.LootTables;
 *///?}
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraft.core.Registry;
+*///? }
 
 public abstract class BranchBlock extends BlockWithDynamicHardness implements TreePart, FutureBreakable, BonemealableBlock {
 
@@ -98,7 +103,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
      * @param name name of branch, without a {@code _branch} suffix
      */
     public BranchBlock(ResourceLocation name) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         this(name, Properties.of().pushReaction(PushReaction.BLOCK));
          //? } else {
         /*this(name, Properties.of(Material.LEAVES));
@@ -211,7 +216,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
 
     /// ////////////////////////////////////////
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return TreeHelper.getTreePart(state).getFamily(state, level, pos).onTreeActivated(
@@ -255,7 +260,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.20 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -267,7 +272,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         return this.getFamily().getBranchItem().map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
@@ -289,11 +294,16 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
      */
     @Override
     public boolean isValidBonemealTarget(
+            //? if >= 1.19.4 {
             LevelReader levelReader,
+            //? } else {
+            /*BlockGetter levelReader,
+            *///? }
+
             BlockPos blockPos,
             BlockState blockState
 
-            //? if < 1.21 {
+            //? if < 1.21.1 {
             /*,
             boolean isClient
             *///?}
@@ -305,7 +315,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         SoilBlock root = TreeHelper.getRooty(rootState);
         if (root == null) return false;
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return root.isValidBonemealTarget(levelReader, rootPos, rootState);
         //? } else {
         /*return root.isValidBonemealTarget(levelReader, rootPos, rootState, isClient);
@@ -511,6 +521,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         BlockState soilState = level.getBlockState(rootPos);
         SoilBlock soilBlock = TreeHelper.getRooty(soilState);
         if (soilBlock != null && soilBlock.fallWithTree(soilState, level, rootPos, hasRoots)){
+            //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
             ResourceLocation blockResLoc = BuiltInRegistries.BLOCK.getKey(soilBlock);
             int stateId = soilBlock.getStateIndex(soilState);
             return Pair.of(blockResLoc, stateId);
@@ -616,7 +627,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
     }
 
     public LootTable getLootTable(
-            //? if >= 1.20 {
+            //? if >= 1.21.1 {
             ReloadableServerRegistries.Holder lootTables,
              //?} else {
             /*LootTables lootTables,
@@ -627,8 +638,19 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         return lootTableSupplier.get(lootTables, species);
     }
 
-    public LootTable.Builder createBranchDrops(HolderLookup.Provider registries) {
-        return DTLootTableBuilder.createBranchDrops(getPrimitiveLog().get(), family.getStick(1).getItem(), registries);
+    public LootTable.Builder createBranchDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
+        return DTLootTableBuilder.createBranchDrops(
+                getPrimitiveLog().get(),
+                family.getStick(1).getItem()
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
     public float getPrimitiveLogs(float volumeIn, List<ItemStack> drops) {
@@ -663,7 +685,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         // Get all the wood drops.
         final ItemStack heldItem = entity.getMainHandItem();
 
-        //? if >= 1.20 {
+        //? if >= 1.21.1 {
         final int fortune = ItemUtils.getEnchantmentLevel(Enchantments.FORTUNE, heldItem, level.registryAccess());
          //?} else {
         /*final int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, heldItem);
@@ -716,7 +738,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
      //?} else {
     /*public
@@ -787,7 +809,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         destroyMode = DynamicTrees.DestroyMode.SLOPPY; // Ready the state machine for sloppy breaking again.
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         return state;
@@ -829,16 +851,16 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
      * @param explosion The {@link Explosion} destroying the {@link BranchBlock}.
      */
     @Override
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected void onExplosionHit(BlockState state, Level level, BlockPos pos, Explosion explosion, BiConsumer<ItemStack, BlockPos> dropConsumer)
      //?} else {
     /*public void wasExploded(Level level, BlockPos pos, Explosion explosion)
     *///?}
     {
-        //? if < 1.21
+        //? if < 1.21.1
         //final BlockState state = level.getBlockState(pos);
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         final float radius = explosion.radius();
          //?} else {
         /*final float radius = 1.0F;
@@ -857,13 +879,11 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         final FallingTreeEntity treeEntity = FallingTreeEntity.dropTree(level, destroyData, woodDropList, FallingTreeEntity.DestroyType.EXPLODE);
 
         if (treeEntity != null) {
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             final Vec3 expPos = explosion.center();
-             //?} else {
-            /*final Vec3 expPos = explosion.getDirectSourceEntity() != null
-                    ? explosion.getDirectSourceEntity().position()
-                    : pos.getCenter();
-            *///?}
+             //? } else {
+            /*final Vec3 expPos = new Vec3(explosion.x, explosion.y, explosion.z);
+            *///? }
 
             final double distance = Math.sqrt(treeEntity.distanceToSqr(expPos.x, expPos.y, expPos.z));
 
@@ -879,7 +899,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
         return TreePartType.BRANCH;
     }
 
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*@Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return super.getPistonPushReaction(state);

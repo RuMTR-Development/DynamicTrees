@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 
 import net.minecraft.world.ItemInteractionResult;
 //? } else {
@@ -62,7 +62,7 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -177,7 +177,7 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -198,7 +198,7 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
         return false;
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return harvest(state, level, pos) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -223,11 +223,16 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
 
     @Override
     public boolean isValidBonemealTarget(
+            //? if >= 1.19.4 {
             LevelReader levelReader,
+             //? } else {
+            /*BlockGetter levelReader,
+            *///? }
+
             BlockPos blockPos,
             BlockState blockState
 
-            //? if < 1.21 {
+            //? if < 1.21.1 {
             /*,
             boolean isClient
             *///?}
@@ -265,7 +270,7 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
         level.setBlock(pos, state.setValue(fruit.getAgeProperty(), newAge), 2);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
@@ -277,7 +282,7 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
     }
     *///? }
 
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*@Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;

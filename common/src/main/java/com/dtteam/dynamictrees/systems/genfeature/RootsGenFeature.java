@@ -144,6 +144,7 @@ public class RootsGenFeature extends GenFeature {
         return level.isEmptyBlock(pos)
                 || placeState.getBlock() instanceof TrunkShellBlock
                 || placeState.is(DTBlockTags.FOLIAGE)
+                //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
                 || placeState.canBeReplaced() && !placeState.getFluidState().is(FluidTags.LAVA);
     }
 

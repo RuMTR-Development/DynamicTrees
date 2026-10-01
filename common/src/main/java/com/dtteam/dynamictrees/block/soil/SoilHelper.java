@@ -6,7 +6,6 @@ import com.dtteam.dynamictrees.deserialization.applier.PropertyApplierResult;
 import com.dtteam.dynamictrees.deserialization.applier.VoidApplier;
 import com.dtteam.dynamictrees.tree.TreeHelper;
 import com.google.common.collect.BiMap;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;

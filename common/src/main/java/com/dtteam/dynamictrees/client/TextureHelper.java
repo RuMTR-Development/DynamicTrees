@@ -32,8 +32,14 @@ public class TextureHelper {
         }
 
         public PixelBuffer(TextureAtlasSprite sprite) {
+            //? if >= 1.19.4 {
             this.w = sprite.contents().width();
             this.h = sprite.contents().height();
+            //? } else {
+            /*this.w = sprite.mainImage[0].getWidth();
+            this.h = sprite.mainImage[0].getHeight();
+            *///? }
+
             pixels = new int[w * h];
             for (int x = 0; x < w; x++) {
                 for (int y = 0; y < h; y++) {

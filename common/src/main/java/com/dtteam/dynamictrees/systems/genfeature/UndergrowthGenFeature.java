@@ -53,6 +53,7 @@ public class UndergrowthGenFeature extends GenFeature {
         while (placedBushes <= 2 && attempts <= 10) {
             int rad = Mth.clamp(level.getRandom().nextInt(radius - 2) + 2, 2, radius - 1);
             Vec3 v = vTree.add(new Vec3(1, 0, 0).scale(rad).yRot((float) (level.getRandom().nextFloat() * Math.PI * 2)));
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             BlockPos vPos = BlockPos.containing(v);
 
             final BlockPos groundPos = CoordUtils.findWorldSurface(level, vPos, true);

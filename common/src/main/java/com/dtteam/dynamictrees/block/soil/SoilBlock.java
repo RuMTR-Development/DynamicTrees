@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.level.storage.loot.LootParams;
 //? } else {
@@ -75,7 +75,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
     private final SoilProperties properties;
 
     public SoilBlock(SoilProperties properties, Properties blockProperties) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         super(blockProperties.randomTicks().pushReaction(PushReaction.BLOCK));
         //? } else {
         /*super(blockProperties.randomTicks());
@@ -124,7 +124,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -137,7 +137,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -150,7 +150,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -163,7 +163,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -175,7 +175,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -197,7 +197,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -209,7 +209,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     //?} else {
     /*public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
@@ -220,7 +220,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -341,7 +341,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
         return getFertility(blockState, level, pos);
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
     //?} else {
@@ -354,7 +354,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
                         level, TreeHelper.findRootNode(level, pos), pos, state, player, hand, stack, hitResult
                 )
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         ) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.FAIL;
         //? } else {
         /*) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
@@ -396,7 +396,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
         wasExploded(level, pos, explosion);
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
     //?} else {
@@ -406,7 +406,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
     {
         this.destroyTree(level, pos, player);
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return super.playerWillDestroy(level, pos, state, player);
         //? }
     }
@@ -429,11 +429,16 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
      */
     @Override
     public boolean isValidBonemealTarget(
+            //? if >= 1.19.4 {
             LevelReader levelReader,
+             //? } else {
+            /*BlockGetter levelReader,
+            *///? }
+
             BlockPos blockPos,
             BlockState blockState
 
-            //? if < 1.21 {
+            //? if < 1.21.1 {
             /*,
             boolean isClient
             *///?}
@@ -543,7 +548,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -558,7 +563,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public

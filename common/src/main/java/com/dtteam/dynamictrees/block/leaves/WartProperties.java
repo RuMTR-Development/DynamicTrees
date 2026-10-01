@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.Collections;
 import java.util.List;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.level.material.MapColor;
  //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
@@ -39,7 +39,7 @@ public class WartProperties extends SolidLeavesProperties {
 
     @Override
     public BlockBehaviour.Properties getDefaultBlockProperties() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_RED)
         //? } else {
@@ -56,13 +56,33 @@ public class WartProperties extends SolidLeavesProperties {
     }
 
     @Override
-    public LootTable.Builder createBlockDrops(HolderLookup.Provider registries) {
-        return DTLootTableBuilder.createWartBlockDrops(primitiveLeaves.getBlock(), registries);
+    public LootTable.Builder createBlockDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
+        return DTLootTableBuilder.createWartBlockDrops(
+                primitiveLeaves.getBlock()
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
     @Override
-    public LootTable.Builder createDrops(HolderLookup.Provider registries) {
-        return DTLootTableBuilder.createWartDrops(primitiveLeaves.getBlock(), registries);
+    public LootTable.Builder createDrops(
+            //? if >= 1.19.4
+             HolderLookup.Provider registries
+    ) {
+        return DTLootTableBuilder.createWartDrops(
+                primitiveLeaves.getBlock()
+
+                //? if >= 1.19.4 {
+                ,
+                registries
+                //? }
+        );
     }
 
 }

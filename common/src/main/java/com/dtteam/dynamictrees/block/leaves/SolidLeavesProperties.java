@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
@@ -31,7 +31,7 @@ public class SolidLeavesProperties extends LeavesProperties {
 
     @Override
     public BlockBehaviour.Properties getDefaultBlockProperties() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
                 .ignitedByLava()

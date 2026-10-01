@@ -11,7 +11,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
@@ -30,11 +30,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
+
 /**
  * @author Harley O'Connor
  */
 public final class ItemBySpeciesLootPoolEntry extends LootPoolSingletonContainer {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<ItemBySpeciesLootPoolEntry> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
                     .group(Codec.unboundedMap(ResourceLocation.CODEC, BuiltInRegistries.ITEM.holderByNameCodec()).fieldOf("name_by_species").forGetter(c->c.items))
@@ -48,6 +52,7 @@ public final class ItemBySpeciesLootPoolEntry extends LootPoolSingletonContainer
     }
     //? } else {
     /*public static class Serializer extends LootPoolSingletonContainer.Serializer<ItemBySpeciesLootPoolEntry> {
+        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
         private static final Codec<Map<ResourceLocation, Holder<Item>>> ITEMS_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, BuiltInRegistries.ITEM.holderByNameCodec());
 
         public Serializer() {}

@@ -5,8 +5,7 @@ import com.dtteam.dynamictrees.block.sapling.DynamicSaplingBlock;
 import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelAccessor;
@@ -17,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? }
 
 /**
  * Handles finding a suitable ground block on which a tree can generate in subterranean locations, such as the Nether. 
@@ -78,6 +81,7 @@ public class SubterraneanGroundFinder implements GroundFinder {
             BlockPos pos = new BlockPos(start.getX(), y, start.getZ());
             //We only want positions for underground biomes and underground dimensions
             if (level.dimensionType().hasCeiling() || level.getBiome(pos).is(TagKey.create(
+                    //~ if < 1.19.4 'Registries.BIOME' -> 'Registry.BIOME_REGISTRY'
                     Registries.BIOME,
 
                     //? if >= 1.21 {

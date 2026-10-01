@@ -38,7 +38,7 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
 
     public static int getBrightness(FallingTreeEntity entity) {
         final BranchDestructionData destructionData = entity.getDestroyData();
-        //~ if < 1.21 '.level()' -> '.level'
+        //~ if < 1.21.1 '.level()' -> '.level'
         final Level world = entity.level();
         return world.getBlockState(destructionData.cutPos).getLightEmission();
     }
@@ -58,7 +58,7 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
             int packedLight,
             int packedOverlay,
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             int colorIn
             //? } else {
             /*float red,
@@ -86,7 +86,7 @@ public class FallingTreeEntityModel extends EntityModel<FallingTreeEntity> {
                 b *= diffuse;
             }
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             buffer.putBulkData(poseStack.last(), bakedQuad, r, g, b, 1, packedLight, packedOverlay);
             //? } else {
             /*buffer.putBulkData(poseStack.last(), bakedQuad, r, g, b, packedLight, packedOverlay);

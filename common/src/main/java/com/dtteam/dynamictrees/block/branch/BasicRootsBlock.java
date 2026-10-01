@@ -73,7 +73,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Function;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.ItemInteractionResult;
@@ -211,7 +211,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
     public ItemStack getCloneItemStack(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             LevelReader level,
              //?} else {
             /*BlockGetter level,
@@ -232,7 +232,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     protected
     //?} else {
     /*public
@@ -263,7 +263,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
     public boolean canPlaceLiquid(
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             @Nullable Player player,
             //? }
 
@@ -279,7 +279,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     @Override
     public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (canPlaceLiquid(null, pLevel, pPos, pState, pFluidState.getType())) {
         //? } else {
         /*if (canPlaceLiquid(pLevel, pPos, pState, pFluidState.getType())) {
@@ -305,7 +305,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         return rootLootTableSupplier.getName();
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     public LootTable getLootTable(ReloadableServerRegistries.Holder lootTables, Species species) {
         return rootLootTableSupplier.get(lootTables, species);
@@ -329,7 +329,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         return pState.canSurvive(level, clickedPos) && level.isUnobstructed(pState, clickedPos, collisioncontext);
     }
 
-    //? if >= 1.20 {
+    //? if >= 1.21.1 {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
     //?} else {
@@ -358,7 +358,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
                         if (!player.isCreative()) handStack.shrink(1);
                         level.playSound(null, pos, coverBlock.defaultBlockState().getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1f, 0.8f);
 
-                        //? if >= 1.21 {
+                        //? if >= 1.21.1 {
                         return ItemInteractionResult.SUCCESS;
                         //? } else {
                         /*return InteractionResult.SUCCESS;
@@ -368,7 +368,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
             }
         }
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
          return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         
         //? } else {
@@ -416,7 +416,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         // Get all the wood drops.
         final ItemStack heldItem = entity.getMainHandItem();
 
-        //? if >= 1.20 {
+        //? if >= 1.21.1 {
         final int fortune = ItemUtils.getEnchantmentLevel(Enchantments.FORTUNE, heldItem, level.registryAccess());
          //?} else {
         /*final int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, heldItem);
@@ -467,6 +467,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
         BlockPos lowestBlock = stateMapper.getBranchConnectionMap().keySet().stream().min(Comparator.comparingInt(Vec3i::getY)).orElse(BlockPos.ZERO);
         final BlockPos.MutableBlockPos basePos = new BlockPos(cutPos).mutable();
         for (int i = 0; i>lowestBlock.getY(); i--) {
+            //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
             if (!level.getBlockState(basePos.move(0, -1, 0).below()).canBeReplaced()){
                 break;
             }
@@ -602,6 +603,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
 
     private boolean canGrowInto(Level level, BlockPos pos){
         BlockState state = level.getBlockState(pos);
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         boolean isFree = getFamily().isAcceptableSoilForRootSystem(state) || state.canBeReplaced();
         return isFree || state.getBlock() instanceof BasicRootsBlock;
     }

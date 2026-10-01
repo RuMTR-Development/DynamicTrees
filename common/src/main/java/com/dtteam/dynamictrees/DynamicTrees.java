@@ -81,7 +81,7 @@ public class DynamicTrees {
     }
 
     public static ResourceLocation location (String name){
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
         //? } else {
         /*return new ResourceLocation(MOD_ID, name);

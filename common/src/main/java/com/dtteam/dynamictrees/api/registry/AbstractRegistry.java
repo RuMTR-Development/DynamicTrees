@@ -137,7 +137,13 @@ public abstract class AbstractRegistry<V extends RegistryEntry<V>> implements Re
     @Override
     public final DataResult<V> getAsDataResult(final ResourceLocation registryName) {
         return this.getOptional(ResourceLocationUtils.parseDTLocation(registryName)).map(DataResult::success)
-                .orElse(DataResult.error(() -> "Could not find " + this.name + " '" + registryName + "'."));
+                .orElse(DataResult.error(
+                        //? if >= 1.19.4 {
+                        () -> "Could not find " + this.name + " '" + registryName + "'."
+                        //? } else {
+                        /*"Could not find " + this.name + " '" + registryName + "'."
+                        *///? }
+                ));
     }
 
     @Override

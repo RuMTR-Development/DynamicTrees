@@ -3,8 +3,7 @@ package com.dtteam.dynamictrees.systems;
 import com.dtteam.dynamictrees.utility.Optionals;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.Registry;import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,12 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
+
 public class SeedSaplingRecipe {
 
     public static final Codec<SeedSaplingRecipe> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry' {
                     BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("sapling_block").forGetter(SeedSaplingRecipe::getSaplingBlock),
                     BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("sapling_item").forGetter(SeedSaplingRecipe::getSaplingItem)
+                    //~ }
             ).apply(instance, (saplingBlock, saplingItem) -> new SeedSaplingRecipe(
                     saplingBlock.orElse(null),
                     saplingItem.orElseGet(() ->

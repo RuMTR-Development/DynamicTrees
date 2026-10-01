@@ -79,7 +79,7 @@ public class Seed extends Item {//implements IPlantable {
         int lifespan = Services.INTERACTION.setSeedItemEntityLifespan(entityItem, this);
 
         if (entityItem.tickCount >= lifespan - 20) {//Perform this action 20 ticks(1 second) before dying
-            //~ if < 1.21 '.level()' -> '.level'
+            //~ if < 1.21.1 '.level()' -> '.level'
             final Level level = entityItem.level();
             if (!level.isClientSide) {//Server side only
                 final ItemStack seedStack = entityItem.getItem();
@@ -221,6 +221,7 @@ public class Seed extends Item {//implements IPlantable {
         BlockState state = context.getLevel().getBlockState(context.getClickedPos());
         BlockPos pos = context.getClickedPos().above(onFluid?1:0);
         Direction facing = context.getClickedFace();
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         if (state.canBeReplaced()) {
             pos = pos.below();
             facing = Direction.UP;
@@ -256,7 +257,7 @@ public class Seed extends Item {//implements IPlantable {
         final Block emptyPotBlock = emptyPotState.getBlock();
 
         if (!(emptyPotBlock instanceof FlowerPotBlock) || emptyPotState != emptyPotBlock.defaultBlockState() ||
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 ((FlowerPotBlock) emptyPotBlock).getPotted() != Blocks.AIR) {
                 //? } else {
                 /*((FlowerPotBlock) emptyPotBlock).getContent() != Blocks.AIR) {

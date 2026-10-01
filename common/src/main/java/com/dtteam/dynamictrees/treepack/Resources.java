@@ -101,7 +101,7 @@ public final class Resources {
 
         if (Files.exists(absTreesPath)) {
             MANAGER.addPack(new TreePackResources(
-                    //? if >= 1.21 {
+                    //? if >= 1.21.1 {
                     new PackLocationInfo(
                             modFile.getModId(),
                             Component.translatable("treePack."+modFile.getModId()+".name"),
@@ -109,16 +109,18 @@ public final class Resources {
                             Optional.empty()),
 
                     absTreesPath.toAbsolutePath()
-                    //? } else {
+                    //? } else if >= 1.19.4 {
                     /*modFile.getModId(),
                     absTreesPath.toAbsolutePath(),
                     false
+                    *///? } else {
+                    /*absTreesPath.toAbsolutePath()
                     *///? }
             ));
         }
     }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     private static final PackLocationInfo FLAT_TREE_PACK_INFO = new PackLocationInfo(
             "dynamictrees", Component.translatable("treePack.dynamictrees.name"), PackSource.BUILT_IN, Optional.empty()
     );
@@ -127,10 +129,15 @@ public final class Resources {
         final File mainTreeFolder = getTreeFolder();
         MANAGER.addPack(new TreePackResources(FLAT_TREE_PACK_INFO, mainTreeFolder.toPath().toAbsolutePath()));
     }
-    //? } else {
+    //? } else if >= 1.19.4 {
     /*private static void registerFlatTreePack() {
         final File mainTreeFolder = getTreeFolder();
         MANAGER.addPack(new TreePackResources("dynamictrees", mainTreeFolder.toPath().toAbsolutePath(), true));
+    }
+    *///? } else {
+    /*private static void registerFlatTreePack() {
+        final File mainTreeFolder = getTreeFolder();
+        MANAGER.addPack(new TreePackResources(mainTreeFolder.toPath().toAbsolutePath()));
     }
     *///? }
 

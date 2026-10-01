@@ -33,7 +33,7 @@ import com.dtteam.dynamictrees.worldgen.BiomeDatabase;
 import com.dtteam.dynamictrees.worldgen.IDTBiomeHolderSet;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -57,6 +57,10 @@ import net.minecraft.world.level.material.MapColor;
 //? } else {
 /*import net.minecraft.world.level.material.MaterialColor;
 *///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 /**
  * Holds {@link JsonDeserializer} objects, which can be used to obtain objects from {@link JsonElement} objects.
@@ -311,8 +315,11 @@ public final class JsonDeserializers {
      */
     public static void registerRegistryEntryGetters() {
         BLOCK = register(Block.class,
-                new BuiltInRegistryEntryDeserializer<>(BuiltInRegistries.BLOCK, "block", Blocks.AIR));
-        ITEM = register(Item.class, new BuiltInRegistryEntryDeserializer<>(BuiltInRegistries.ITEM, "item", Items.AIR));
+                //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.Block'
+                new BuiltInRegistryEntryDeserializer<>(Registry.BLOCK, "block", Blocks.AIR));
+        ITEM = register(Item.class,
+                //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'Registry.ITEM'
+                new BuiltInRegistryEntryDeserializer<>(BuiltInRegistries.ITEM, "item", Items.AIR));
     }
 
     public static void postRegistryEvent() {

@@ -16,8 +16,7 @@ import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.tree.species.UndergroundRootsSpecies;
 import com.dtteam.dynamictrees.utility.Optionals;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -37,6 +36,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.dtteam.dynamictrees.utility.ResourceLocationUtils.suffix;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+//? } else {
+/*import net.minecraft.data.tags.BlockTagsProvider;
+*///? }
 
 public class UndergroundRootsFamily extends Family {
 
@@ -242,6 +248,7 @@ public class UndergroundRootsFamily extends Family {
     }
 
     @Override
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
     public void addGeneratedBlockTags (Function<TagKey<Block>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block>> tagAppender){
         super.addGeneratedBlockTags(tagAppender);
         //Create roots tag and root harvest tag if the family is mangrove-like.
@@ -251,6 +258,7 @@ public class UndergroundRootsFamily extends Family {
                 if (!isOnlyIfLoaded()) {
                     tagAppender.apply(tag).add(roots);
                 } else {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     tagAppender.apply(tag).addOptional(BuiltInRegistries.BLOCK.getKey(roots));
                 }
             });

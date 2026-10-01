@@ -22,7 +22,7 @@ import java.util.List;
  * @author Harley O'Connor
  */
 public final class MultiplyCount extends LootItemConditionalFunction {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<MultiplyCount> CODEC = RecordCodecBuilder.mapCodec(
             instance -> commonFields(instance)
                     .and(Codec.FLOAT.fieldOf("multiplier").forGetter(c->c.multiplier))
@@ -46,7 +46,7 @@ public final class MultiplyCount extends LootItemConditionalFunction {
 
     private final float multiplier;
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public MultiplyCount(List<LootItemCondition> conditions, float multiplier) {
         super(conditions);
         this.multiplier = multiplier;
@@ -58,7 +58,7 @@ public final class MultiplyCount extends LootItemConditionalFunction {
     }
     *///? }
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
         return DTRegistries.MULTIPLY_COUNT.get();
@@ -77,7 +77,7 @@ public final class MultiplyCount extends LootItemConditionalFunction {
     }
 
     public static LootItemFunction.Builder multiplyCount() {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return () -> new MultiplyCount(List.of(), 1.0F);
         //? } else {
         /*return () -> new MultiplyCount(new LootItemCondition[0], 1.0F);

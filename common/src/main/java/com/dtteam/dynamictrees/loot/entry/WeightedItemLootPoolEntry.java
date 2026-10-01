@@ -10,8 +10,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.core.Registry;import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.item.Item;
@@ -26,11 +25,15 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 import java.util.function.Consumer;
 
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+ //? }
+
 /**
  * @author Harley O'Connor
  */
 public final class WeightedItemLootPoolEntry extends LootPoolSingletonContainer {
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public static final MapCodec<WeightedItemLootPoolEntry> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance
                     .group(SimpleWeightedRandomList.codec(WeightedEntry.Wrapper.codec(BuiltInRegistries.ITEM.holderByNameCodec())).fieldOf("items").forGetter(c->c.items))
@@ -38,6 +41,7 @@ public final class WeightedItemLootPoolEntry extends LootPoolSingletonContainer 
                     .apply(instance, WeightedItemLootPoolEntry::new));
     //? } else {
     /*public static class Serializer extends LootPoolSingletonContainer.Serializer<WeightedItemLootPoolEntry> {
+        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
         private static final Codec<WeightedRandomList<WeightedEntry.Wrapper<Holder<Item>>>> ITEMS_CODEC = SimpleWeightedRandomList.codec(WeightedEntry.Wrapper.codec(BuiltInRegistries.ITEM.holderByNameCodec()));
 
         public Serializer() {
@@ -69,7 +73,7 @@ public final class WeightedItemLootPoolEntry extends LootPoolSingletonContainer 
 
     private final WeightedRandomList<WeightedEntry.Wrapper<Holder<Item>>> items;
 
-    //? if >= 1.21 {
+    //? if >= 1.21.1 {
     public WeightedItemLootPoolEntry(WeightedRandomList<WeightedEntry.Wrapper<Holder<Item>>> items, int weight, int quality, List<LootItemCondition> conditions,
                                      List<LootItemFunction> functions) {
         super(weight, quality, conditions, functions);
@@ -90,7 +94,7 @@ public final class WeightedItemLootPoolEntry extends LootPoolSingletonContainer 
 
     @Override
     protected void createItemStack(Consumer<ItemStack> stackConsumer, LootContext lootContext) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         items.getRandom(lootContext.getRandom()).ifPresent(wrapper -> stackConsumer.accept(new ItemStack(wrapper.data().value())));
         //? } else {
         /*items.getRandom(lootContext.getRandom()).ifPresent(wrapper -> stackConsumer.accept(new ItemStack(wrapper.getData().value())));

@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;import java.util.List;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.DyedItemColor;
@@ -50,7 +50,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
  * dynamictrees:staff{color:0x88FF00,code:"OUiVpPzkbtJ9uSRPbZP",read_only:1,tree:"dynamictrees:birch",max_uses:16,display:{Name:'[{"text":"Name","italic":false}]'}}}
  */
 public class Staff extends Item {
-    //? if < 1.21 {
+    //? if < 1.21.1 {
     /*public final static String HANDLE = "handle";
     public final static String COLOR = "color";
 
@@ -66,7 +66,7 @@ public class Staff extends Item {
 
     public Staff() {
         super(new Properties().stacksTo(1)
-                //? if >= 1.21 {
+                //? if >= 1.21.1 {
                 .component(DataComponents.RARITY, Rarity.RARE)
                 .component(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
                         //.add(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(DynamicTrees.location("dynamictrees_staff_range"), REACH_DISTANCE, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HAND)
@@ -118,6 +118,7 @@ public class Staff extends Item {
 
         BlockPos pos = context.getClickedPos();
         BlockState state = level.getBlockState(pos);
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         if (state.canBeReplaced() || state.is(DTBlockTags.FOLIAGE)) {
             pos = pos.below();
             state = level.getBlockState(pos);
@@ -177,7 +178,7 @@ public class Staff extends Item {
     }
 
     public boolean isReadOnly(ItemStack itemStack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return itemStack.has(DTRegistries.READ_ONLY_DATA_COMPONENT.get());
         //? } else {
         /*return itemStack.getOrCreateTag().getBoolean(READ_ONLY);
@@ -185,7 +186,7 @@ public class Staff extends Item {
     }
 
     public Staff setReadOnly(ItemStack itemStack, boolean readonly) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         itemStack.set(DTRegistries.READ_ONLY_DATA_COMPONENT.get(), Unit.INSTANCE);
         //? } else {
         /*itemStack.getOrCreateTag().putBoolean(READ_ONLY, readonly);
@@ -212,7 +213,7 @@ public class Staff extends Item {
     }
 
     public void setCode(ItemStack itemStack, String code) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         itemStack.set(DTRegistries.JOCODE_DATA_COMPONENT.get(), code);
         //? } else {
         /*itemStack.getOrCreateTag().putString(CODE, code);
@@ -220,7 +221,7 @@ public class Staff extends Item {
     }
 
     public void setRootsCode(ItemStack itemStack, String code) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         itemStack.set(DTRegistries.ROOTS_JOCODE_DATA_COMPONENT.get(), code);
         //? } else {
         /*itemStack.getOrCreateTag().putString(ROOTS_CODE, code);
@@ -228,7 +229,7 @@ public class Staff extends Item {
     }
 
     public Species getSpecies(ItemStack itemStack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (itemStack.has(DTRegistries.SPECIES_DATA_COMPONENT.get())) {
             return Species.findSpecies(itemStack.get(DTRegistries.SPECIES_DATA_COMPONENT.get()));
         } else {
@@ -251,7 +252,7 @@ public class Staff extends Item {
 
     /** NeoForge Override */
     public int getDamage(ItemStack itemStack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return Mth.clamp(itemStack.getOrDefault(DataComponents.DAMAGE, 0), 0, itemStack.getMaxDamage());
         //? } else {
         /*CompoundTag nbt = itemStack.getOrCreateTag();
@@ -266,7 +267,7 @@ public class Staff extends Item {
 
     /** NeoForge Override */
     public void setDamage(ItemStack itemStack, int value) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         itemStack.set(DataComponents.DAMAGE, value);
         //? } else {
         /*itemStack.getOrCreateTag().putInt(USES, this.getMaxDamage(itemStack) - value);
@@ -275,7 +276,7 @@ public class Staff extends Item {
 
     /** NeoForge Override */
     public int getMaxDamage(ItemStack itemStack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         return itemStack.getOrDefault(DataComponents.MAX_DAMAGE, 0);
         //? } else {
         /*CompoundTag nbt = itemStack.getOrCreateTag();
@@ -289,7 +290,7 @@ public class Staff extends Item {
     }
 
     public void setMaxDamage(ItemStack itemStack, int value) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         itemStack.set(DataComponents.MAX_DAMAGE, value);
         //? } else {
         /*itemStack.getOrCreateTag().putInt(MAX_USES, value);
@@ -297,7 +298,7 @@ public class Staff extends Item {
     }
 
     public boolean hasMaxDamage(ItemStack itemStack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (itemStack.has(DataComponents.MAX_DAMAGE)) {
             return getMaxDamage(itemStack) != 0;
         }
@@ -315,7 +316,7 @@ public class Staff extends Item {
     }
 
     public int getColor(ItemStack itemStack, int tint) {
-        //? if < 1.21 {
+        //? if < 1.21.1 {
         /*final CompoundTag tag = itemStack.getOrCreateTag();
         *///? }
 
@@ -324,7 +325,7 @@ public class Staff extends Item {
 
             Species species = getSpecies(itemStack);
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             if (itemStack.has(DTRegistries.STAFF_HANDLE_COLOR_DATA_COMPONENT.get())) {
                 color = itemStack.getOrDefault(DTRegistries.STAFF_HANDLE_COLOR_DATA_COMPONENT.get(), new DyedItemColor(color, false)).rgb();
             } else if (species.isValid()) {
@@ -346,7 +347,7 @@ public class Staff extends Item {
         } else if (tint == 1) {
             int color = 0xFF00FFFF; // Cyan crystal like Radagast the Brown's staff.
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             if (itemStack.has(DTRegistries.STAFF_CRYSTAL_COLOR_DATA_COMPONENT.get())) {
                 color = itemStack.get(DTRegistries.STAFF_CRYSTAL_COLOR_DATA_COMPONENT.get()).rgb();
             }
@@ -363,7 +364,7 @@ public class Staff extends Item {
     }
 
     public Staff setColor(ItemStack itemStack, int color) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         itemStack.set(DTRegistries.STAFF_CRYSTAL_COLOR_DATA_COMPONENT.get(), new DyedItemColor(color, false));
         //? } else {
         /*itemStack.getOrCreateTag().putInt(COLOR, color);
@@ -376,7 +377,7 @@ public class Staff extends Item {
     public String getCode(ItemStack itemStack) {
         String code = "P";//Code of a sapling
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (itemStack.has(DTRegistries.JOCODE_DATA_COMPONENT.get())) {
             String newCode = itemStack.get(DTRegistries.JOCODE_DATA_COMPONENT.get());
             if (newCode != null) code = newCode;
@@ -395,7 +396,7 @@ public class Staff extends Item {
     }
 
     public String getRootsCode(ItemStack itemStack) {
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         if (itemStack.has(DTRegistries.ROOTS_JOCODE_DATA_COMPONENT.get())) {
             String newCode = itemStack.get(DTRegistries.ROOTS_JOCODE_DATA_COMPONENT.get());
             if (newCode != null) return newCode;
@@ -413,7 +414,7 @@ public class Staff extends Item {
     public void appendHoverText(
             ItemStack stack,
 
-            //? if >= 1.21 {
+            //? if >= 1.21.1 {
             TooltipContext context,
             //? } else {
             /*@Nullable Level level,
@@ -428,7 +429,7 @@ public class Staff extends Item {
         if (!rootsCode.isEmpty())
             tooltipComponents.add(Component.translatable("tooltip.dynamictrees.roots_jo_code", new RootsJoCode(rootsCode).getTextComponent()));
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         //? } else {
         /*super.appendHoverText(stack, level, tooltipComponents, tooltipFlag);
