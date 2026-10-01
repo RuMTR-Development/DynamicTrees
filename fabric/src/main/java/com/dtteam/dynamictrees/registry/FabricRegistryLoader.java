@@ -3,7 +3,6 @@ package com.dtteam.dynamictrees.registry;
 import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.recipe.DendroPotionRecipeHandler;
 import com.mojang.brigadier.arguments.ArgumentType;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
@@ -47,11 +46,16 @@ import com.mojang.serialization.MapCodec;
 /*import net.minecraft.world.level.storage.loot.Serializer;
 *///? }
 
+//? if 1.19.4 {
+/*import net.fabricmc.fabric.impl.itemgroup.ItemGroupHelper;
+*///? }
+
 //? if >= 1.19.4 {
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.fabricmc.fabric.impl.itemgroup.ItemGroupHelper;
-//? }
+//? } else {
+/*import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+*///? }
 
 public class FabricRegistryLoader extends RegistryLoader {
 
@@ -62,22 +66,22 @@ public class FabricRegistryLoader extends RegistryLoader {
 
     @Override
     public <T extends Block> Supplier<T> registerBlock(String name, Supplier<T> newBlock) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        T block = BuiltInRegistries.register(BuiltInRegistries.BLOCK, DynamicTrees.location(name), newBlock.get());
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
+        T block = Registry.register(BuiltInRegistries.BLOCK, DynamicTrees.location(name), newBlock.get());
         return ()-> block;
     }
 
     @Override
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> newBlock) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        T item = BuiltInRegistries.register(BuiltInRegistries.ITEM, DynamicTrees.location(name), newBlock.get());
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
+        T item = Registry.register(BuiltInRegistries.ITEM, DynamicTrees.location(name), newBlock.get());
         return ()-> item;
     }
 
     @Override
     public <T extends Recipe<?>> Supplier<RecipeSerializer<T>> registerRecipeType(String name, Supplier<RecipeSerializer<T>> newBlock) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        RecipeSerializer<T> type = BuiltInRegistries.register(BuiltInRegistries.RECIPE_SERIALIZER, DynamicTrees.location(name), newBlock.get());
+        //~ if < 1.19.4 'BuiltInRegistries.RECIPE_SERIALIZER' -> 'Registry.RECIPE_SERIALIZER'
+        RecipeSerializer<T> type = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, DynamicTrees.location(name), newBlock.get());
         return ()-> type;
     }
 
@@ -85,7 +89,7 @@ public class FabricRegistryLoader extends RegistryLoader {
     public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, Consumer<Consumer<ItemStack>> displayItems) {
         //? if >= 1.21 {
         CreativeModeTab tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, DynamicTrees.location(DynamicTrees.MOD_ID),
-                FabricItemGroup.builder().icon(icon).title(title).displayItems((parameters, output) -> displayItems.accept(output)).build());
+                FabricItemGroup.builder().icon(icon).title(title).displayItems((parameters, output) -> displayItems.accept(output::accept)).build());
 
         return ()-> tab;
         //? } else if >= 1.19.4 {
@@ -112,24 +116,24 @@ public class FabricRegistryLoader extends RegistryLoader {
     public <T extends Entity> Supplier<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder, boolean isTree) {
 //        if (isTree)
 //            builder.setShouldReceiveVelocityUpdates(true).setTrackingRange(512).setUpdateInterval(Integer.MAX_VALUE);
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        EntityType<T> entityType = BuiltInRegistries.register(BuiltInRegistries.ENTITY_TYPE, DynamicTrees.location(name), builder.build(name));
+        //~ if < 1.19.4 'BuiltInRegistries.ENTITY_TYPE' -> 'Registry.ENTITY_TYPE'
+        EntityType<T> entityType = Registry.register(BuiltInRegistries.ENTITY_TYPE, DynamicTrees.location(name), builder.build(name));
         return ()-> entityType;
     }
 
     @Override
     public <T extends BlockEntity> Supplier<BlockEntityType<T>> registerBlockEntity(String name, BlockEntityType.BlockEntitySupplier<? extends T> newBlockEntity, Supplier<Set<Block>> validBlocks) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        BlockEntityType<T> entityType = BuiltInRegistries.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, DynamicTrees.location(name), new BlockEntityType<>(newBlockEntity, validBlocks.get(), null));
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK_ENTITY_TYPE' -> 'Registry.BLOCK_ENTITY_TYPE'
+        BlockEntityType<T> entityType = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, DynamicTrees.location(name), new BlockEntityType<>(newBlockEntity, validBlocks.get(), null));
         return ()-> entityType;
     }
 
     @Override
     public Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation location = DynamicTrees.location(name);
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
+        //~ if < 1.19.4 'BuiltInRegistries.SOUND_EVENT' -> 'Registry.SOUND_EVENT'
         //~ if < 1.19.4 'SoundEvent.createVariableRangeEvent' -> 'new SoundEvent'
-        SoundEvent type = BuiltInRegistries.register(BuiltInRegistries.SOUND_EVENT, location, SoundEvent.createVariableRangeEvent(location));
+        SoundEvent type = Registry.register(BuiltInRegistries.SOUND_EVENT, location, SoundEvent.createVariableRangeEvent(location));
         return ()-> type;
     }
 
@@ -144,8 +148,8 @@ public class FabricRegistryLoader extends RegistryLoader {
     @Override
     public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>> Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo) {
         ArgumentTypeInfos.BY_CLASS.put(infoClass, argumentTypeInfo);
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        I type = BuiltInRegistries.register(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, DynamicTrees.location(name), argumentTypeInfo);
+        //~ if < 1.19.4 'BuiltInRegistries.COMMAND_ARGUMENT_TYPE' -> 'Registry.COMMAND_ARGUMENT_TYPE'
+        I type = Registry.register(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, DynamicTrees.location(name), argumentTypeInfo);
         return ()-> type;
     }
 
@@ -199,8 +203,8 @@ public class FabricRegistryLoader extends RegistryLoader {
 
     @Override
     public <T extends Feature<?>> Supplier<T> registerFeature(String name, Supplier<T> supplier) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        T feature = BuiltInRegistries.register(BuiltInRegistries.FEATURE, DynamicTrees.location(name), supplier.get());
+        //~ if < 1.19.4 'BuiltInRegistries.FEATURE' -> 'Registry.FEATURE'
+        T feature = Registry.register(BuiltInRegistries.FEATURE, DynamicTrees.location(name), supplier.get());
         return ()-> feature;
     }
 
@@ -213,8 +217,8 @@ public class FabricRegistryLoader extends RegistryLoader {
 
     @Override
     public <T extends StructurePoolElement> Supplier<StructurePoolElementType<T>> registerStructurePoolElementType(String name, Supplier<StructurePoolElementType<T>> supplier) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        StructurePoolElementType<T> type = BuiltInRegistries.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, DynamicTrees.location(name), supplier.get());
+        //~ if < 1.19.4 'BuiltInRegistries.STRUCTURE_POOL_ELEMENT' -> 'Registry.STRUCTURE_POOL_ELEMENT'
+        StructurePoolElementType<T> type = Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, DynamicTrees.location(name), supplier.get());
         return ()-> type;
     }
 }

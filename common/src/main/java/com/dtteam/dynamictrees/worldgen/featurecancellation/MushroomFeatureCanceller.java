@@ -25,7 +25,8 @@ public class MushroomFeatureCanceller<T extends FeatureConfiguration> extends Fe
 
     @Override
     public boolean shouldCancel(final ConfiguredFeature<?, ?> configuredFeature, final BiomePropertySelectors.NormalFeatureCancellation featureCancellations) {
-        final ResourceLocation featureRegistryName = Registry.FEATURE.getKey(configuredFeature.feature());
+        //~ if < 1.19.4 'BuiltInRegistries.FEATURE' -> 'Registry.FEATURE'
+        final ResourceLocation featureRegistryName = BuiltInRegistries.FEATURE.getKey(configuredFeature.feature());
 
         if (featureRegistryName == null) {
             return false;

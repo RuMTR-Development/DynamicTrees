@@ -1,6 +1,6 @@
 package com.dtteam.dynamictrees.worldgen.structure;
 
-import com.dtteam.dynamictrees.api.registry.Registries;import com.dtteam.dynamictrees.data.CustomBootstrapContext;
+import com.dtteam.dynamictrees.data.CustomBootstrapContext;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;import net.minecraft.core.RegistryAccess;import net.minecraft.resources.ResourceKey;

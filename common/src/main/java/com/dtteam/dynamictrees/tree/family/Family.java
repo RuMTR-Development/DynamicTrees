@@ -871,7 +871,8 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
         *///? }
     }
 
-    public void addGeneratedItemTags (Function<TagKey<Item>, BlockTagsProvider.TagAppender<Item>> tagAppender){
+    //~ if < 1.19.4 'IntrinsicHolderTagsProvider.IntrinsicTagAppender' -> 'BlockTagsProvider.TagAppender'
+    public void addGeneratedItemTags (Function<TagKey<Item>, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item>> tagAppender){
         getBranchItem().ifPresent(item -> {
                     if (!isOnlyIfLoaded()) {
                         defaultBranchItemTags().forEach(tag -> tagAppender.apply(tag).add(item));

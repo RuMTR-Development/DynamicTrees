@@ -315,8 +315,8 @@ public final class JsonDeserializers {
      */
     public static void registerRegistryEntryGetters() {
         BLOCK = register(Block.class,
-                //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.Block'
-                new BuiltInRegistryEntryDeserializer<>(Registry.BLOCK, "block", Blocks.AIR));
+                //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
+                new BuiltInRegistryEntryDeserializer<>(BuiltInRegistries.BLOCK, "block", Blocks.AIR));
         ITEM = register(Item.class,
                 //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'Registry.ITEM'
                 new BuiltInRegistryEntryDeserializer<>(BuiltInRegistries.ITEM, "item", Items.AIR));
