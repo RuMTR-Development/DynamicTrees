@@ -27,7 +27,12 @@ dependencies {
 
     compileOnly "org.spongepowered:mixin:0.8.5"
     modCompileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-${forge_config_api_port_variant}:${forge_config_api_port_version}"
+
+    if (forge_config_api_port_variant == "modrinth") {
+        compileOnly "maven.modrinth:forge-config-api-port:${forge_config_api_port_version}"
+    } else {
+        compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-${forge_config_api_port_variant}:${forge_config_api_port_version}"
+    }
 
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'

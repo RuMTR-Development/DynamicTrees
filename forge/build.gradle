@@ -12,7 +12,7 @@ legacyForge {
         forgeVersion = "${minecraft_version}-${forge_version}"
     }
 
-    validateAccessTransformers = stonecutter.current.isActive
+//    validateAccessTransformers = stonecutter.current.isActive
 
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -67,21 +67,6 @@ sourceSets.main {
 tasks {
     jar {
         finalizedBy("reobfJar")
-    }
-}
-
-repositories {
-    maven {
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-    maven {
-        url "https://api.modrinth.com/maven"
-        content {
-            includeGroup "maven.modrinth"
-        }
     }
 }
 
