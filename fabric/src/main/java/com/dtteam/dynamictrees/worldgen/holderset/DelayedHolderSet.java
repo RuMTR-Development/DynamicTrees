@@ -2,8 +2,8 @@ package com.dtteam.dynamictrees.worldgen.holderset;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +15,10 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.HolderOwner;
+//? }
 
 public class DelayedHolderSet<T> implements HolderSet<T> {
     private final Supplier<HolderSet<T>> holderSetSupplier;
@@ -53,6 +57,7 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
         return this.holderSetSupplier.get().contains(holder);
     }
 
+    //? if >= 1.19.4 {
     @Override
     public boolean canSerializeIn(HolderOwner<T> owner) {
         return this.holderSetSupplier.get().canSerializeIn(owner);
@@ -61,7 +66,12 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
     @Override
     public Optional<TagKey<T>> unwrapKey() {
         return this.holderSetSupplier.get().unwrapKey();
+    }//? } else {
+    /*@Override
+    public boolean isValidInRegistry(Registry<T> registry) {
+        return this.holderSetSupplier.get().isValidInRegistry(registry);
     }
+    *///? }
 
     @NotNull
     @Override

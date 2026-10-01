@@ -3,13 +3,17 @@ package com.dtteam.dynamictrees.compat.waila;
 import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.block.pod.PodBlock;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 public class WailaPodHandler implements IBlockComponentProvider {
     private static final ResourceLocation POD_UID = DynamicTrees.location("pod");
@@ -19,6 +23,7 @@ public class WailaPodHandler implements IBlockComponentProvider {
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+        //~ if < 1.19.2 'BuiltInRegistries' -> 'Registry'
         if (accessor.getBlock() instanceof PodBlock podBlock && !BuiltInRegistries.BLOCK.getKey(accessor.getBlock()).equals(COCOA)) {
             float ageAsPercentage = podBlock.getAgeAsPercentage(accessor.getBlockState());
             tooltip.add(Component.translatable(

@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "create:tree_fertilizer",
+      "required": false
+    }
+  ]
+}

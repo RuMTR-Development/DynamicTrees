@@ -55,7 +55,12 @@ public interface TreeResourcePack extends PackResources {
         //? if >= 1.19.4 {
         return this.getResource(null, location) != null;
         //? } else {
-        /*return this.getResource(location) != null;
+        /*try {
+            this.getResource(null, location);
+            return true;
+        } catch (IOException ignored) {
+            return false;
+        }
         *///? }
     }
 

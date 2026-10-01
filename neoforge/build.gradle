@@ -68,7 +68,7 @@ dependencies {
     runtimeOnly "curse.maven:patchouli-306770:${neoforge_patchouli_version}"
     runtimeOnly "curse.maven:spark-361579:${neoforge_spark_version}"
 
-    implementation "fuzs.forgeconfigapiport:forgeconfigapiport-neoforge:${forge_config_api_port_version}"
+    implementation "${forge_config_api_port_group}:forgeconfigapiport-neoforge:${forge_config_api_port_version}"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

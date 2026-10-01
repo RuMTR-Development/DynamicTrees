@@ -14,8 +14,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.RandomSource;
+import net.minecraft.core.Registry;import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -23,6 +22,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
 
@@ -54,6 +57,7 @@ public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
 
                 boolean rootyBlockAdded = false;
                 if (destructionData.soilState != null) {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     SoilBlock soilBlock = TreeHelper.getRooty(BuiltInRegistries.BLOCK.get(destructionData.soilState.getLeft()));
                     if (soilBlock != null) {
                         BlockState soilState = soilBlock.GetStateFromIndex(destructionData.soilState.getRight());

@@ -28,11 +28,13 @@ dependencies {
     compileOnly "org.spongepowered:mixin:0.8.5"
     modCompileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
-    if (forge_config_api_port_variant == "modrinth") {
-        modCompileOnly "maven.modrinth:forge-config-api-port:${forge_config_api_port_version}"
-        compileOnly "com.electronwill.night-config:core:3.6.6"
-    } else {
-        compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-${forge_config_api_port_variant}:${forge_config_api_port_version}"
+    modApi("${forge_config_api_port_group}:forgeconfigapiport-${forge_config_api_port_variant}:${forge_config_api_port_version}") {
+        exclude group: "net.fabricmc"
+    }
+
+    if (project.hasProperty("night_config_version")) {
+        implementation "com.electronwill.night-config:core:${night_config_version}"
+        implementation "com.electronwill.night-config:toml:${night_config_version}"
     }
 
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'

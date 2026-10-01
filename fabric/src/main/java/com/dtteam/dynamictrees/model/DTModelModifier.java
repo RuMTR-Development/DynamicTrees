@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+//? }
 
 //~ if < 1.21 'ResourceLocation.fromNamespaceAndPath' -> 'new ResourceLocation' {
 public class DTModelModifier {
@@ -48,9 +52,15 @@ public class DTModelModifier {
             if (!family.isValid()) continue;
 
             family.getPrimitiveLog().ifPresent(primitiveLog -> {
+                //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                 ResourceLocation primitiveLogId = BuiltInRegistries.BLOCK.getKey(primitiveLog);
                 ResourceLocation barkTexture = ResourceLocation.fromNamespaceAndPath(primitiveLogId.getNamespace(), "block/" + primitiveLogId.getPath());
+
+                //? if >= 1.19.4 {
                 ResourceLocation ringsTexture = barkTexture.withSuffix("_top");
+                //? } else {
+                /*ResourceLocation ringsTexture = ResourceLocation.fromNamespaceAndPath(barkTexture.getNamespace(), barkTexture.getPath() + "_top");
+                *///? }
 
                 AtomicReference<ResourceLocation> barkRef = new AtomicReference<>(barkTexture);
                 AtomicReference<ResourceLocation> ringsRef = new AtomicReference<>(ringsTexture);
@@ -61,6 +71,7 @@ public class DTModelModifier {
                 boolean isThick = family.isThick();
 
                 family.getBranch().ifPresent(branch -> {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(branch);
                     BakedModel model = createBranchModel(barkRef.get(), ringsRef.get(), isThick, spriteGetter);
                     BRANCH_MODEL_CACHE.put(blockId, model);
@@ -68,9 +79,15 @@ public class DTModelModifier {
             });
 
             family.getPrimitiveStrippedLog().ifPresent(strippedLog -> {
+                //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                 ResourceLocation strippedLogId = BuiltInRegistries.BLOCK.getKey(strippedLog);
                 ResourceLocation strippedBarkTexture = ResourceLocation.fromNamespaceAndPath(strippedLogId.getNamespace(), "block/" + strippedLogId.getPath());
+
+                //? if >= 1.19.4 {
                 ResourceLocation strippedRingsTexture = strippedBarkTexture.withSuffix("_top");
+                 //? } else {
+                /*ResourceLocation strippedRingsTexture = ResourceLocation.fromNamespaceAndPath(strippedBarkTexture.getNamespace(), strippedBarkTexture.getPath() + "_top");
+                *///? }
 
                 AtomicReference<ResourceLocation> barkRef = new AtomicReference<>(strippedBarkTexture);
                 AtomicReference<ResourceLocation> ringsRef = new AtomicReference<>(strippedRingsTexture);
@@ -81,6 +98,7 @@ public class DTModelModifier {
                 boolean isThick = family.isThick();
 
                 family.getStrippedBranch().ifPresent(strippedBranch -> {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(strippedBranch);
                     BakedModel model = createBranchModel(barkRef.get(), ringsRef.get(), isThick, spriteGetter);
                     BRANCH_MODEL_CACHE.put(blockId, model);
@@ -89,11 +107,13 @@ public class DTModelModifier {
 
             family.getSurfaceRoot().ifPresent(surfaceRoot -> {
                 family.getPrimitiveLog().ifPresent(primitiveLog -> {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     ResourceLocation primitiveLogId = BuiltInRegistries.BLOCK.getKey(primitiveLog);
                     ResourceLocation barkTexture = ResourceLocation.fromNamespaceAndPath(primitiveLogId.getNamespace(), "block/" + primitiveLogId.getPath());
                     AtomicReference<ResourceLocation> barkRef = new AtomicReference<>(barkTexture);
                     family.getTexturePath(Family.BRANCH).ifPresent(barkRef::set);
 
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(surfaceRoot);
                     BakedModel model = createRootModel(barkRef.get(), spriteGetter);
                     ROOT_MODEL_CACHE.put(blockId, model);
@@ -102,9 +122,11 @@ public class DTModelModifier {
 
             if (family instanceof UndergroundRootsFamily undergroundFamily) {
                 undergroundFamily.getRoots().ifPresent(roots -> {
+                    //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                     ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(roots);
 
                     undergroundFamily.getPrimitiveRoots().ifPresent(primitiveRoots -> {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         ResourceLocation primitiveRootsId = BuiltInRegistries.BLOCK.getKey(primitiveRoots);
                         ResourceLocation barkTexture = ResourceLocation.fromNamespaceAndPath(primitiveRootsId.getNamespace(), "block/" + primitiveRootsId.getPath() + "_side");
                         ResourceLocation ringsTexture = ResourceLocation.fromNamespaceAndPath(primitiveRootsId.getNamespace(), "block/" + primitiveRootsId.getPath() + "_top");
@@ -116,16 +138,27 @@ public class DTModelModifier {
                         family.getTexturePath(Family.ROOTS_TOP).ifPresent(ringsRef::set);
 
                         BakedModel model = createRootsBlockModel(barkRef.get(), ringsRef.get(), spriteGetter);
+
+                        //? if >= 1.19.4 {
                         UNDERGROUND_ROOTS_MODEL_CACHE.put(blockId.withSuffix("_exposed"), model);
+                        //? } else {
+                        /*UNDERGROUND_ROOTS_MODEL_CACHE.put(ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(), blockId.getPath() + "_exposed"), model);
+                        *///? }
                     });
 
                     undergroundFamily.getPrimitiveFilledRoots().ifPresent(primitiveFilledRoots -> {
+                        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                         ResourceLocation primitiveFilledRootsId = BuiltInRegistries.BLOCK.getKey(primitiveFilledRoots);
                         ResourceLocation barkTexture = ResourceLocation.fromNamespaceAndPath(primitiveFilledRootsId.getNamespace(), "block/" + primitiveFilledRootsId.getPath() + "_side");
                         ResourceLocation ringsTexture = ResourceLocation.fromNamespaceAndPath(primitiveFilledRootsId.getNamespace(), "block/" + primitiveFilledRootsId.getPath() + "_top");
 
                         BakedModel model = createRootsBlockModel(barkTexture, ringsTexture, spriteGetter);
+
+                        //? if >= 1.19.4 {
                         UNDERGROUND_ROOTS_MODEL_CACHE.put(blockId.withSuffix("_filled"), model);
+                        //? } else {
+                        /*UNDERGROUND_ROOTS_MODEL_CACHE.put(ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(), blockId.getPath() + "_filled"), model);
+                        *///? }
                     });
 
 
@@ -139,7 +172,11 @@ public class DTModelModifier {
         TextureAtlasSprite ringsSprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, ringsTexture));
 
         if (isThick) {
+            //? if >= 1.19.4 {
             ResourceLocation thickRingsTexture = ringsTexture.withSuffix("_thick");
+             //? } else {
+            /*ResourceLocation thickRingsTexture = ResourceLocation.fromNamespaceAndPath(ringsTexture.getNamespace(), ringsTexture.getPath() + "_thick");
+            *///? }
             TextureAtlasSprite thickRingsSprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, thickRingsTexture));
             return new ThickBranchBlockBakedModel(barkSprite, ringsSprite, thickRingsSprite);
         }
@@ -161,6 +198,7 @@ public class DTModelModifier {
     private static BakedModel createFallbackRootsModel(UndergroundRootsFamily family, String variant, Function<Material, TextureAtlasSprite> spriteGetter) {
         if (variant.contains("layer=exposed")) {
             return family.getPrimitiveRoots().map(primitiveRoots -> {
+                //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                 ResourceLocation primitiveRootsId = BuiltInRegistries.BLOCK.getKey(primitiveRoots);
                 ResourceLocation barkTexture = ResourceLocation.fromNamespaceAndPath(primitiveRootsId.getNamespace(), "block/" + primitiveRootsId.getPath() + "_side");
                 ResourceLocation ringsTexture = ResourceLocation.fromNamespaceAndPath(primitiveRootsId.getNamespace(), "block/" + primitiveRootsId.getPath() + "_top");
@@ -168,6 +206,7 @@ public class DTModelModifier {
             }).orElse(null);
         } else if (variant.contains("layer=filled")) {
             return family.getPrimitiveFilledRoots().map(primitiveFilledRoots -> {
+                //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
                 ResourceLocation primitiveFilledRootsId = BuiltInRegistries.BLOCK.getKey(primitiveFilledRoots);
                 ResourceLocation barkTexture = ResourceLocation.fromNamespaceAndPath(primitiveFilledRootsId.getNamespace(), "block/" + primitiveFilledRootsId.getPath() + "_side");
                 ResourceLocation ringsTexture = ResourceLocation.fromNamespaceAndPath(primitiveFilledRootsId.getNamespace(), "block/" + primitiveFilledRootsId.getPath() + "_top");
@@ -192,6 +231,7 @@ public class DTModelModifier {
             return new BakedModelBlockPottedSapling(model);
         }
 
+        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
         Block block = BuiltInRegistries.BLOCK.get(blockId);
 
         if (block instanceof BasicRootsBlock rootsBlock) {
@@ -205,9 +245,17 @@ public class DTModelModifier {
 
             ResourceLocation cacheKey;
             if (variant.contains("layer=filled")) {
+                //? if >= 1.19.4 {
                 cacheKey = blockId.withSuffix("_filled");
+                //? } else {
+                /*cacheKey = ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(), blockId.getPath() + "_filled");
+                *///? }
             } else if (variant.contains("layer=exposed")) {
+                //? if >= 1.19.4 {
                 cacheKey = blockId.withSuffix("_exposed");
+                //? } else {
+                /*cacheKey = ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(), blockId.getPath() + "_exposed");
+                *///? }
             } else if (variant.contains("layer=covered")) {
                 return model;
             } else {

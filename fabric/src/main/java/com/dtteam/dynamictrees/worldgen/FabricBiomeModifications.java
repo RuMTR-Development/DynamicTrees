@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -24,12 +24,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.Registries;
+//? } else {
+
+//? }
+
 public class FabricBiomeModifications {
 
     private static final ResourceLocation REMOVE_TREES_ID = DynamicTrees.location("remove_vanilla_trees");
     private static final ResourceLocation ADD_TREES_ID = DynamicTrees.location("add_dynamic_trees");
     public static final TagKey<PlacedFeature> FEATURE_CANCELLER_EXCLUSIONS_KEY = TagKey.create(
-            net.minecraft.core.registries.Registries.PLACED_FEATURE,
+            //~ if < 1.19.4 'Registries.PLACED_FEATURE' -> 'Registry.PLACED_FEATURE_REGISTRY'
+            Registries.PLACED_FEATURE,
             DynamicTrees.location("feature_canceller_exclusions"));
 
     public static void register() {
@@ -116,6 +123,7 @@ public class FabricBiomeModifications {
                 GenerationStep.Decoration.VEGETAL_DECORATION,
                 DTRegistries.CAVE_ROOTED_TREE_PLACED_FEATURE
         );
+
         context.getGenerationSettings().addFeature(
                 GenerationStep.Decoration.VEGETAL_DECORATION,
                 DTRegistries.DYNAMIC_TREE_PLACED_FEATURE

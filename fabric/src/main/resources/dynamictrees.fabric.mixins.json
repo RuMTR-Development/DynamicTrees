@@ -11,7 +11,8 @@
     "MixinChunkSerializer",
     "MixinMinecraftServer",
     "MixinPotionBrewing",
-    "MixinSaplingBlock"
+    "MixinSaplingBlock",
+    "TextureAtlasMixin"
   ],
   "client": [
     "ModelBakeryMixin",

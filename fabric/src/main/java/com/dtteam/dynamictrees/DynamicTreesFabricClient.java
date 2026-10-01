@@ -20,7 +20,6 @@ import net.fabricmc.api.*;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.*;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.item.v1.*;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.fabricmc.fabric.impl.client.rendering.*;
 import net.minecraft.client.*;
@@ -43,13 +42,25 @@ import java.util.stream.*;
 
 //? if >= 1.21 {
 import net.neoforged.fml.config.*;
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.*;
 import net.fabricmc.fabric.api.client.model.loading.v1.*;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 //? } else {
-/*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
-import net.minecraftforge.fml.config.ModConfig;
+/*import net.minecraftforge.fml.config.ModConfig;
+*///? }
+
+//? if >= 1.19.4 {
 import net.minecraft.client.renderer.texture.atlas.SpriteSources;
+//? } else {
+/*import com.dtteam.dynamictrees.event.handler.ThickBranchRingsHandler;
+*///? }
+
+//? if >= 1.21 {
+import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+//? } else if >= 1.19.4 {
+/*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+*///? } else {
+/*import net.minecraftforge.api.ModLoadingContext;
 *///? }
 
 public class DynamicTreesFabricClient implements ClientModInitializer {
@@ -59,12 +70,18 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        //? if >= 1.19.4 {
         ForgeConfigRegistry.INSTANCE.register(DynamicTrees.MOD_ID, ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+        //? } else {
+        /*ModLoadingContext.registerConfig(DynamicTrees.MOD_ID, ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+        *///? }
 
         //? if >= 1.21 {
         AtlasSourceTypeRegistryImpl.register(ThickBranchRingsSource.ID, ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC));
-        //? } else {
+        //? } else if >= 1.19.4 {
         /*SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
+        *///? } else {
+        /*ThickBranchRingsHandler.register();
         *///? }
 
         registerModelLoaders();
@@ -204,6 +221,7 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
                 return;
             }
 
+            //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
             BlockPos playerPos = BlockPos.containing(player.position());
             //~ if < 1.21 '.level()' -> '.level'
             ClimateZoneType climate = ClimateHelper.getClimate(player.level(), playerPos);

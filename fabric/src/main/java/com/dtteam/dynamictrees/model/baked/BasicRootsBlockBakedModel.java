@@ -21,10 +21,15 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.*;
 import java.util.function.Supplier;
+
+//? if >= 1.19.4 {
+import org.joml.Vector3f;
+//? } else {
+/*import com.mojang.math.Vector3f;
+*///? }
 
 @SuppressWarnings("unchecked")
 public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {

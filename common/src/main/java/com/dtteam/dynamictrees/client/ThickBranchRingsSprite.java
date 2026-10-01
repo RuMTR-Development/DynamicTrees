@@ -32,18 +32,27 @@ public class ThickBranchRingsSprite extends SpriteContents {
         super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), new AnimationMetadataSection(new ArrayList<>(), 0, 0, 0, false));
     }
     *///? } else {
-    /*public ThickBranchRingsSprite(TextureAtlas atlas, TextureAtlasSprite originalSprite, int mipmapLevels, int atlasWidth, int atlasHeight, int x, int y) {
+    /*public ThickBranchRingsSprite(
+            TextureAtlas atlas,
+            ResourceLocation thickLocation,
+            TextureAtlasSprite originalSprite,
+            int mipmapLevels,
+            int storageX,
+            int storageY,
+            int x,
+            int y
+    ) {
         super(
                 atlas,
                 new TextureAtlasSprite.Info(
-                        originalSprite.getName(),
+                        thickLocation,
                         originalSprite.getWidth() * LAYERS,
                         originalSprite.getHeight() * LAYERS,
                         AnimationMetadataSection.EMPTY
                 ),
                 mipmapLevels,
-                atlasWidth,
-                atlasHeight,
+                storageX,
+                storageY,
                 x,
                 y,
                 processImage(originalSprite.mainImage[0])

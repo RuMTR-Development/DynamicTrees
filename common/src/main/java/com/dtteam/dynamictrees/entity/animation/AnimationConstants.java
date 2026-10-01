@@ -19,7 +19,7 @@ public class AnimationConstants {
     //? } else {
     /*public static class FallingTreeDamageSource extends DamageSource {
         protected FallingTreeDamageSource() {
-            super(DynamicTrees.location("falling_tree").toString());
+            super("falling_tree");
         }
     }
     *///? }

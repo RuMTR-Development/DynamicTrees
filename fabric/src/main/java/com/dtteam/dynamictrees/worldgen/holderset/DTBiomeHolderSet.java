@@ -4,9 +4,8 @@ import com.dtteam.dynamictrees.worldgen.IDTBiomeHolderSet;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
@@ -15,6 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.HolderOwner;
+ //? }
 
 public class DTBiomeHolderSet implements IDTBiomeHolderSet {
 
@@ -97,6 +100,7 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
         return this.getSet().contains(holder);
     }
 
+    //? if >= 1.19.4 {
     @Override
     public boolean canSerializeIn(HolderOwner<Biome> owner) {
         return true;
@@ -106,6 +110,12 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
     public Optional<TagKey<Biome>> unwrapKey() {
         return Optional.empty();
     }
+    //? } else {
+    /*@Override
+    public boolean isValidInRegistry(Registry<Biome> registry) {
+        return true;
+    }
+    *///? }
 
     @Override
     public List<HolderSet<Biome>> getIncludeComponents() {

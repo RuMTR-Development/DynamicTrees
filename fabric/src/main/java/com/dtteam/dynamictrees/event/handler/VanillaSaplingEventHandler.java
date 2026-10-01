@@ -43,6 +43,7 @@ public class VanillaSaplingEventHandler {
 
         BlockPos placePos = hitResult.getBlockPos().relative(hitResult.getDirection());
 
+        //~ if < 1.19.4 '.canBeReplaced()' -> '.getMaterial().isReplaceable()'
         if (!level.getBlockState(placePos).canBeReplaced()) {
             return InteractionResult.PASS;
         }

@@ -26,10 +26,13 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    if (forge_config_api_port_variant == "modrinth") {
-        modApi "maven.modrinth:forge-config-api-port:${forge_config_api_port_version}"
-    } else {
-        modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_api_port_version}"
+    modApi("${forge_config_api_port_group}:forgeconfigapiport-fabric:${forge_config_api_port_version}") {
+        exclude group: "net.fabricmc"
+    }
+
+    if (project.hasProperty("night_config_version")) {
+        implementation "com.electronwill.night-config:core:${night_config_version}"
+        implementation "com.electronwill.night-config:toml:${night_config_version}"
     }
 
     implementation("net.jodah:typetools:0.6.3")
@@ -47,7 +50,9 @@ dependencies {
 
     modCompileOnly "curse.maven:continuity-531351:${fabric_continuity_version}"
 
-    modRuntimeOnly "maven.modrinth:sodium:${fabric_sodium_version}"
+    if (project.hasProperty("fabric_sodium_version")) {
+        modRuntimeOnly "maven.modrinth:sodium:${fabric_sodium_version}"
+    }
 
     if (project.hasProperty("fabric_indium_version")) {
         modRuntimeOnly "maven.modrinth:indium:${fabric_indium_version}"

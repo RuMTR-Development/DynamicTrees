@@ -6,6 +6,7 @@ import com.dtteam.dynamictrees.block.sapling.PottedSaplingBlock;
 import com.dtteam.dynamictrees.block.soil.SoilBlock;
 import com.dtteam.dynamictrees.item.Seed;
 import com.dtteam.dynamictrees.platform.services.IInteractionHelper;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,11 +23,13 @@ public class FabricInteractionHelper implements IInteractionHelper {
     //so a simple axe check will have to do.
     @Override
     public boolean canToolAxeStrip(ItemStack stack) {
+        //~ if < 1.19.4 'ItemTags' -> 'ConventionalItemTags'
         return stack.is(ItemTags.AXES);
     }
 
     @Override
     public boolean canToolAxeDig(ItemStack stack) {
+        //~ if < 1.19.4 'ItemTags' -> 'ConventionalItemTags'
         return stack.is(ItemTags.AXES);
     }
 

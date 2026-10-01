@@ -3,7 +3,6 @@ package com.dtteam.dynamictrees.registry;
 import com.dtteam.dynamictrees.api.registry.*;
 import net.minecraft.core.*;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -11,6 +10,10 @@ import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.*;
+//? }
 
 /**
  * Handles registries for the given mod ID in the constructor. Add-ons should instantiate one of these in their
@@ -65,12 +68,14 @@ public class FabricRegistryHandler extends RegistryHandler {
 
     @Override
     public @Nullable Supplier<Block> getBlock(ResourceLocation registryName) {
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
         Block block = BuiltInRegistries.BLOCK.get(registryName);
         return () -> block;
     }
 
     @Override
     public @Nullable Supplier<Item> getItem(ResourceLocation registryName) {
+        //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'Registry.ITEM'
         Item item = BuiltInRegistries.ITEM.get(registryName);
         return () -> item;
     }
@@ -81,6 +86,7 @@ public class FabricRegistryHandler extends RegistryHandler {
         if (this.warnIfInvalid("Block", registryName)) {
             return (Supplier<T>) getBlock(registryName);
         }
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
         T block = Registry.register(BuiltInRegistries.BLOCK, registryName, blockSup.get());
         return () -> block;
     }
@@ -91,6 +97,7 @@ public class FabricRegistryHandler extends RegistryHandler {
         if (this.warnIfInvalid("Item", registryName)) {
             return (Supplier<T>) getItem(registryName);
         }
+        //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'Registry.ITEM'
         T item = Registry.register(BuiltInRegistries.ITEM, registryName, itemSup.get());
         return () -> item;
     }

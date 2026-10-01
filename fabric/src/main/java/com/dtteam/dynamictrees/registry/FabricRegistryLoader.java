@@ -73,7 +73,7 @@ public class FabricRegistryLoader extends RegistryLoader {
 
     @Override
     public <T extends Item> Supplier<T> registerItem(String name, Supplier<T> newBlock) {
-        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
+        //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'Registry.ITEM'
         T item = Registry.register(BuiltInRegistries.ITEM, DynamicTrees.location(name), newBlock.get());
         return ()-> item;
     }

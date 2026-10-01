@@ -20,20 +20,30 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 //? if >= 1.21 {
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
 import net.neoforged.fml.config.ModConfig;
 //? } else {
+/*import net.minecraftforge.fml.config.ModConfig;
+*///? }
+
+//? if >= 1.21 {
+import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+//? } else if >= 1.19.4 {
 /*import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
-import net.minecraftforge.fml.config.ModConfig;
+*///? } else {
+/*import net.minecraftforge.api.ModLoadingContext;
 *///? }
 
 public class DynamicTreesFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
+        //? if >= 1.19.4 {
         ForgeConfigRegistry.INSTANCE.register(DynamicTrees.MOD_ID, ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
         ForgeConfigRegistry.INSTANCE.register(DynamicTrees.MOD_ID, ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
+        //? } else {
+        /*ModLoadingContext.registerConfig(DynamicTrees.MOD_ID, ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
+        ModLoadingContext.registerConfig(DynamicTrees.MOD_ID, ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
+        *///? }
 
 
         FabricRegistryHandler.setup(DynamicTrees.MOD_ID);

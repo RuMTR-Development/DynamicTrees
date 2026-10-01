@@ -151,7 +151,7 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
         Path path = resolvePath(this.root, Arrays.asList(fullPath.split("/")));
 
         if (!Files.exists(path)) {
-            throw new IOException("Resource missing");
+            throw new IOException("Resource missing: " + path);
         }
 
         return Files.newInputStream(path);

@@ -3,10 +3,7 @@ package com.dtteam.dynamictrees.recipe;
 import com.dtteam.dynamictrees.config.DTConfigs;
 import com.dtteam.dynamictrees.item.DendroPotion;
 import com.dtteam.dynamictrees.registry.DTRegistries;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,12 +14,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-//? if >= 1.21 {
+//? if >= 1.21.1 {
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
 //? } else {
 /*import net.minecraft.world.item.alchemy.PotionUtils;
 *///? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+//? }
 
 public class DendroPotionRecipeHandler {
 
@@ -61,13 +63,14 @@ public class DendroPotionRecipeHandler {
     }
 
     public static ItemStack setPotion(ItemStack pStack, String potionName) {
-        //~ if < 1.21 'ResourceLocation.parse' -> 'new ResourceLocation'
-        Optional<Holder.Reference<Potion>> potion = BuiltInRegistries.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
 
-        //? if >= 1.21 {
+        //? if >= 1.21.1 {
+        Optional<Holder.Reference<Potion>> potion = BuiltInRegistries.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
         potion.ifPresent(holder -> pStack.set(DataComponents.POTION_CONTENTS, new PotionContents(holder)));
         //? } else {
-        /*potion.ifPresent(holder -> PotionUtils.setPotion(pStack, holder.value()));
+        /*//~ if < 1.19.4 'BuiltInRegistries.POTION' -> 'Registry.POTION'
+        Optional<Potion> optionalPotion = BuiltInRegistries.POTION.getOptional(new ResourceLocation(potionName));
+        optionalPotion.ifPresent(holder -> PotionUtils.setPotion(pStack, holder));
         *///? }
 
         return pStack;
