@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 //? if >= 1.21.1 {
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 //? } else {
 /*import net.minecraft.world.item.alchemy.PotionUtils;
 *///? }

@@ -1,6 +1,5 @@
 package com.dtteam.dynamictrees.mixin;
 
-import com.dtteam.dynamictrees.event.handler.ThickBranchRingsHandler;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -15,6 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
+
+//? if < 1.19.4 {
+/*import com.dtteam.dynamictrees.event.handler.ThickBranchRingsHandler;
+*///? }
 
 @Mixin(TextureAtlas.class)
 public class TextureAtlasMixin {

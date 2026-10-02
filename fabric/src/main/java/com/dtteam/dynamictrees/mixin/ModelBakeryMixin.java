@@ -3,7 +3,6 @@ package com.dtteam.dynamictrees.mixin;
 import com.dtteam.dynamictrees.model.DTModelModifier;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.client.renderer.texture.AtlasSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +13,10 @@ import org.spongepowered.asm.mixin.injection.Coerce;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
+//? if < 1.19.4 {
+/*import net.minecraft.client.renderer.texture.AtlasSet;
+*///? }
 
 @Mixin(ModelBakery.class)
 public class ModelBakeryMixin {
