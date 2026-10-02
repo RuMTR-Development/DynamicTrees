@@ -5,30 +5,54 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderOwner;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.registries.holdersets.ICustomHolderSet;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+//? if >= 1.19.4 {
+/*import net.minecraft.core.HolderOwner;
+ *///? }
+
 public abstract class RegexMatchHolderSet<T> extends StreamBackedHolderSet<T> implements ICustomHolderSet<T> {
 
-    protected static <T> MapCodec<? extends ICustomHolderSet<T>> mapCodec(ResourceKey<? extends Registry<T>> registryKey, BiFunction<HolderLookup.RegistryLookup<T>, String, RegexMatchHolderSet<T>> factory) {
+    protected static <T> MapCodec<? extends ICustomHolderSet<T>> mapCodec(
+            ResourceKey<? extends Registry<T>> registryKey,
+
+            //? if >= 1.19.4 {
+            /*BiFunction<HolderLookup.RegistryLookup<T>, String, RegexMatchHolderSet<T>> factory
+            *///? } else {
+            BiFunction<Registry<T>, String, RegexMatchHolderSet<T>> factory
+            //? }
+    ) {
         return RecordCodecBuilder.<RegexMatchHolderSet<T>>mapCodec(builder -> builder.group(
-                RegistryOps.retrieveRegistryLookup(registryKey).forGetter(RegexMatchHolderSet::registryLookup),
+                //? if >= 1.19.4 {
+                /*RegistryOps.retrieveRegistryLookup(registryKey).forGetter(RegexMatchHolderSet::registryLookup),
+                *///? } else {
+                RegistryOps.retrieveRegistry(registryKey).forGetter(RegexMatchHolderSet::registry),
+                //? }
+
                 Codec.STRING.fieldOf("regex").forGetter(RegexMatchHolderSet::regex)
         ).apply(builder, factory));
     }
 
-    private final HolderLookup.RegistryLookup<T> registryLookup;
+    //? if >= 1.19.4 {
+    /*private final HolderLookup.RegistryLookup<T> registryLookup;
+    *///? } else {
+    private final Supplier<Registry<T>> registrySupplier;
+    //? }
+
     private final String regex;
     private Pattern pattern;
 
-    public RegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
+    //? if >= 1.19.4 {
+    /*public RegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
         this.registryLookup = registryLookup;
         this.regex = regex;
     }
@@ -36,6 +60,50 @@ public abstract class RegexMatchHolderSet<T> extends StreamBackedHolderSet<T> im
     public final HolderLookup.RegistryLookup<T> registryLookup() {
         return this.registryLookup;
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Stream<Holder<T>> stream() {
+        return (Stream<Holder<T>>) (Stream<?>) this.registryLookup.listElements()
+                .filter(holder ->
+                        this.getInput(holder).anyMatch(input ->
+                                this.getPattern().matcher(input).matches())
+                );
+    }
+
+    @Override
+    public boolean canSerializeIn(HolderOwner<T> owner) {
+        return this.registryLookup.canSerializeIn(owner);
+    }
+    *///? } else {
+    public RegexMatchHolderSet(Registry<T> registry, String regex) {
+        this(() -> registry, regex);
+    }
+
+    public RegexMatchHolderSet(Supplier<Registry<T>> registrySupplier, String regex) {
+        this.registrySupplier = registrySupplier;
+        this.regex = regex;
+    }
+
+    public final Supplier<Registry<T>> registrySupplier() {
+        return this.registrySupplier;
+    }
+
+    public Registry<T> registry() {
+        return this.registrySupplier.get();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Stream<Holder<T>> stream() {
+        return (Stream<Holder<T>>) (Stream<?>) this.registry().holders().filter(holder -> this.getInput(holder).anyMatch(input -> this.getPattern().matcher(input).matches()));
+    }
+
+    @Override
+    public boolean isValidInRegistry(Registry<T> registry) {
+        return true;
+    }
+    //? }
 
     public final String regex() {
         return this.regex;
@@ -47,17 +115,6 @@ public abstract class RegexMatchHolderSet<T> extends StreamBackedHolderSet<T> im
         }
 
         return this.pattern;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Stream<Holder<T>> stream() {
-        return (Stream<Holder<T>>) (Stream<?>) this.registryLookup.listElements().filter(holder -> this.getInput(holder).anyMatch(input -> this.getPattern().matcher(input).matches()));
-    }
-
-    @Override
-    public boolean canSerializeIn(HolderOwner<T> owner) {
-        return this.registryLookup.canSerializeIn(owner);
     }
 
     /**

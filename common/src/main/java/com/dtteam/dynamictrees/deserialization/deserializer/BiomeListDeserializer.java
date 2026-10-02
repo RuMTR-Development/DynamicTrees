@@ -80,13 +80,7 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         String finalNameRegex = nameRegex;
         biomeList.addNameRegexMatch(
                 (notOperator ? biomeList.getExcludeComponents() : biomeList.getIncludeComponents()),
-                () -> {
-                    //? if >= 1.19.4 {
-                    return DELAYED_BIOME_REGISTRY.get().asLookup();
-                    //? } else {
-                    /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
-                    *///? }
-                }, finalNameRegex);
+                DELAYED_BIOME_REGISTRY, finalNameRegex);
     };
 
     private static boolean usingNotOperator(String categoryString) {
@@ -109,13 +103,7 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
             String finalNameRegex = nameRegex;
             biomeList.addNameRegexMatch(
                     (notOperator ? orExcludes : orIncludes),
-                    () -> {
-                        //? if >= 1.19.4 {
-                        return DELAYED_BIOME_REGISTRY.get().asLookup();
-                         //? } else {
-                        /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
-                        *///? }
-                    }, finalNameRegex);
+                    DELAYED_BIOME_REGISTRY, finalNameRegex);
         });
 
         if (!orIncludes.isEmpty())
@@ -141,13 +129,7 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
 
             biomeList.addTagsRegexMatch(
                     (notOperator ? orExcludes : orIncludes),
-                    () -> {
-                        //? if >= 1.19.4 {
-                        return DELAYED_BIOME_REGISTRY.get().asLookup();
-                         //? } else {
-                        /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
-                        *///? }
-                    }, tagRegex);
+                    DELAYED_BIOME_REGISTRY, tagRegex);
         });
 
         if (!orIncludes.isEmpty())
@@ -209,13 +191,7 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         return JsonResult.forInput(input)
                 .mapIfType(String.class, biomeName -> {
                     IDTBiomeHolderSet biomes = Services.MISC.newDTBiomeHolderSet();
-                    biomes.addNameRegexMatch(biomes.getIncludeComponents(), () -> {
-                        //? if >= 1.19.4 {
-                        return DELAYED_BIOME_REGISTRY.get().asLookup();
-                         //? } else {
-                        /*return new HolderLookup.RegistryLookup<>(DELAYED_BIOME_REGISTRY.get());
-                        *///? }
-                    }, biomeName.toLowerCase(Locale.ENGLISH));
+                    biomes.addNameRegexMatch(biomes.getIncludeComponents(), DELAYED_BIOME_REGISTRY, biomeName.toLowerCase(Locale.ENGLISH));
                     return biomes;
                 })
                 .elseMapIfType(JsonObject.class, selectorObject -> {

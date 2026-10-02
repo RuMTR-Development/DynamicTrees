@@ -5,7 +5,8 @@ import com.dtteam.dynamictrees.data.tags.DTItemTags;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -18,17 +19,30 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+//? if >= 1.19.4 {
+/*import net.minecraft.data.PackOutput;
+*///? }
+
 /**
  * @author Harley O'Connor
  */
 public class DTItemTagsProvider extends ItemTagsProvider {
-    public DTItemTagsProvider(PackOutput output, String modId, CompletableFuture<HolderLookup.Provider> lookupProvider,
+    //? if >= 1.19.4 {
+    /*public DTItemTagsProvider(PackOutput output, String modId, CompletableFuture<HolderLookup.Provider> lookupProvider,
                               CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper fileHelper) {
         super(output, lookupProvider, blockTags, modId, fileHelper);
     }
+    *///? } else {
+    public DTItemTagsProvider(DataGenerator generator, BlockTagsProvider blockTagsProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+        super(generator, blockTagsProvider, modId, existingFileHelper);
+    }
+    //? }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(
+            //? if >= 1.19.4
+            //HolderLookup.Provider provider
+    ) {
         if (this.modId.equals(DynamicTrees.MOD_ID)) {
             this.addDTOnlyTags();
         }

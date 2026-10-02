@@ -3,7 +3,6 @@ package com.dtteam.dynamictrees;
 import com.dtteam.dynamictrees.block.leaves.LeavesProperties;
 import com.dtteam.dynamictrees.block.soil.SoilProperties;
 import com.dtteam.dynamictrees.client.BlockColorMultipliers;
-import com.dtteam.dynamictrees.client.ThickBranchRingsSource;
 import com.dtteam.dynamictrees.config.*;
 import com.dtteam.dynamictrees.data.GatherDataHelper;
 import com.dtteam.dynamictrees.data.generator.DTExtraLangGenerator;
@@ -16,7 +15,6 @@ import com.dtteam.dynamictrees.registry.ForgeRegistryLoader;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.treepack.Resources;
-import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -28,6 +26,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.Set;
+
+//? if >= 1.19.4 {
+/*import com.dtteam.dynamictrees.client.ThickBranchRingsSource;
+import net.minecraft.client.renderer.texture.atlas.SpriteSources;
+*///? }
 
 @Mod(DynamicTrees.MOD_ID)
 public class DynamicTreesForge {
@@ -59,7 +62,8 @@ public class DynamicTreesForge {
         LeavesProperties.postInitClient();
         BlockColorMultipliers.cleanUp();
 
-        SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
+        //? if >= 1.19.4
+        //SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
     }
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
@@ -80,10 +84,14 @@ public class DynamicTreesForge {
                 LeavesProperties.REGISTRY
         );
         //Generate the feature replacement data
-        DataGenerator dataGen = event.getGenerator();
+        //? if >= 1.19.4 {
+        /*DataGenerator dataGen = event.getGenerator();
         dataGen.addProvider(event.includeServer(), new DTDatapackBuiltinEntriesProvider(
                 dataGen.getPackOutput(), event.getLookupProvider(), Set.of(DynamicTrees.MOD_ID, DynamicTrees.MINECRAFT)
         ));
+        *///? } else {
+        DTDatapackBuiltinEntriesProvider.registerProviders(event.getGenerator(), event.getExistingFileHelper(), DynamicTrees.MOD_ID, event.includeServer());
+        //? }
     }
 
 }

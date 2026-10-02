@@ -13,9 +13,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.core.NonNullList;import net.minecraft.core.Registry;import net.minecraft.network.chat.Component;import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -41,7 +39,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.registries.DeferredRegister;
@@ -56,12 +53,22 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraftforge.event.CreativeModeTabEvent;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
+
 public class ForgeRegistryLoader extends RegistryLoader {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, DynamicTrees.MOD_ID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, DynamicTrees.MOD_ID);
+
+    //? if >= 1.19.4 {
+    /*public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, DynamicTrees.MOD_ID);
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, DynamicTrees.MOD_ID);
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, DynamicTrees.MOD_ID);
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, DynamicTrees.MOD_ID);
     public static final DeferredRegister<BlockStateProviderType<?>> BLOCK_STATE_PROVIDER_TYPES = DeferredRegister.create(Registries.BLOCK_STATE_PROVIDER_TYPE, DynamicTrees.MOD_ID);
     public static final DeferredRegister<StructurePoolElementType<?>> STRUCTURE_POOL_ELEMENT_TYPES = DeferredRegister.create(Registries.STRUCTURE_POOL_ELEMENT, DynamicTrees.MOD_ID);
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, DynamicTrees.MOD_ID);
@@ -71,6 +78,18 @@ public class ForgeRegistryLoader extends RegistryLoader {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(Registries.RECIPE_SERIALIZER, DynamicTrees.MOD_ID);
 
     public static final List<Consumer<CreativeModeTabEvent.Register>> CREATIVE_TABS = new ArrayList<>();
+    *///? } else {
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(Registry.PLACEMENT_MODIFIER_REGISTRY, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<BlockStateProviderType<?>> BLOCK_STATE_PROVIDER_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_STATE_PROVIDER_TYPES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<StructurePoolElementType<?>> STRUCTURE_POOL_ELEMENT_TYPES = DeferredRegister.create(Registry.STRUCTURE_POOL_ELEMENT_REGISTRY, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<LootItemConditionType> LOOT_CONDITION_TYPES = DeferredRegister.create(Registry.LOOT_CONDITION_TYPE.key(), DynamicTrees.MOD_ID);
+    public static final DeferredRegister<LootPoolEntryType> LOOT_POOL_ENTRY_TYPES = DeferredRegister.create(Registry.LOOT_POOL_ENTRY_TYPE.key(), DynamicTrees.MOD_ID);
+    public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTION_TYPES = DeferredRegister.create(Registry.LOOT_FUNCTION_TYPE.key(), DynamicTrees.MOD_ID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, DynamicTrees.MOD_ID);
+    //? }
 
     public static void setup(IEventBus modBus) {
         BLOCK_ENTITY_TYPES.register(modBus);
@@ -113,8 +132,9 @@ public class ForgeRegistryLoader extends RegistryLoader {
     }
 
     @Override
-    public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, CreativeModeTab.DisplayItemsGenerator displayItems) {
-        AtomicReference<CreativeModeTab> tab = new AtomicReference<>();
+    public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, Consumer<Consumer<ItemStack>> displayItems) {
+        //? if >= 1.19.4 {
+        /*AtomicReference<CreativeModeTab> tab = new AtomicReference<>();
 
         CREATIVE_TABS.add(e -> {
             CreativeModeTab newTab = e.registerCreativeModeTab(new ResourceLocation(DynamicTrees.MOD_ID, name), builder ->
@@ -127,6 +147,29 @@ public class ForgeRegistryLoader extends RegistryLoader {
         });
 
         return tab::get;
+        *///? } else {
+        CreativeModeTab tab = new CreativeModeTab(
+                ResourceLocation.fromNamespaceAndPath(DynamicTrees.MOD_ID, name).toLanguageKey()
+        ) {
+            @Override
+            public ItemStack makeIcon() {
+                return icon.get();
+            }
+
+            @Override
+            public void fillItemList(NonNullList<ItemStack> items) {
+                displayItems.accept(items::add);
+            }
+
+            @Override
+            public Component getDisplayName() {
+                return title;
+            }
+        };
+
+        return () -> tab;
+        //? }
+
     }
 
     @Override
@@ -144,7 +187,8 @@ public class ForgeRegistryLoader extends RegistryLoader {
 
     @Override
     public Supplier<SoundEvent> registerSoundEvent(String name) {
-        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(DynamicTrees.location(name)));
+        //~ if < 1.19.4 'SoundEvent.createVariableRangeEvent' -> 'new SoundEvent'
+        return SOUND_EVENTS.register(name, () -> new SoundEvent(DynamicTrees.location(name)));
     }
 
     @Override

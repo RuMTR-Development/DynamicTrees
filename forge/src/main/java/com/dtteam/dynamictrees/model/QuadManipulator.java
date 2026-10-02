@@ -105,7 +105,8 @@ public class QuadManipulator {
             float closest = Float.POSITIVE_INFINITY;
             ResourceLocation closestTex = ResourceLocation.parse("missingno");
             if (model != null) {
-                ResourceLocation tex = model.getParticleIcon(ModelData.EMPTY).contents().name();
+                //~ if < 1.19.4 '.contents().name()' -> '.getName()'
+                ResourceLocation tex = model.getParticleIcon(ModelData.EMPTY).getName();
                 TextureAtlasSprite tas = bakedTextureGetter.apply(tex);
                 float u = tas.getU(8);
                 float v = tas.getV(8);

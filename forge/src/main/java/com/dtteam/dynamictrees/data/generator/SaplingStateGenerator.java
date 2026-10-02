@@ -5,13 +5,18 @@ import com.dtteam.dynamictrees.data.DTDataProvider;
 import com.dtteam.dynamictrees.data.Generator;
 import com.dtteam.dynamictrees.data.provider.DTBlockStateProvider;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 
 import java.util.Objects;
 import java.util.Optional;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -26,8 +31,10 @@ public class SaplingStateGenerator implements Generator<DTDataProvider.BlockStat
     public void generate(DTDataProvider.BlockState prov, Species input, Dependencies dependencies) {
         if (prov instanceof DTBlockStateProvider provider){
             final Optional<ResourceLocation> leavesTextureLocation = dependencies.getOptional(PRIMITIVE_LEAVES)
-                    .map(primitiveLeaves -> provider.block(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(primitiveLeaves))));
-            final ResourceLocation primitiveLogLocation = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_LOG)));
+                    //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                    .map(primitiveLeaves -> provider.block(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(primitiveLeaves))));
+            //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+            final ResourceLocation primitiveLogLocation = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_LOG)));
 
             final BlockModelBuilder builder = provider.models().getBuilder(input.getSaplingModelName())
                     .parent(provider.models().getExistingFile(input.getSaplingSmartModelLocation()))

@@ -138,14 +138,32 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
     }
 
     @Override
-    public void addNameRegexMatch(List<HolderSet<Biome>> components, Supplier<HolderLookup.RegistryLookup<Biome>> registryLookup, String regex) {
-        Supplier<HolderSet<Biome>> sup = () -> new NameRegexMatchHolderSet<>(registryLookup.get(), regex);
+    public void addNameRegexMatch(List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex) {
+        Supplier<HolderSet<Biome>> sup = () -> new NameRegexMatchHolderSet<>(
+                //? if >= 1.19.4 {
+                registrySupplier.get().asLookup(),
+                 //? } else {
+                /*new HolderLookup.RegistryLookup<>(registrySupplier.get()),
+                *///? }
+
+                regex
+        );
+
         addDelayedHolderSet(components, sup);
     }
 
     @Override
-    public void addTagsRegexMatch(List<HolderSet<Biome>> components, Supplier<HolderLookup.RegistryLookup<Biome>> registryLookup, String regex) {
-        Supplier<HolderSet<Biome>> sup = () -> new TagsRegexMatchHolderSet<>(registryLookup.get(), regex);
+    public void addTagsRegexMatch(List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex) {
+        Supplier<HolderSet<Biome>> sup = () -> new TagsRegexMatchHolderSet<>(
+                //? if >= 1.19.4 {
+                registrySupplier.get().asLookup(),
+                 //? } else {
+                /*new HolderLookup.RegistryLookup<>(registrySupplier.get()),
+                *///? }
+
+                regex
+        );
+
         addDelayedHolderSet(components, sup);
     }
 

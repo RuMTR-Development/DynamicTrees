@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.registries.holdersets.HolderSetType;
 import net.minecraftforge.registries.holdersets.ICustomHolderSet;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class NameRegexMatchHolderSet<T> extends RegexMatchHolderSet<T> {
@@ -20,9 +21,19 @@ public class NameRegexMatchHolderSet<T> extends RegexMatchHolderSet<T> {
         }
     }
 
-    public NameRegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
+    //? if >= 1.19.4 {
+    /*public NameRegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
         super(registryLookup, regex);
     }
+    *///? } else {
+    public NameRegexMatchHolderSet(Registry<T> registry, String regex) {
+        super(registry, regex);
+    }
+
+    public NameRegexMatchHolderSet(Supplier<Registry<T>> registrySupplier, String regex) {
+        super(registrySupplier, regex);
+    }
+    //? }
 
     @Override
     protected Stream<String> getInput(Holder<T> holder) {

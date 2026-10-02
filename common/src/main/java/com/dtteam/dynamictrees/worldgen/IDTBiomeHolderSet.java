@@ -3,6 +3,7 @@ package com.dtteam.dynamictrees.worldgen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
@@ -24,9 +25,9 @@ public interface IDTBiomeHolderSet extends HolderSet<Biome> {
 
     void addDelayedHolderSet(List<HolderSet<Biome>> components, Supplier<HolderSet<Biome>> holderSetSupplier);
 
-    void addNameRegexMatch (List<HolderSet<Biome>> components,  Supplier<HolderLookup.RegistryLookup<Biome>> registryLookup, String regex);
+    void addNameRegexMatch (List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex);
 
-    void addTagsRegexMatch (List<HolderSet<Biome>> components, Supplier<HolderLookup.RegistryLookup<Biome>> registryLookup, String regex);
+    void addTagsRegexMatch (List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex);
 
     void addOr(List<HolderSet<Biome>> components, List<HolderSet<Biome>> values);
 

@@ -5,7 +5,6 @@ import com.dtteam.dynamictrees.data.DTDataProvider;
 import com.dtteam.dynamictrees.data.Generator;
 import com.dtteam.dynamictrees.data.provider.DTLangProvider;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -16,6 +15,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 public class LeavesPropertiesLangGenerator implements Generator<DTDataProvider.Language, LeavesProperties> {
     DTLangProvider provider;
@@ -35,7 +40,8 @@ public class LeavesPropertiesLangGenerator implements Generator<DTDataProvider.L
 
     protected void itemLang(Item entry, Optional<String> override) {
         if (!(entry instanceof BlockItem) || entry instanceof ItemNameBlockItem) {
-            provider.addItem(() -> entry, override.orElse(checkReplace(BuiltInRegistries.ITEM.getKey(entry))));
+            //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'ForgeRegistries.ITEMS'
+            provider.addItem(() -> entry, override.orElse(checkReplace(ForgeRegistries.ITEMS.getKey(entry))));
         }
     }
 
@@ -44,7 +50,8 @@ public class LeavesPropertiesLangGenerator implements Generator<DTDataProvider.L
     }
 
     protected void blockLang(Block entry, Optional<String> blah) {
-        provider.addBlock(() -> entry, blah.orElse(checkReplace(BuiltInRegistries.BLOCK.getKey(entry))));
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+        provider.addBlock(() -> entry, blah.orElse(checkReplace(ForgeRegistries.BLOCKS.getKey(entry))));
     }
 
     protected String checkReplace(ResourceLocation registryObject) {

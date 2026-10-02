@@ -8,25 +8,40 @@ import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.data.DataGenerator;import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+//? if >= 1.19.4 {
+/*import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.BlockTagsProvider;
+*///? } else {
+import net.minecraft.data.tags.BlockTagsProvider;
+//? }
+
 /**
  * @author Harley O'Connor
  */
 public class DTBlockTagsProvider extends BlockTagsProvider {
-    public DTBlockTagsProvider(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
+    //? if >= 1.19.4 {
+    /*public DTBlockTagsProvider(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
         super(output, lookupProvider, modid, fileHelper);
+    }*///? } else {
+
+    public DTBlockTagsProvider(DataGenerator generator, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+        super(generator, modId, existingFileHelper);
     }
 
+    //? }
+
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(
+            //? if >= 1.19.4
+            //HolderLookup.Provider provider
+    ) {
         if (this.modId.equals(DynamicTrees.MOD_ID)) {
             this.addDTOnlyTags();
         }
@@ -43,7 +58,8 @@ public class DTBlockTagsProvider extends BlockTagsProvider {
                 .add(Blocks.TALL_GRASS)
                 .add(Blocks.FERN)
                 .add(Blocks.LILY_PAD)
-                .add(Blocks.PINK_PETALS)
+                //? if >= 1.19.4
+                //.add(Blocks.PINK_PETALS)
                 .add(Blocks.BROWN_MUSHROOM)
                 .add(Blocks.RED_MUSHROOM)
                 .add(Blocks.MOSS_CARPET)

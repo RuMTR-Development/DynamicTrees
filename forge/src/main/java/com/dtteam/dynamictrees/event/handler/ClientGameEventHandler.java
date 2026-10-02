@@ -46,7 +46,8 @@ public class ClientGameEventHandler {
             return;
         }
 
-        BlockPos playerPos = BlockPos.containing(player.position());
+        //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
+        BlockPos playerPos = new BlockPos(player.position());
         ClimateZoneType climate = ClimateHelper.getClimate(player.level, playerPos);
         int flags = seed.getSpecies().getSeasonalTooltipFlags(levelContext, player);
         Tooltips.applySeasonalTooltips(event.getToolTip(), flags, climate);

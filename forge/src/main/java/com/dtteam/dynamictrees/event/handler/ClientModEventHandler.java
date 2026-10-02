@@ -8,7 +8,6 @@ import com.dtteam.dynamictrees.block.soil.SoilBlock;
 import com.dtteam.dynamictrees.block.soil.SoilProperties;
 import com.dtteam.dynamictrees.client.BlockColorMultipliers;
 import com.dtteam.dynamictrees.client.TextureHelper;
-import com.dtteam.dynamictrees.client.ThickBranchRingsSource;
 import com.dtteam.dynamictrees.entity.render.FallingTreeRenderer;
 import com.dtteam.dynamictrees.entity.render.LingeringEffectorRenderer;
 import com.dtteam.dynamictrees.model.baked.BakedModelBlockPottedSapling;
@@ -22,7 +21,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
@@ -192,7 +190,13 @@ public class ClientModEventHandler {
     }
 
     @SubscribeEvent
-    public static void onModelModifyBakingResultResult(ModelEvent.ModifyBakingResult event) {
+    public static void onModelModifyBakingResultResult(
+            //? if >= 1.19.4 {
+            /*ModelEvent.ModifyBakingResult event
+            *///? } else {
+            ModelEvent.BakingCompleted event
+            //? }
+    ) {
         // Put bonsai pot baked model into its model location.
         event.getModels().computeIfPresent(new ModelResourceLocation(DynamicTrees.location("potted_sapling"), ""), (k, val) -> new BakedModelBlockPottedSapling(val));
     }

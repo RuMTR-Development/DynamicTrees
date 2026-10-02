@@ -6,10 +6,15 @@ import com.dtteam.dynamictrees.data.Generator;
 import com.dtteam.dynamictrees.data.builder.BranchLoaderBuilder;
 import com.dtteam.dynamictrees.data.provider.DTBlockStateProvider;
 import com.dtteam.dynamictrees.tree.family.Family;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Objects;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -24,10 +29,12 @@ public class SurfaceRootStateGenerator implements Generator<DTDataProvider.Block
         if (prov instanceof DTBlockStateProvider provider){
             final SurfaceRootBlock surfaceRoot = dependencies.get(SURFACE_ROOT);
             provider.simpleBlock(surfaceRoot,
-                    provider.models().getBuilder(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(surfaceRoot)).getPath())
+                    //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                    provider.models().getBuilder(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(surfaceRoot)).getPath())
                             .customLoader(BranchLoaderBuilder.branchBuilders.get(input.getSurfaceRootLoader()))
                             .texture("bark", input.getTexturePath(Family.BRANCH)
-                                    .orElse(provider.block(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_LOG))))
+                                    //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                                    .orElse(provider.block(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_LOG))))
                                     )).end()
             );
         }

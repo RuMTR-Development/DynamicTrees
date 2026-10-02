@@ -4,10 +4,7 @@ import com.dtteam.dynamictrees.model.baked.SurfaceRootBlockBakedModel;
 import com.dtteam.dynamictrees.model.loader.SurfaceRootBlockModelLoader;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 
@@ -24,7 +21,17 @@ public class SurfaceRootBlockModelGeometry extends BranchBlockModelGeometry {
     }
 
     @Override
-    public BakedModel bake(IGeometryBakingContext context, ModelBaker modelBaker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides itemOverrides, ResourceLocation location) {
+    public BakedModel bake(
+            IGeometryBakingContext context,
+
+            //~ if < 1.19.4 'ModelBaker' -> 'ModelBakery'
+            ModelBakery modelBaker,
+
+            Function<Material, TextureAtlasSprite> spriteGetter,
+            ModelState modelState,
+            ItemOverrides itemOverrides,
+            ResourceLocation resourceLocation
+    ) {
         return new SurfaceRootBlockBakedModel(this.barkTextureLocation, spriteGetter);
     }
 

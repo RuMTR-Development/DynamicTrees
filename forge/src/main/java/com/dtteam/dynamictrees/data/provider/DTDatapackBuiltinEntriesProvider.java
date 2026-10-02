@@ -1,20 +1,16 @@
 package com.dtteam.dynamictrees.data.provider;
 
 import com.dtteam.dynamictrees.DynamicTrees;
-import com.dtteam.dynamictrees.registry.DTRegistries;
+import com.dtteam.dynamictrees.data.CustomBootstrapContext;import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.worldgen.feature.CaveRootedTreePlacement;
 import com.dtteam.dynamictrees.worldgen.feature.DTReplaceNyliumFungiBlockStateProvider;
 import com.dtteam.dynamictrees.worldgen.structure.VillageTreeReplacement;
-import net.minecraft.core.*;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.worldgen.BootstapContext;
-import net.minecraft.data.worldgen.features.NetherFeatures;
+import com.mojang.serialization.JsonOps;import net.minecraft.core.*;
+import net.minecraft.data.DataGenerator;import net.minecraft.data.worldgen.features.NetherFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.resources.RegistryOps;import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -30,16 +26,26 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;import net.minecraftforge.common.data.ExistingFileHelper;import net.minecraftforge.common.data.JsonCodecProvider;
 
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;import java.util.List;
+import java.util.Map;import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class DTDatapackBuiltinEntriesProvider extends DatapackBuiltinEntriesProvider {
+//? if >= 1.19.4 {
+/*import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.worldgen.BootstapContext;
+*///? }
 
-    public DTDatapackBuiltinEntriesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, Set<String> modIds) {
+public class DTDatapackBuiltinEntriesProvider
+        //? if >= 1.19.4
+        //extends DatapackBuiltinEntriesProvider
+{
+    //? if >= 1.19.4 {
+    /*public DTDatapackBuiltinEntriesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, Set<String> modIds) {
         super(output, registries.thenApply(p -> constructRegistries(p, getBuilder(p))), modIds);
     }
 
@@ -69,48 +75,163 @@ public class DTDatapackBuiltinEntriesProvider extends DatapackBuiltinEntriesProv
                 .add(Registries.CONFIGURED_FEATURE, context -> bootstrapConfiguredFeatures(vanillaProvider, context))
                 .add(Registries.PLACED_FEATURE, DTDatapackBuiltinEntriesProvider::bootstrapPlacedFeatures);
     }
+    *///? } else {
+    public static void registerProviders(DataGenerator generator, ExistingFileHelper fileHelper, String modId, boolean run) {
+        Map<ResourceLocation, StructureTemplatePool> templatePools = new HashMap<>();
+        Map<ResourceLocation, ConfiguredFeature<?, ?>> configuredFeatures = new HashMap<>();
+        Map<ResourceLocation, PlacedFeature> placedFeatures = new HashMap<>();
 
-    private static void bootstrapTemplatePools(HolderLookup.Provider vanillaProvider, BootstapContext<StructureTemplatePool> context) {
+        bootstrapTemplatePools((key, value) -> templatePools.put(key.location(), value));
+        bootstrapConfiguredFeatures((key, value) -> configuredFeatures.put(key.location(), value));
+        bootstrapPlacedFeatures((key, value) -> placedFeatures.put(key.location(), value));
+
+        generator.addProvider(run, JsonCodecProvider.forDatapackRegistry(
+                generator,
+                fileHelper,
+                modId,
+                RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                Registry.TEMPLATE_POOL_REGISTRY,
+                templatePools
+        ));
+
+        generator.addProvider(run, JsonCodecProvider.forDatapackRegistry(
+                generator,
+                fileHelper,
+                modId,
+                RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                Registry.CONFIGURED_FEATURE_REGISTRY,
+                configuredFeatures
+        ));
+
+        generator.addProvider(run, JsonCodecProvider.forDatapackRegistry(
+                generator,
+                fileHelper,
+                modId,
+                RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                Registry.PLACED_FEATURE_REGISTRY,
+                placedFeatures
+        ));
+    }
+    //? }
+
+    private static void bootstrapTemplatePools(
+            //? if >= 1.19.4
+            //HolderLookup.Provider vanillaProvider,
+
+            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            CustomBootstrapContext<StructureTemplatePool> context
+    ) {
         // TODO 1.20: Verify this works
-        VillageTreeReplacement.replaceTreesFromVanillaVillages(vanillaProvider, context);
+        VillageTreeReplacement.replaceTreesFromVanillaVillages(
+                //? if >= 1.19.4
+                //vanillaProvider,
+
+                context
+        );
     }
 
-    private static void bootstrapConfiguredFeatures(HolderLookup.Provider vanillaProvider, BootstapContext<ConfiguredFeature<?, ?>> context) {
+    private static void bootstrapConfiguredFeatures(
+            //? if >= 1.19.4
+            //HolderLookup.Provider vanillaProvider,
+
+            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            CustomBootstrapContext<ConfiguredFeature<?, ?>> context
+    ) {
         context.register(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE,
                 new ConfiguredFeature<>(DTRegistries.DYNAMIC_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
         context.register(DTRegistries.CAVE_ROOTED_TREE_CONFIGURED_FEATURE,
                 new ConfiguredFeature<>(DTRegistries.CAVE_ROOTED_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
         // TODO 1.20: Verify this works
-        replaceNyliumFungiFeatures(vanillaProvider, context);
+        replaceNyliumFungiFeatures(
+                //? if >= 1.19.4
+                //vanillaProvider,
+
+                context
+        );
     }
 
-    private static void bootstrapPlacedFeatures(BootstapContext<PlacedFeature> context) {
-        var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+    //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+    private static void bootstrapPlacedFeatures(CustomBootstrapContext<PlacedFeature> context) {
+        //? if >= 1.19.4 {
+        /*var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        *///? } else {
+        var configuredFeatures = new HolderLookup.RegistryLookup<>(
+                RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY)
+        );
 
-        context.register(DTRegistries.DYNAMIC_TREE_PLACED_FEATURE,
-                new PlacedFeature(configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE), List.of()));
+        //? }
+
+        context.register(DTRegistries.DYNAMIC_TREE_PLACED_FEATURE, new PlacedFeature(
+                //? if >= 1.19.4 {
+                /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
+                *///? } else {
+                configuredFeatures.get(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE).orElseThrow(),
+                //? }
+
+                List.of()
+        ));
+
         context.register(DTRegistries.CAVE_ROOTED_TREE_PLACED_FEATURE,
-                new PlacedFeature(configuredFeatures.getOrThrow(DTRegistries.CAVE_ROOTED_TREE_CONFIGURED_FEATURE), List.of(
-                        CaveRootedTreePlacement.INSTANCE, PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-                        EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                        RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome())));
+                new PlacedFeature(
+                        //? if >= 1.19.4 {
+                        /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
+                         *///? } else {
+                        configuredFeatures.get(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE).orElseThrow(),
+                        //? }
+
+                        List.of(
+                                CaveRootedTreePlacement.INSTANCE, PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                                EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                                RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()))
+        );
     }
 
-    private static void replaceNyliumFungiFeatures(HolderLookup.Provider vanillaProvider, BootstapContext<ConfiguredFeature<?, ?>> context) {
+    private static void replaceNyliumFungiFeatures(
+            //? if >= 1.19.4
+            //HolderLookup.Provider vanillaProvider,
+
+            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            CustomBootstrapContext<ConfiguredFeature<?, ?>> context
+    ) {
         Species.findSpecies(DynamicTrees.CRIMSON).getSapling().ifPresent(crimsonSapling ->
                 Species.findSpecies(DynamicTrees.WARPED).getSapling().ifPresent(warpedSapling -> {
-                    var configuredFeatures = vanillaProvider.lookup(Registries.CONFIGURED_FEATURE).orElseThrow();
+                    //? if >= 1.19.4 {
+                    /*var configuredFeatures = vanillaProvider.lookup(Registries.CONFIGURED_FEATURE).orElseThrow();
+                    *///? } else {
+                    var configuredFeatures = new HolderLookup.RegistryLookup<>(
+                            RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY)
+                    );
+                    //? }
+
                     List.of(NetherFeatures.CRIMSON_FOREST_VEGETATION, NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL,
                                     NetherFeatures.WARPED_FOREST_VEGETION, NetherFeatures.WARPED_FOREST_VEGETATION_BONEMEAL)
-                            .forEach(key -> replaceFeature(context, configuredFeatures, key, crimsonSapling, warpedSapling));
+                            .forEach(key -> replaceFeature(
+                                    context,
+                                    configuredFeatures,
+
+                                    //? if >= 1.19.4 {
+                                    /*key,
+                                    *///? } else {
+                                    (ResourceKey) key.unwrapKey().orElseThrow(),
+                                    //? }
+
+                                    crimsonSapling,
+                                    warpedSapling
+                            ));
                 })
         );
     }
 
-    private static void replaceFeature(BootstapContext<ConfiguredFeature<?, ?>> context, HolderLookup.RegistryLookup<ConfiguredFeature<?, ?>> configuredFeatures,
+    //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+    private static void replaceFeature(CustomBootstrapContext<ConfiguredFeature<?, ?>> context, HolderLookup.RegistryLookup<ConfiguredFeature<?, ?>> configuredFeatures,
                                        ResourceKey<ConfiguredFeature<?, ?>> key, Block crimsonSapling, Block warpedSapling) {
-        var feature = configuredFeatures.getOrThrow(key).value();
+        //? if >= 1.19.4 {
+        /*var feature = configuredFeatures.getOrThrow(key).value();
+        *///? } else {
+        var feature = configuredFeatures.get(key).orElseThrow().get();
+        //? }
+
         var config = (NetherForestVegetationConfig) feature.config();
         var stateProvider = (WeightedStateProvider) config.stateProvider;
 

@@ -23,7 +23,7 @@ public class WailaPodHandler implements IBlockComponentProvider {
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-        //~ if < 1.19.2 'BuiltInRegistries' -> 'Registry'
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
         if (accessor.getBlock() instanceof PodBlock podBlock && !BuiltInRegistries.BLOCK.getKey(accessor.getBlock()).equals(COCOA)) {
             float ageAsPercentage = podBlock.getAgeAsPercentage(accessor.getBlockState());
             tooltip.add(Component.translatable(

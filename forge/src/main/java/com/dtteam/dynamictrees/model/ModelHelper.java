@@ -15,9 +15,14 @@ import net.minecraftforge.client.RenderTypeGroup;
 import net.minecraftforge.client.model.IModelBuilder;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-import org.joml.Vector3f;
 
 import java.util.UUID;
+
+//? if >= 1.19.4 {
+/*import org.joml.Vector3f;
+*///? } else {
+import com.mojang.math.Vector3f;
+//? }
 
 public class ModelHelper {
 

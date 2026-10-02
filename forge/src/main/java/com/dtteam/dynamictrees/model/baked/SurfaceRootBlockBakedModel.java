@@ -25,11 +25,15 @@ import net.minecraftforge.client.model.IModelBuilder;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.*;
 import java.util.function.Function;
 
+//? if >= 1.19.4 {
+/*import org.joml.Vector3f;
+*///? } else {
+import com.mojang.math.Vector3f;
+//? }
 
 public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 

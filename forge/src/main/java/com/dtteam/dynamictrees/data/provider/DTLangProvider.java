@@ -5,21 +5,34 @@ import com.dtteam.dynamictrees.data.DTDataProvider;
 import com.dtteam.dynamictrees.data.GatherDataHelper;
 import com.dtteam.dynamictrees.data.Generator;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.Collection;
 import java.util.List;
 
+//? if >= 1.19.4 {
+/*import net.minecraft.data.PackOutput;
+*///? } else {
+import net.minecraft.data.DataGenerator;
+//? }
+
 public class DTLangProvider extends LanguageProvider implements DTDataProvider.Language {
     private final String modId;
     private final List<Registry<?>> registries;
 
-    public DTLangProvider(PackOutput gen, String modId, Collection<Registry<?>> registries) {
+    //? if >= 1.19.4 {
+    /*public DTLangProvider(PackOutput gen, String modId, Collection<Registry<?>> registries) {
+        super(gen, modId, "en_us");
+        this.modId = modId;
+        this.registries = ImmutableList.copyOf(registries);
+    }*/
+    //? } else {
+    public DTLangProvider(DataGenerator gen, String modId, Collection<Registry<?>> registries) {
         super(gen, modId, "en_us");
         this.modId = modId;
         this.registries = ImmutableList.copyOf(registries);
     }
+    //? }
 
     @Override
     protected void addTranslations() {

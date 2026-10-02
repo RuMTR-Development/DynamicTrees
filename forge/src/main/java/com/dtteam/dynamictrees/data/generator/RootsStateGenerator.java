@@ -8,10 +8,15 @@ import com.dtteam.dynamictrees.data.builder.BranchLoaderBuilder;
 import com.dtteam.dynamictrees.data.provider.DTBlockStateProvider;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.family.UndergroundRootsFamily;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Objects;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 /**
  * @author Max Hyper
@@ -28,14 +33,18 @@ public class RootsStateGenerator implements Generator<DTDataProvider.BlockState,
         if (prov instanceof DTBlockStateProvider provider){
             final BranchBlock root = dependencies.get(ROOT);
             final BranchLoaderBuilder builderExposed = provider.models().getBuilder(
-                    Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(root)).getPath()
+                    //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                    Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(root)).getPath()
             ).customLoader(BranchLoaderBuilder.branchBuilders.get(input.getRootsLoader()));
-            input.addRootTextures(builderExposed::texture, provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_ROOT))));
+            //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+            input.addRootTextures(builderExposed::texture, provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_ROOT))));
 
             final BranchLoaderBuilder builderFilled = provider.models().getBuilder(
-                    Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(root)).getPath() + "_filled"
+                    //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                    Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(root)).getPath() + "_filled"
             ).customLoader(BranchLoaderBuilder.branchBuilders.get(input.getRootsLoader()));
-            input.addRootTextures(builderFilled::texture, provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_FILLED_ROOT))));
+            //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+            input.addRootTextures(builderFilled::texture, provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_FILLED_ROOT))));
 
             provider.getVariantBuilder(root)
                     .partialState().with(BasicRootsBlock.LAYER, BasicRootsBlock.Layer.EXPOSED)

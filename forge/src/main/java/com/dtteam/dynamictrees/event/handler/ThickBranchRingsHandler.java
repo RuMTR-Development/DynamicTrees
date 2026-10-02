@@ -1,5 +1,5 @@
 //? if < 1.19.4 {
-/*package com.dtteam.dynamictrees.event.handler;
+package com.dtteam.dynamictrees.event.handler;
 
 import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.api.registry.Registry;
@@ -8,12 +8,12 @@ import com.dtteam.dynamictrees.block.soil.SoilProperties;
 import com.dtteam.dynamictrees.client.ThickBranchRingsSprite;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
-import com.llamalad7.mixinextras.sugar.Local;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.TextureStitchEvent;import net.minecraftforge.eventbus.api.SubscribeEvent;import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,11 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+@Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ThickBranchRingsHandler {
-    public static void register() {
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(ThickBranchRingsHandler::onBlockAtlas);
-    }
-
     @SuppressWarnings("unchecked")
     private static List<Registry<Family>> castToFamilyRegistries(Registry<?>... registries){
         return Arrays.stream(registries)
@@ -42,18 +39,20 @@ public class ThickBranchRingsHandler {
         );
     }
 
-    private static void onBlockAtlas(TextureAtlas atlas, ClientSpriteRegistryCallback.Registry registry) {
+    @SubscribeEvent
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         List<Registry<Family>> registries = getRegistries();
 
         for (Registry<Family> familyRegistry : registries) {
             familyRegistry.dataGenerationStream(DynamicTrees.MOD_ID).forEach(
-                    family -> ThickBranchRingsHandler.registerBase(family, registry)
+                    family -> ThickBranchRingsHandler.registerBase(family, event)
             );
         }
     }
 
-    public static void inject(TextureAtlas atlas, Set<ResourceLocation> ids, List<TextureAtlasSprite> sprites) {
-        if (!atlas.location().equals(InventoryMenu.BLOCK_ATLAS)) {
+    @SubscribeEvent
+    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
+        if (!event.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
             return;
         }
 
@@ -61,30 +60,26 @@ public class ThickBranchRingsHandler {
 
         for (Registry<Family> familyRegistry : registries) {
             familyRegistry.getAllFor(DynamicTrees.MOD_ID).forEach(
-                    family -> ThickBranchRingsHandler.registerThick(family, atlas, ids, sprites)
+                    family -> ThickBranchRingsHandler.registerThick(family, event.getAtlas())
             );
         }
     }
 
-    private static void registerBase(Family family, ClientSpriteRegistryCallback.Registry registry) {
+    private static void registerBase(Family family, TextureStitchEvent.Pre registry) {
         for (ResourceLocation baseLocation : family.topBranchTextureLocations()) {
-            registry.register(baseLocation);
+            registry.addSprite(baseLocation);
         }
     }
 
-    private static void registerThick(Family family, TextureAtlas atlas, Set<ResourceLocation> ids, List<TextureAtlasSprite> sprites) {
+    private static void registerThick(Family family, TextureAtlas atlas) {
         for (ResourceLocation baseLocation : family.topBranchTextureLocations()) {
-            ResourceLocation thickLocation = new ResourceLocation(baseLocation.getNamespace(), baseLocation.getPath() + "_thick");
+            ResourceLocation thickLocation = ResourceLocation.fromNamespaceAndPath(baseLocation.getNamespace(), baseLocation.getPath() + "_thick");
 
-            if (ids.contains(thickLocation)) {
+            if (atlas.sprites.contains(thickLocation)) {
                 continue;
             }
 
-            TextureAtlasSprite base = sprites.stream().filter(sprite -> sprite.getName().equals(baseLocation)).findAny().orElse(null);
-
-            if (base == null) {
-                continue;
-            }
+            TextureAtlasSprite base = atlas.getSprite(baseLocation);
 
             ThickBranchRingsSprite thick = new ThickBranchRingsSprite(
                     atlas,
@@ -97,9 +92,9 @@ public class ThickBranchRingsHandler {
                     base.getY()
             );
 
-            ids.add(thickLocation);
-            sprites.add(thick);
+            atlas.sprites.add(thickLocation);
+            atlas.texturesByName.put(thickLocation, thick);
         }
     }
 }
-*///? }
+//? }

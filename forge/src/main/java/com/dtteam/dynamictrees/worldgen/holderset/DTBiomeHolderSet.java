@@ -4,6 +4,7 @@ import com.dtteam.dynamictrees.worldgen.IDTBiomeHolderSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.registries.holdersets.AndHolderSet;
@@ -47,14 +48,32 @@ public class DTBiomeHolderSet extends IncludesExcludesHolderSet<Biome> implement
     }
 
     @Override
-    public void addNameRegexMatch(List<HolderSet<Biome>> components, Supplier<HolderLookup.RegistryLookup<Biome>> registryLookup, String regex) {
-        Supplier<HolderSet<Biome>> sup = () -> new NameRegexMatchHolderSet<>(registryLookup.get(), regex);
+    public void addNameRegexMatch(List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex) {
+        Supplier<HolderSet<Biome>> sup = () -> new NameRegexMatchHolderSet<>(
+                //? if >= 1.19.4 {
+                /*registrySupplier.get().asLookup(),
+                *///? } else {
+                registrySupplier,
+                //? }
+
+                regex
+        );
+
         addDelayedHolderSet(components, sup);
     }
 
     @Override
-    public void addTagsRegexMatch(List<HolderSet<Biome>> components, Supplier<HolderLookup.RegistryLookup<Biome>> registryLookup, String regex) {
-        Supplier<HolderSet<Biome>> sup = () -> new TagsRegexMatchHolderSet<>(registryLookup.get(), regex);
+    public void addTagsRegexMatch(List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex) {
+        Supplier<HolderSet<Biome>> sup = () -> new TagsRegexMatchHolderSet<>(
+                //? if >= 1.19.4 {
+                /*registrySupplier.get().asLookup(),
+                 *///? } else {
+                registrySupplier,
+                //? }
+
+                regex
+        );
+
         addDelayedHolderSet(components, sup);
     }
 

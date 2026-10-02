@@ -107,7 +107,7 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
 
     private void registerModelLoaders() {
         //? if >= 1.21
-         ModelLoadingPlugin.register(new DTModelLoadingPlugin());
+        ModelLoadingPlugin.register(new DTModelLoadingPlugin());
     }
 
     private void registerEntityRenderers() {

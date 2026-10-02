@@ -8,12 +8,17 @@ import com.dtteam.dynamictrees.data.Generator;
 import com.dtteam.dynamictrees.data.builder.PalmLeavesLoaderBuilder;
 import com.dtteam.dynamictrees.data.provider.DTBlockStateProvider;
 import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -44,7 +49,8 @@ public class PalmLeavesStateGenerator implements Generator<DTDataProvider.BlockS
 
             final ModelFile blockModel = provider.models().getExistingFile(
                     palmInput.getModelPath(LeavesProperties.LEAVES).orElse(
-                            provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_LEAVES)))
+                            //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                            provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_LEAVES)))
                     )
             );
 

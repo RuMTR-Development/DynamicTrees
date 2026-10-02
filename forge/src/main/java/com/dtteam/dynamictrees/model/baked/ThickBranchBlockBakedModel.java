@@ -32,7 +32,6 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +39,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+//? if >= 1.19.4 {
+/*import org.joml.Vector3f;
+*///? } else {
+import com.mojang.math.Vector3f;
+//? }
 
 public class ThickBranchBlockBakedModel extends BasicBranchBlockBakedModel {
 

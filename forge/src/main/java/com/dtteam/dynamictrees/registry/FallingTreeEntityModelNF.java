@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -24,6 +23,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 public class FallingTreeEntityModelNF extends FallingTreeEntityModel {
 
@@ -50,7 +55,8 @@ public class FallingTreeEntityModelNF extends FallingTreeEntityModel {
                 //Draw the rooty block if it is set to fall too
                 boolean rootyBlockAdded = false;
                 if (destructionData.soilState != null){
-                    SoilBlock soilBlock = TreeHelper.getRooty(BuiltInRegistries.BLOCK.get(destructionData.soilState.getLeft()));
+                    //~ if < 1.19.4 'BuiltInRegistries.BLOCK.get' -> 'ForgeRegistries.BLOCKS.getValue'
+                    SoilBlock soilBlock = TreeHelper.getRooty(ForgeRegistries.BLOCKS.getValue(destructionData.soilState.getLeft()));
                     if (soilBlock != null) {
                         BlockState soilState = soilBlock.GetStateFromIndex(destructionData.soilState.getRight());
                         BakedModel rootyModel = dispatcher.getBlockModel(soilState);

@@ -5,10 +5,15 @@ import com.dtteam.dynamictrees.block.soil.SoilProperties;
 import com.dtteam.dynamictrees.data.DTDataProvider;
 import com.dtteam.dynamictrees.data.Generator;
 import com.dtteam.dynamictrees.data.provider.DTBlockStateProvider;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Objects;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -23,7 +28,8 @@ public class SoilStateGenerator implements Generator<DTDataProvider.BlockState, 
         if (prov instanceof DTBlockStateProvider provider){
             provider.getMultipartBuilder(dependencies.get(SOIL))
                     .part().modelFile(provider.models().getExistingFile(
-                            input.getModelPath(SoilProperties.SOIL_BLOCK).orElse(provider.block(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_SOIL)))))
+                            //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+                            input.getModelPath(SoilProperties.SOIL_BLOCK).orElse(provider.block(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_SOIL)))))
                     )).addModel().end()
                     .part().modelFile(provider.models().getExistingFile(input.getRootsOverlayModelLocation())).addModel().end();
         }

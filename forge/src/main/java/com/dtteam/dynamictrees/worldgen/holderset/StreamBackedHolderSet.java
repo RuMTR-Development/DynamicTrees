@@ -54,8 +54,10 @@ public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
         return this.stream().anyMatch(h -> Objects.equals(h, holder));
     }
 
-    @Override
+    //? if >= 1.19.4 {
+    /*@Override
     public Optional<TagKey<T>> unwrapKey() {
         return Optional.empty();
     }
+    *///? }
 }

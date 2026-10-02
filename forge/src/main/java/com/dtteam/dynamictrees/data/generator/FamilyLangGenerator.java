@@ -5,13 +5,18 @@ import com.dtteam.dynamictrees.data.Generator;
 import com.dtteam.dynamictrees.data.provider.DTLangProvider;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.family.UndergroundRootsFamily;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+//? if >= 1.19.4 {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///? } else {
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 public class FamilyLangGenerator implements Generator<DTDataProvider.Language, Family> {
     DTLangProvider provider;
@@ -41,7 +46,8 @@ public class FamilyLangGenerator implements Generator<DTDataProvider.Language, F
     }
 
     protected void blockLang(Block entry, Optional<String> blah) {
-        provider.addBlock(() -> entry, blah.orElse(checkReplace(BuiltInRegistries.BLOCK.getKey(entry).getPath())));
+        //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
+        provider.addBlock(() -> entry, blah.orElse(checkReplace(ForgeRegistries.BLOCKS.getKey(entry).getPath())));
     }
 
     protected String checkReplace(String path) {

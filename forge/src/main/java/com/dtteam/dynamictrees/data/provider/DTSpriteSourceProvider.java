@@ -1,4 +1,5 @@
-package com.dtteam.dynamictrees.data.provider;
+//? if >= 1.19.4 {
+/*package com.dtteam.dynamictrees.data.provider;
 
 import com.dtteam.dynamictrees.api.registry.Registry;
 import com.dtteam.dynamictrees.client.ThickBranchRingsSource;
@@ -47,3 +48,4 @@ public class DTSpriteSourceProvider extends SpriteSourceProvider {
                 atlasList.addSource(new ThickBranchRingsSource(location)));
     }
 }
+*///? }
