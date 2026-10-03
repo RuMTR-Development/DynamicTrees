@@ -6,7 +6,6 @@ import com.dtteam.dynamictrees.block.leaves.LeavesProperties;
 import com.dtteam.dynamictrees.block.pod.Pod;
 import com.dtteam.dynamictrees.event.DataGenerationStreamEvent;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -29,8 +28,8 @@ import net.minecraft.data.loot.BlockLoot;
 import net.minecraftforge.registries.ForgeRegistries;
 //? }
 
-//~ if < 1.19.4 'BlockLootSubProvider' -> 'BlockLoot'
-public class DTBlockLoot extends BlockLoot {
+//~ if < 1.19.4 'extends BlockLootSubProvider' -> 'exteds BlockLoot'
+public class DTBlockLootSubProvider extends BlockLoot {
     private final String modId;
     private final ExistingFileHelper fileHelper;
 

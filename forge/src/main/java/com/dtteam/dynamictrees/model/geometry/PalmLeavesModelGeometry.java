@@ -8,15 +8,22 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class PalmLeavesModelGeometry implements IUnbakedGeometry<PalmLeavesModelGeometry> {
+//? if >= 1.19.2 {
+/*import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
+*///? } else {
+import net.minecraftforge.client.model.IModelConfiguration;
+import net.minecraftforge.client.model.geometry.IModelGeometry;
+//? }
+
+//~ if < 1.19.2 'IUnbakedGeometry' -> 'IModelGeometry'
+public class PalmLeavesModelGeometry implements IModelGeometry<PalmLeavesModelGeometry> {
 
     protected final ResourceLocation frondsResLoc;
 
@@ -29,7 +36,8 @@ public class PalmLeavesModelGeometry implements IUnbakedGeometry<PalmLeavesModel
 
     @Override
     public BakedModel bake(
-            IGeometryBakingContext context,
+            //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
+            IModelConfiguration context,
 
             //~ if < 1.19.4 'ModelBaker' -> 'ModelBakery'
             ModelBakery modelBaker,
@@ -46,11 +54,16 @@ public class PalmLeavesModelGeometry implements IUnbakedGeometry<PalmLeavesModel
         };
     }
 
-    //? if < 1.19.4 {
+    //? if < 1.19.2 {
     @Override
+    public Collection<Material> getTextures(IModelConfiguration iModelConfiguration, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
+        return List.of();
+    }
+    //? } else if < 1.19.4 {
+    /*@Override
     public Collection<Material> getMaterials(IGeometryBakingContext iGeometryBakingContext, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
         return List.of();
     }
-    //? }
+    *///? }
 
 }

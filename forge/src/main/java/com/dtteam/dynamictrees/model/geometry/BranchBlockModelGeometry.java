@@ -9,13 +9,20 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;import java.util.HashSet;
 import java.util.List;import java.util.Set;
 import java.util.function.Function;
+
+//? if >= 1.19.2 {
+/*
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
+*///? } else {
+import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.IModelConfiguration;
+//? }
 
 /**
  * Bakes {@link BasicBranchBlockBakedModel} from bark and rings texture locations given by {@link
@@ -27,7 +34,8 @@ import java.util.function.Function;
  * @author Harley O'Connor
  */
 
-public class BranchBlockModelGeometry implements IUnbakedGeometry<BranchBlockModelGeometry> {
+//~ if < 1.19.2 'IUnbakedGeometry' -> 'IModelGeometry'
+public class BranchBlockModelGeometry implements IModelGeometry<BranchBlockModelGeometry> {
     protected final Set<ResourceLocation> textures = new HashSet<>();
     protected final ResourceLocation barkTextureLocation;
     protected final ResourceLocation ringsTextureLocation;
@@ -47,7 +55,8 @@ public class BranchBlockModelGeometry implements IUnbakedGeometry<BranchBlockMod
 
     @Override
     public BakedModel bake(
-            IGeometryBakingContext context,
+            //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
+            IModelConfiguration context,
 
             //~ if < 1.19.4 'ModelBaker' -> 'ModelBakery'
             ModelBakery modelBaker,
@@ -61,18 +70,30 @@ public class BranchBlockModelGeometry implements IUnbakedGeometry<BranchBlockMod
         if (!useThickModel) {
             return new BasicBranchBlockBakedModel(context, this.barkTextureLocation, this.ringsTextureLocation, spriteGetter);
         } else {
-            if (this.thickRingsTextureLocation == null)
-                this.thickRingsTextureLocation = this.ringsTextureLocation.withSuffix("_thick");
+            if (this.thickRingsTextureLocation == null) {
+                //? if >= 1.19.2 {
+                /*this.thickRingsTextureLocation = this.ringsTextureLocation.withSuffix("_thick");
+                *///? } else {
+                this.thickRingsTextureLocation = new ResourceLocation(this.ringsTextureLocation.getNamespace(), this.ringsTextureLocation.getPath() + "_thick");
+                //? }
+            }
+
             return new ThickBranchBlockBakedModel(context, this.barkTextureLocation, this.ringsTextureLocation, this.thickRingsTextureLocation, spriteGetter);
         }
     }
 
-    //? if < 1.19.4 {
+    //? if < 1.19.2 {
     @Override
+    public Collection<Material> getTextures(IModelConfiguration iModelConfiguration, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
+        return List.of();
+    }
+
+    //? } else if < 1.19.4 {
+    /*@Override
     public Collection<Material> getMaterials(IGeometryBakingContext iGeometryBakingContext, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
         return List.of();
     }
-    //? }
+    *///? }
 
     private Family setFamily(String modelName) {
         if (this.family == null) {

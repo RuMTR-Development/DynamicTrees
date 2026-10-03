@@ -26,10 +26,13 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;import net.minecraftforge.common.data.ExistingFileHelper;import net.minecraftforge.common.data.JsonCodecProvider;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.util.HashMap;import java.util.List;
-import java.util.Map;import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 //? if >= 1.19.4 {
@@ -38,6 +41,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.worldgen.BootstapContext;
+*///? }
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.common.data.JsonCodecProvider;
 *///? }
 
 public class DTDatapackBuiltinEntriesProvider
@@ -85,25 +92,38 @@ public class DTDatapackBuiltinEntriesProvider
         bootstrapConfiguredFeatures((key, value) -> configuredFeatures.put(key.location(), value));
         bootstrapPlacedFeatures((key, value) -> placedFeatures.put(key.location(), value));
 
-        generator.addProvider(run, JsonCodecProvider.forDatapackRegistry(
-                generator,
-                fileHelper,
-                modId,
-                RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
-                Registry.TEMPLATE_POOL_REGISTRY,
-                templatePools
+        //? if < 1.19.2 {
+        if (!run) {
+            return;
+        }
+        //? }
+
+        //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
+        generator.addProvider(
+                //? if >= 1.19.2
+                //run,
+
+                CustomJsonCodecProvider.forDatapackRegistry(
+                    generator,
+                    fileHelper,
+                    modId,
+                    RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                    Registry.TEMPLATE_POOL_REGISTRY,
+                    templatePools
+                )
+        );
+
+        //? if >= 1.19.2 {
+        /*generator.addProvider(run, CustomJsonCodecProvider.forDatapackRegistry(
+                    generator,
+                    fileHelper,
+                    modId,
+                    RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                    Registry.CONFIGURED_FEATURE_REGISTRY,
+                    configuredFeatures
         ));
 
-        generator.addProvider(run, JsonCodecProvider.forDatapackRegistry(
-                generator,
-                fileHelper,
-                modId,
-                RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
-                Registry.CONFIGURED_FEATURE_REGISTRY,
-                configuredFeatures
-        ));
-
-        generator.addProvider(run, JsonCodecProvider.forDatapackRegistry(
+        generator.addProvider(run, CustomJsonCodecProvider.forDatapackRegistry(
                 generator,
                 fileHelper,
                 modId,
@@ -111,6 +131,7 @@ public class DTDatapackBuiltinEntriesProvider
                 Registry.PLACED_FEATURE_REGISTRY,
                 placedFeatures
         ));
+        *///? }
     }
     //? }
 
@@ -156,9 +177,7 @@ public class DTDatapackBuiltinEntriesProvider
         //? if >= 1.19.4 {
         /*var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         *///? } else {
-        var configuredFeatures = new HolderLookup.RegistryLookup<>(
-                RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY)
-        );
+        var configuredFeatures = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
 
         //? }
 
@@ -166,7 +185,7 @@ public class DTDatapackBuiltinEntriesProvider
                 //? if >= 1.19.4 {
                 /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
                 *///? } else {
-                configuredFeatures.get(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE).orElseThrow(),
+                configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
                 //? }
 
                 List.of()
@@ -177,7 +196,7 @@ public class DTDatapackBuiltinEntriesProvider
                         //? if >= 1.19.4 {
                         /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
                          *///? } else {
-                        configuredFeatures.get(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE).orElseThrow(),
+                        configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
                         //? }
 
                         List.of(
@@ -199,9 +218,7 @@ public class DTDatapackBuiltinEntriesProvider
                     //? if >= 1.19.4 {
                     /*var configuredFeatures = vanillaProvider.lookup(Registries.CONFIGURED_FEATURE).orElseThrow();
                     *///? } else {
-                    var configuredFeatures = new HolderLookup.RegistryLookup<>(
-                            RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY)
-                    );
+                    var configuredFeatures = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
                     //? }
 
                     List.of(NetherFeatures.CRIMSON_FOREST_VEGETATION, NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL,
@@ -223,13 +240,21 @@ public class DTDatapackBuiltinEntriesProvider
         );
     }
 
-    //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
-    private static void replaceFeature(CustomBootstrapContext<ConfiguredFeature<?, ?>> context, HolderLookup.RegistryLookup<ConfiguredFeature<?, ?>> configuredFeatures,
-                                       ResourceKey<ConfiguredFeature<?, ?>> key, Block crimsonSapling, Block warpedSapling) {
+    private static void replaceFeature(
+            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            CustomBootstrapContext<ConfiguredFeature<?, ?>> context,
+
+            //~ if < 1.19.4 'HolderLookup.RegistryLookup' -> 'Registry'
+            Registry<ConfiguredFeature<?, ?>> configuredFeatures,
+
+            ResourceKey<ConfiguredFeature<?, ?>> key,
+            Block crimsonSapling,
+            Block warpedSapling
+    ) {
         //? if >= 1.19.4 {
         /*var feature = configuredFeatures.getOrThrow(key).value();
         *///? } else {
-        var feature = configuredFeatures.get(key).orElseThrow().get();
+        var feature = configuredFeatures.get(key);
         //? }
 
         var config = (NetherForestVegetationConfig) feature.config();

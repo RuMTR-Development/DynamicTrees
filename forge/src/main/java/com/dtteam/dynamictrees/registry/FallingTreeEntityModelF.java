@@ -18,7 +18,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -30,9 +29,15 @@ import java.util.List;
 import net.minecraftforge.registries.ForgeRegistries;
 //? }
 
-public class FallingTreeEntityModelNF extends FallingTreeEntityModel {
+//? if >= 1.19.2 {
+/*import net.minecraftforge.client.model.data.ModelData;
+*///? } else {
+import net.minecraftforge.client.model.data.EmptyModelData;
+//? }
 
-    public FallingTreeEntityModelNF(FallingTreeEntity entity) {
+public class FallingTreeEntityModelF extends FallingTreeEntityModel {
+
+    public FallingTreeEntityModelF(FallingTreeEntity entity) {
         super(entity);
     }
 
@@ -61,7 +66,8 @@ public class FallingTreeEntityModelNF extends FallingTreeEntityModel {
                         BlockState soilState = soilBlock.GetStateFromIndex(destructionData.soilState.getRight());
                         BakedModel rootyModel = dispatcher.getBlockModel(soilState);
                         BlockPos cutOffset = destructionData.getRelativeCutPos();
-                        treeQuads.addAll(toTreeQuadData(QuadManipulator.getQuads(rootyModel, soilState, new Vec3(cutOffset.getX(), cutOffset.getY()-1, cutOffset.getZ()), entity.level.getRandom(), ModelData.EMPTY),
+                        //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE'
+                        treeQuads.addAll(toTreeQuadData(QuadManipulator.getQuads(rootyModel, soilState, new Vec3(cutOffset.getX(), cutOffset.getY()-1, cutOffset.getZ()), entity.level.getRandom(), EmptyModelData.INSTANCE),
                                 destructionData.species.getFamily().getRootColor(soilState, soilBlock.getColorFromBark()),
                                 soilState));
                         rootyBlockAdded = true;
@@ -103,7 +109,8 @@ public class FallingTreeEntityModelNF extends FallingTreeEntityModel {
                 //Draw the leaves
                 for (Pair<BlockPos, BlockState> leafLoc : destructionData.getAllLeavesWithPos()) {
                     BlockState leafState = leafLoc.getValue();
-                    List<BakedQuad> bakedQuads = QuadManipulator.getQuads(dispatcher.getBlockModel(leafState), leafState, new Vec3(leafLoc.getKey().getX(), leafLoc.getKey().getY(), leafLoc.getKey().getZ()), entity.level.getRandom(), ModelData.EMPTY);
+                    //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE'
+                    List<BakedQuad> bakedQuads = QuadManipulator.getQuads(dispatcher.getBlockModel(leafState), leafState, new Vec3(leafLoc.getKey().getX(), leafLoc.getKey().getY(), leafLoc.getKey().getZ()), entity.level.getRandom(), EmptyModelData.INSTANCE);
 
                     treeQuads.addAll(toTreeQuadData(bakedQuads, species.leafColorMultiplier(entity.level,
                             cutPos.offset(leafLoc.getKey())), leafState));

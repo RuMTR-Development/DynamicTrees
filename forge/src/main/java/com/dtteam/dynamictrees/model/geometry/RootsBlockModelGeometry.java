@@ -8,10 +8,15 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+*///? } else {
+import net.minecraftforge.client.model.IModelConfiguration;
+//? }
 
 /**
  * Bakes {@link SurfaceRootBlockBakedModel} from bark texture location given by {@link SurfaceRootBlockModelLoader}.
@@ -26,7 +31,8 @@ public class RootsBlockModelGeometry extends BranchBlockModelGeometry {
 
     @Override
     public BakedModel bake(
-            IGeometryBakingContext context,
+            //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
+            IModelConfiguration context,
 
             //~ if < 1.19.4 'ModelBaker' -> 'ModelBakery'
             ModelBakery modelBaker,

@@ -4,20 +4,19 @@ import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.api.registry.RegistryHandler;
 import com.dtteam.dynamictrees.worldgen.biomemodifier.AddDynamicTreesBiomeModifier;
 import com.dtteam.dynamictrees.worldgen.biomemodifier.RunFeatureCancellersBiomeModifier;
-import com.dtteam.dynamictrees.worldgen.holderset.IncludesExcludesHolderSet;
-import com.dtteam.dynamictrees.worldgen.holderset.NameRegexMatchHolderSet;
+import com.dtteam.dynamictrees.worldgen.feature.CaveRootedTreePlacement;import com.dtteam.dynamictrees.worldgen.holderset.NameRegexMatchHolderSet;
 import com.dtteam.dynamictrees.worldgen.holderset.TagsRegexMatchHolderSet;
 import com.google.common.base.Suppliers;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.Direction;import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
+import net.minecraft.data.BuiltinRegistries;import net.minecraft.data.worldgen.placement.PlacementUtils;import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.util.valueproviders.ConstantInt;import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -26,11 +25,10 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.storage.loot.Serializer;
@@ -41,10 +39,8 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.holdersets.HolderSetType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +61,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 //? if >= 1.19.2 {
 /*import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.registries.holdersets.HolderSetType;
+import com.dtteam.dynamictrees.worldgen.holderset.IncludesExcludesHolderSet;
 *///? } else {
 import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.ArgumentTypes;import net.minecraftforge.registries.RegistryObject;
 //? }
 
 public class ForgeRegistryLoader extends RegistryLoader {
-    //~ if < 1.19.2 'ENTITY_TYPES' -> 'ENTITIES'
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, DynamicTrees.MOD_ID);
+    //~ if < 1.19.2 'ForgeRegistries.ENTITY_TYPES' -> 'ForgeRegistries.ENTITIES'
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, DynamicTrees.MOD_ID);
 
     //? if >= 1.19.4 {
@@ -98,8 +97,8 @@ public class ForgeRegistryLoader extends RegistryLoader {
     public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTION_TYPES = DeferredRegister.create(Registry.LOOT_FUNCTION_TYPE.key(), DynamicTrees.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, DynamicTrees.MOD_ID);
 
-    //~ if < 1.19.2 'BLOCK_ENTITY_TYPES' -> 'BLOCK_ENTITIES'
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, DynamicTrees.MOD_ID);
+    //~ if < 1.19.2 'ForgeRegistries.BLOCK_ENTITY_TYPES' -> 'ForgeRegistries.BLOCK_ENTITIES'
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, DynamicTrees.MOD_ID);
 
     //? if >= 1.19.2
     //public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, DynamicTrees.MOD_ID);
@@ -118,12 +117,16 @@ public class ForgeRegistryLoader extends RegistryLoader {
         LOOT_FUNCTION_TYPES.register(modBus);
         RECIPE_SERIALIZER.register(modBus);
 
-        //? if >= 1.19.2
-        //ARGUMENT_TYPES.register(modBus);
+        //? if >= 1.19.2 {
+        /*ARGUMENT_TYPES.register(modBus);
 
         //MinecraftForge
         BIOME_MODIFIER_SERIALIZERS.register(modBus);
         HOLDER_SET_TYPES.register(modBus);
+        *///? } else {
+        CONFIGURED_FEATURES.register(modBus);
+        PLACED_FEATURES.register(modBus);
+        //? }
 
         DTRegistries.setup();
     }
@@ -268,7 +271,8 @@ public class ForgeRegistryLoader extends RegistryLoader {
     // NEO FORGE ONLY
     ///////////////////////////////////////////
 
-    public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, DynamicTrees.MOD_ID);
+    //? if >= 1.19.2 {
+    /*public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, DynamicTrees.MOD_ID);
     public static final DeferredRegister<HolderSetType> HOLDER_SET_TYPES = DeferredRegister.create(ForgeRegistries.Keys.HOLDER_SET_TYPES, DynamicTrees.MOD_ID);
 
     public static final Supplier<Codec<AddDynamicTreesBiomeModifier>> ADD_DYNAMIC_TREES_BIOME_MODIFIER =
@@ -278,5 +282,21 @@ public class ForgeRegistryLoader extends RegistryLoader {
     public static final Supplier<HolderSetType> INCLUDES_EXCLUDES_HOLDER_SET_TYPE = HOLDER_SET_TYPES.register("includes_excludes", IncludesExcludesHolderSet.Type::new);
     public static final Supplier<HolderSetType> NAME_REGEX_MATCH_HOLDER_SET_TYPE = HOLDER_SET_TYPES.register("name_regex_match", NameRegexMatchHolderSet.Type::new);
     public static final Supplier<HolderSetType> TAGS_REGEX_MATCH_HOLDER_SET_TYPE = HOLDER_SET_TYPES.register("tags_regex_match", TagsRegexMatchHolderSet.Type::new);
+    *///? } else {
+    public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = DeferredRegister.create(Registry.CONFIGURED_FEATURE_REGISTRY, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, DynamicTrees.MOD_ID);
+
+    public static final RegistryObject<ConfiguredFeature<NoneFeatureConfiguration, ?>> DYNAMIC_TREE_CONFIGURED_FEATURE = CONFIGURED_FEATURES.register("dynamic_tree",
+            () -> new ConfiguredFeature<>(DTRegistries.DYNAMIC_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+
+    public static final RegistryObject<ConfiguredFeature<NoneFeatureConfiguration, ?>> CAVE_SURFACE_TREE_CONFIGURED_FEATURE = CONFIGURED_FEATURES.register("cave_rooted_tree",
+            () -> new ConfiguredFeature<>(DTRegistries.CAVE_ROOTED_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+
+    public static final RegistryObject<PlacedFeature> DYNAMIC_TREE_PLACED_FEATURE = PLACED_FEATURES.register("dynamic_tree_placed_feature",
+            () -> PlacementUtils.inlinePlaced(DYNAMIC_TREE_CONFIGURED_FEATURE.getHolder().get()).value());
+
+    public static final RegistryObject<PlacedFeature> CAVE_SURFACE_TREE_PLACED_FEATURE = PLACED_FEATURES.register("cave_rooted_tree",
+            () -> PlacementUtils.inlinePlaced(CAVE_SURFACE_TREE_CONFIGURED_FEATURE.getHolder().get(), CaveRootedTreePlacement.INSTANCE, PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()).value());
+    //? }
 
 }

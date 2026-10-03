@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-
 public class LargePalmLeavesBakedModel extends PalmLeavesBakedModel {
 
     public static List<LargePalmLeavesBakedModel> INSTANCES = new ArrayList<>();
@@ -137,7 +136,10 @@ public class LargePalmLeavesBakedModel extends PalmLeavesBakedModel {
                     );
 
 
-                    bakedFronds[surr.ordinal()] = builder.build(renderGroup);
+                    bakedFronds[surr.ordinal()] = builder.build(
+                            //? if >= 1.19.2
+                            //renderGroup
+                    );
                 }
             }
         }

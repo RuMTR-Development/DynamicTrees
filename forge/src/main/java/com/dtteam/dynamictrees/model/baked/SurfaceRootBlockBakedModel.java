@@ -15,15 +15,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.model.IDynamicBakedModel;
 import net.minecraftforge.client.model.IModelBuilder;
-import net.minecraftforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -33,6 +31,14 @@ import java.util.function.Function;
 /*import org.joml.Vector3f;
 *///? } else {
 import com.mojang.math.Vector3f;
+//? }
+
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
+import net.minecraftforge.client.model.IDynamicBakedModel;
+import net.minecraftforge.client.model.data.ModelData;
+*///? } else {
+import net.minecraftforge.client.model.data.IDynamicBakedModel;
 //? }
 
 public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
@@ -113,7 +119,8 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), this.barkTexture, face, BlockModelRotation.X0_Y0));
+            //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), this.barkTexture, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -138,7 +145,8 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
                 Vector3f[] limits = ModelHelper.AABBLimits(pieceBoundary);
 
                 BlockElement part = new BlockElement(limits[0], limits[1], mapFacesIn, null, true);
-                builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, part.faces.get(face), this.barkTexture, face, BlockModelRotation.X0_Y0));
+                //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+                builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, part.faces.get(face), this.barkTexture, face, BlockModelRotation.X0_Y0));
             }
         }
 
@@ -170,7 +178,8 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
+            //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -178,7 +187,19 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
     @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+
+            //~ if < 1.19.2 'RandomSource' -> 'Random'
+            @NotNull Random rand,
+
+            //~ if < 1.19.2 'ModelData' -> 'IModelData'
+            @NotNull IModelData extraData
+
+            //? if >= 1.19.2
+            //, @Nullable RenderType renderType
+    ) {
         if (side != null || state == null) {
             return Collections.emptyList();
         }
@@ -189,7 +210,8 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
         int[] connections = new int[]{0, 0, 0, 0};
         RootConnections.ConnectionLevel[] connectionLevels = RootConnections.PLACEHOLDER_CONNECTION_LEVELS.clone();
-        RootConnections connectionData = extraData.get(ModelHelper.ROOT_CONNECTIONS_PROPERTY);
+        //~ if < 1.19.2 '.get' -> '.getData'
+        RootConnections connectionData = extraData.getData(ModelHelper.ROOT_CONNECTIONS_PROPERTY);
         if (connectionData != null) {
             connections = connectionData.getAllRadii();
             connectionLevels = connectionData.getConnectionLevels();
@@ -211,7 +233,15 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
         for (Direction face : Direction.values()) {
             //Get quads for core model
             if (isGrounded) {
-                quads.addAll(cores[coreDir][coreRadius - 1].getQuads(state, face, rand, extraData, renderType));
+                quads.addAll(cores[coreDir][coreRadius - 1].getQuads(
+                        state,
+                        face,
+                        rand,
+                        extraData
+
+                        //? if >= 1.19.2
+                        //, renderType
+                ));
             }
 
             //Get quads for sleeves models
@@ -222,10 +252,26 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
                     //If the connection side matches the quadpull side then cull the sleeve face.  Don't cull radius 1 connections for leaves(which are partly transparent).
                     if (connRadius > 0) {//  && (connRadius == 1 || side != connDir)) {
                         if (isGrounded) {
-                            quads.addAll(sleeves[idx][connRadius - 1].getQuads(state, face, rand, extraData, renderType));
+                            quads.addAll(sleeves[idx][connRadius - 1].getQuads(
+                                    state,
+                                    face,
+                                    rand,
+                                    extraData
+
+                                    //? if >= 1.19.2
+                                    //, renderType
+                            ));
                         }
                         if (connectionLevels[idx] == RootConnections.ConnectionLevel.HIGH) {
-                            quads.addAll(verts[idx][connRadius - 1].getQuads(state, face, rand, extraData, renderType));
+                            quads.addAll(verts[idx][connRadius - 1].getQuads(
+                                    state,
+                                    face,
+                                    rand,
+                                    extraData
+
+                                    //? if >= 1.19.2
+                                    //, renderType
+                            ));
                         }
                     }
                 }
@@ -237,11 +283,14 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
     @NotNull
     @Override
-    public ModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData tileData) {
+    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    public IModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull IModelData tileData) {
         RootConnections rootConnections = state.getBlock() instanceof SurfaceRootBlock surfaceRootBlock
                 ? new RootConnections(surfaceRootBlock.getConnectionData(world, pos))
                 : new RootConnections();
-        return ModelData.builder().with(ModelHelper.ROOT_CONNECTIONS_PROPERTY, rootConnections).build();
+        //~ if < 1.19.2 'ModelData.builder' -> 'new ModelDataMap.Builder'
+        //~ if < 1.19.2 '.with' -> '.withInitial'
+        return new ModelDataMap.Builder().withInitial(ModelHelper.ROOT_CONNECTIONS_PROPERTY, rootConnections).build();
     }
 
     /**

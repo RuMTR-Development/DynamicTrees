@@ -28,11 +28,10 @@ import com.dtteam.dynamictrees.tree.family.UndergroundRootsFamily;
 import com.dtteam.dynamictrees.tree.species.*;
 import com.dtteam.dynamictrees.treepack.Resources;
 import com.dtteam.dynamictrees.worldgen.featurecancellation.FeatureCancellers;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.world.level.block.Block;import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegisterEvent;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -44,6 +43,10 @@ import net.minecraftforge.event.CreativeModeTabEvent;
 *///? } else {
 import net.minecraftforge.registries.ForgeRegistries;
 //? }
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.registries.RegisterEvent;
+*///? }
 
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonModEventHandler {
@@ -132,11 +135,15 @@ public class CommonModEventHandler {
     }
 
     @SubscribeEvent
-    public static void loadResources(RegisterEvent event) {
+    //? if >= 1.19.2 {
+    /*public static void loadResources(RegisterEvent event) {
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK.key()' -> 'net.minecraft.core.Registry.BLOCK_REGISTRY'
         if (event.getRegistryKey() != net.minecraft.core.Registry.BLOCK_REGISTRY) {
             return;
         }
+    *///? } else {
+    public static void loadResources(net.minecraftforge.event.RegistryEvent.Register<Block> event) {
+    //? }
         // Register any registry entries from Json files.
         Resources.MANAGER.load();
         // Lock all the registries.

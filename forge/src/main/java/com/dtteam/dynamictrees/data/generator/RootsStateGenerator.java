@@ -48,7 +48,12 @@ public class RootsStateGenerator implements Generator<DTDataProvider.BlockState,
 
             provider.getVariantBuilder(root)
                     .partialState().with(BasicRootsBlock.LAYER, BasicRootsBlock.Layer.EXPOSED)
-                    .modelForState().modelFile(builderExposed.end().renderType("cutout_mipped")).addModel()
+                    .modelForState().modelFile(
+                            builderExposed.end()
+
+                            //? if >= 1.19.2
+                            //.renderType("cutout_mipped")
+                    ).addModel()
                     .partialState().with(BasicRootsBlock.LAYER, BasicRootsBlock.Layer.FILLED)
                     .modelForState().modelFile(builderFilled.end()).addModel()
                     .partialState().with(BasicRootsBlock.LAYER, BasicRootsBlock.Layer.COVERED)

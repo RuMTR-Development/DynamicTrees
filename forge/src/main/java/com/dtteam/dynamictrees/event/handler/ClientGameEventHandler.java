@@ -33,7 +33,11 @@ public class ClientGameEventHandler {
             return;
         }
 
-        Player player = event.getEntity();
+        //? if >= 1.19.2 {
+        /*Player player = event.getEntity();
+        *///? } else {
+        Player player = event.getPlayer();
+        //? }
 
         if (player == null) {
             return;

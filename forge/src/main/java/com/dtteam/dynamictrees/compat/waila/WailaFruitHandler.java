@@ -6,14 +6,24 @@ import com.dtteam.dynamictrees.block.fruit.FruitBlock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.config.IPluginConfig;
 
 import java.util.Arrays;
 
-public class WailaFruitHandler implements IBlockComponentProvider {
+//? if >= 1.19.2 {
+/*import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+*///? } else {
+import mcp.mobius.waila.api.BlockAccessor;
+import mcp.mobius.waila.api.IComponentProvider;
+import mcp.mobius.waila.api.ITooltip;
+import mcp.mobius.waila.api.config.IPluginConfig;
+import net.minecraft.network.chat.TranslatableComponent;
+//? }
+
+//~ if < 1.19.2 'IBlockComponentProvider' -> 'IComponentProvider'
+public class WailaFruitHandler implements IComponentProvider {
 
     public static final ResourceLocation FRUIT_UID = DynamicTrees.location("fruit");
 
@@ -23,16 +33,20 @@ public class WailaFruitHandler implements IBlockComponentProvider {
             /* Used to switch off component for fruit with pre-made ages, since Jade already supports these. */
             if (Arrays.stream(DynamicBlockProperties.defaultAges).anyMatch(a -> fruitBlock.getMaxAge() == a)) return;
             float ageAsPercentage = fruitBlock.getAgeAsPercentage(accessor.getBlockState());
-            tooltip.add(Component.translatable(
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
+            tooltip.add(new TranslatableComponent(
                     "tooltip.jade.crop_growth",
                     ageAsPercentage < 100F ? String.format("%.0f%%", ageAsPercentage) :
-                            Component.translatable("tooltip.jade.crop_mature").withStyle(ChatFormatting.GREEN)
+                            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
+                            new TranslatableComponent("tooltip.jade.crop_mature").withStyle(ChatFormatting.GREEN)
             ));
         }
     }
 
-    @Override
+    //? if >= 1.19.2 {
+    /*@Override
     public ResourceLocation getUid() {
         return FRUIT_UID;
     }
+    *///? }
 }

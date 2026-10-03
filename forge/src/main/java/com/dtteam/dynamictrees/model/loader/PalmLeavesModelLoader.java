@@ -6,12 +6,18 @@ import com.google.gson.JsonObject;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+//? if >= 1.19.2 {
+/*import net.minecraftforge.client.model.geometry.IGeometryLoader;
+ *///? } else {
+import net.minecraftforge.client.model.IModelLoader;
+//? }
 
-public class PalmLeavesModelLoader implements IGeometryLoader<PalmLeavesModelGeometry> {
+//~ if < 1.19.2 'IGeometryLoader' -> 'IModelLoader'
+public class PalmLeavesModelLoader implements IModelLoader<PalmLeavesModelGeometry> {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -25,7 +31,13 @@ public class PalmLeavesModelLoader implements IGeometryLoader<PalmLeavesModelGeo
     }
 
     @Override
-    public PalmLeavesModelGeometry read(JsonObject modelObject, JsonDeserializationContext deserializationContext) {
+    public PalmLeavesModelGeometry read(
+            //? if >= 1.19.2 {
+            /*JsonObject modelObject, JsonDeserializationContext deserializationContext
+             *///? } else {
+            JsonDeserializationContext deserializationContext, JsonObject modelObject
+            //? }
+    ) {
         final JsonObject textures = this.getTexturesObject(modelObject);
         return new PalmLeavesModelGeometry(getTextureLocation(textures, FROND), frondType);
     }
@@ -75,4 +87,10 @@ public class PalmLeavesModelLoader implements IGeometryLoader<PalmLeavesModelGeo
         return "Palm Fronds";
     }
 
+    //? if < 1.19.2 {
+    @Override
+    public void onResourceManagerReload(ResourceManager resourceManager) {
+
+    }
+    //? }
 }

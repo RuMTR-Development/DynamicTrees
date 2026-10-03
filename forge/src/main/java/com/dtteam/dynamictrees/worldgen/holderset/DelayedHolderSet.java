@@ -3,20 +3,21 @@ package com.dtteam.dynamictrees.worldgen.holderset;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
+import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 //? if >= 1.19.4 {
 /*import net.minecraft.core.HolderOwner;
+*///? }
+
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
 *///? }
 
 public class DelayedHolderSet<T> implements HolderSet<T> {
@@ -43,7 +44,8 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
     }
 
     @Override
-    public Optional<Holder<T>> getRandomElement(RandomSource random) {
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
+    public Optional<Holder<T>> getRandomElement(Random random) {
         return this.holderSetSupplier.get().getRandomElement(random);
     }
 

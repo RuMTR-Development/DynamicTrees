@@ -77,7 +77,7 @@ public class MediumPalmLeavesBakedModel extends PalmLeavesBakedModel {
                         // Rotate on x axis
                         len = Math.sqrt(y * y + z * z);
                         angle = Math.atan2(y, z);
-                        angle += Math.PI * ((pass == 2 ? 0.28 : pass == 1 ? 0.06 : -0.17) );// + 0.1*rand.nextFloat());
+                        angle += Math.PI * ((pass == 2 ? 0.28 : (pass == 1 ? 0.06 : -0.17)) );// + 0.1*rand.nextFloat());
                         y = (float) (Math.sin(angle) * len);
                         z = (float) (Math.cos(angle) * len);
 
@@ -86,7 +86,7 @@ public class MediumPalmLeavesBakedModel extends PalmLeavesBakedModel {
                         // Rotate on y axis
                         len = Math.sqrt(x * x + z * z);
                         angle = Math.atan2(x, z);
-                        angle += Math.PI * 0.25 * surr.ordinal() + (Math.PI * (pass == 1 ? (0.185 - 0.25) : pass == 2 ? 0.08 : 0.005));
+                        angle += Math.PI * 0.25 * surr.ordinal() + (Math.PI * (pass == 1 ? (0.185 - 0.25) : (pass == 2 ? 0.08 : 0.005)));
                         x = (float) (Math.sin(angle) * len);
                         z = (float) (Math.cos(angle) * len);
 
@@ -94,7 +94,7 @@ public class MediumPalmLeavesBakedModel extends PalmLeavesBakedModel {
                         // Move to center of block
                         x += 0.5f;
                         z += 0.5f;
-                        y += pass == 2 ? -0.125 : pass == 0 ? 0.125 : 0;
+                        y += pass == 2 ? -0.125 : (pass == 0 ? 0.125 : 0);
                         //y -= 0.25f;
 
 
@@ -127,7 +127,10 @@ public class MediumPalmLeavesBakedModel extends PalmLeavesBakedModel {
                     );
 
 
-                    bakedFronds[surr.ordinal()] = builder.build(renderGroup);
+                    bakedFronds[surr.ordinal()] = builder.build(
+                            //? if >= 1.19.2
+                            //renderGroup
+                    );
 
                 }
             }

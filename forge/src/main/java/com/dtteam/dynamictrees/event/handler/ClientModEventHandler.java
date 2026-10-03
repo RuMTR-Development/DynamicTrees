@@ -26,22 +26,31 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Random;import java.util.function.Function;
 import java.util.stream.Collectors;
+
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.model.data.ModelData;
+*///? } else {
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+//? }
 
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientModEventHandler {
@@ -72,10 +81,38 @@ public class ClientModEventHandler {
     
     private static int getFaceColor(BlockState state, Direction face, Function<ResourceLocation, TextureAtlasSprite> textureGetter) {
         final BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
-        List<BakedQuad> quads = model.getQuads(state, face, RandomSource.create(), ModelData.EMPTY, null);
+        List<BakedQuad> quads = model.getQuads(
+                state,
+                face,
+
+                //? if >= 1.19.2 {
+                /*RandomSource.create(),
+                ModelData.EMPTY
+                *///? } else {
+                new Random(),
+                EmptyModelData.INSTANCE
+                //? }
+
+                //? if >= 1.19.2
+                //, null
+        );
         if (quads.isEmpty()) // If the quad list is empty, means there is no face on that side, so we try with null.
         {
-            quads = model.getQuads(state, null, RandomSource.create(), ModelData.EMPTY, null);
+            quads = model.getQuads(
+                    state,
+                    null,
+
+                    //? if >= 1.19.2 {
+                    /*RandomSource.create(),
+                    ModelData.EMPTY
+                    *///? } else {
+                    new Random(),
+                    EmptyModelData.INSTANCE
+                    //? }
+
+                    //? if >= 1.19.2
+                    //, null
+            );
         }
         if (quads.isEmpty()) { // If null still returns empty, there is nothing we can do so we just warn and exit.
             DynamicTrees.LOG.warn("Could not get color of {} side for {}! Branch needs to be handled manually!", face, state.getBlock());
@@ -91,25 +128,27 @@ public class ClientModEventHandler {
     }
 
     @SubscribeEvent
-    
-    public static void registerColorResolversEvent(RegisterColorHandlersEvent.ColorResolvers event){
+    //~ if < 1.19.2 'RegisterColorHandlersEvent.ColorResolvers' -> 'ColorHandlerEvent.Block'
+    public static void registerColorResolversEvent(ColorHandlerEvent.Block event){
         BlockColorMultipliers.register("birch", (state, level, pos, tintIndex) -> FoliageColor.getBirchColor());
         BlockColorMultipliers.register("spruce", (state, level, pos, tintIndex) -> FoliageColor.getEvergreenColor());
     }
 
     @SubscribeEvent
-    
-    public static void registerItemColorHandlersEvent(RegisterColorHandlersEvent.Item event){
+    //~ if < 1.19.2 'RegisterColorHandlersEvent.Item' -> 'ColorHandlerEvent.Item'
+    public static void registerItemColorHandlersEvent(ColorHandlerEvent.Item event){
+        //~ if < 1.19.2 'event.register' -> 'event.getItemColors().register' {
         // Register Potion Colorizer
-        event.register(DTRegistries.DENDRO_POTION.get()::getColor, DTRegistries.DENDRO_POTION.get());
+        event.getItemColors().register(DTRegistries.DENDRO_POTION.get()::getColor, DTRegistries.DENDRO_POTION.get());
         // Register Woodland Staff Colorizer
-        event.register(DTRegistries.STAFF.get()::getColor, DTRegistries.STAFF.get());
+        event.getItemColors().register(DTRegistries.STAFF.get()::getColor, DTRegistries.STAFF.get());
+        //~ }
     }
 
     @SubscribeEvent
-    
-
-    public static void registerBlockColorHandlersEvent(RegisterColorHandlersEvent.Block event){
+    //~ if < 1.19.2 'RegisterColorHandlersEvent.Block' -> 'ColorHandlerEvent.Block'
+    public static void registerBlockColorHandlersEvent(ColorHandlerEvent.Block event){
+        //~ if < 1.19.2 'event.register' -> 'event.getBlockColors().register' {
         final int white = 0xFFFFFFFF;
         final int magenta = 0x00FF00FF;//for errors.. because magenta sucks.
 
@@ -117,19 +156,19 @@ public class ClientModEventHandler {
         for (SoilProperties soil : SoilProperties.REGISTRY) {
             if (soil.getBlock().isEmpty()) continue;
             SoilBlock roots = soil.getBlock().get();
-            event.register((state, level, pos, tintIndex) -> roots.colorMultiplier(event.getBlockColors(), state, level, pos, tintIndex), roots);
+            event.getBlockColors().register((state, level, pos, tintIndex) -> roots.colorMultiplier(event.getBlockColors(), state, level, pos, tintIndex), roots);
             setRenderLayerCutoutMipped(roots);
         }
 
         // Register Bonsai Pot Colorizer
-        event.register((state, level, pos, tintIndex) -> isValidPos(level, pos) && (state.getBlock() instanceof PottedSaplingBlock)
+        event.getBlockColors().register((state, level, pos, tintIndex) -> isValidPos(level, pos) && (state.getBlock() instanceof PottedSaplingBlock)
                 ? DTRegistries.POTTED_SAPLING.get().getSpecies(level, pos).saplingColorMultiplier(state, level, pos, tintIndex) : white,
                 DTRegistries.POTTED_SAPLING.get());
 
         // Register Sapling Colorizer
         for (Species species : Species.REGISTRY) {
             if (species.getSapling().isPresent()) {
-                event.register((state, level, pos, tintIndex) ->
+                event.getBlockColors().register((state, level, pos, tintIndex) ->
                                 isValidPos(level, pos) ?
                                         species.saplingColorMultiplier(state, level, pos, tintIndex) : white,
                         species.getSapling().get());
@@ -137,11 +176,12 @@ public class ClientModEventHandler {
         }
         // Register Leaves Colorizers
         for (DynamicLeavesBlock leaves : LeavesProperties.REGISTRY.getAll().stream().filter(lp -> lp.getDynamicLeavesBlock().isPresent()).map(lp -> lp.getDynamicLeavesBlock().get()).collect(Collectors.toSet())) {
-            event.register((state, level, pos, tintIndex) ->
+            event.getBlockColors().register((state, level, pos, tintIndex) ->
                             isValidPos(level, pos) && TreeHelper.isLeaves(state.getBlock()) ?
                                     ((DynamicLeavesBlock) state.getBlock()).getLeavesProperties().foliageColorMultiplier(state, level, pos) : magenta,
                     leaves);
         }
+        //~ }
     }
 
     @SuppressWarnings("deprecation")
@@ -178,26 +218,41 @@ public class ClientModEventHandler {
     public static final ResourceLocation SMALL_PALM_FRONDS = DynamicTrees.location("small_palm_fronds");
 
     @SubscribeEvent
-    public static void onModelRegistryEvent(ModelEvent.RegisterGeometryLoaders event) {
+    //~ if < 1.19.2 'ModelEvent.RegisterGeometryLoaders' -> 'ModelRegistryEvent'
+    public static void onModelRegistryEvent(ModelRegistryEvent event) {
         // Register model loaders for baked models.
-        event.register(BRANCH.getPath(), new BranchBlockModelLoader());
+
+        //? if >= 1.19.2 {
+        /*event.register(BRANCH.getPath(), new BranchBlockModelLoader());
         event.register(SURFACE_ROOT.getPath(), new SurfaceRootBlockModelLoader());
         event.register(THICK_BRANCH.getPath(), new ThickBranchBlockModelLoader());
         event.register(ROOTS.getPath(), new RootsBlockModelLoader());
         event.register(LARGE_PALM_FRONDS.getPath(), new PalmLeavesModelLoader(0));
         event.register(MEDIUM_PALM_FRONDS.getPath(), new PalmLeavesModelLoader(1));
         event.register(SMALL_PALM_FRONDS.getPath(), new PalmLeavesModelLoader(2));
+        *///? } else {
+        ModelLoaderRegistry.registerLoader(BRANCH, new BranchBlockModelLoader());
+        ModelLoaderRegistry.registerLoader(SURFACE_ROOT, new SurfaceRootBlockModelLoader());
+        ModelLoaderRegistry.registerLoader(THICK_BRANCH, new ThickBranchBlockModelLoader());
+        ModelLoaderRegistry.registerLoader(ROOTS, new RootsBlockModelLoader());
+        ModelLoaderRegistry.registerLoader(LARGE_PALM_FRONDS, new PalmLeavesModelLoader(0));
+        ModelLoaderRegistry.registerLoader(MEDIUM_PALM_FRONDS, new PalmLeavesModelLoader(1));
+        ModelLoaderRegistry.registerLoader(SMALL_PALM_FRONDS, new PalmLeavesModelLoader(2));
+        //? }
     }
 
     @SubscribeEvent
     public static void onModelModifyBakingResultResult(
             //? if >= 1.19.4 {
             /*ModelEvent.ModifyBakingResult event
+            *///? } else if >= 1.19.2 {
+            /*ModelEvent.BakingCompleted event
             *///? } else {
-            ModelEvent.BakingCompleted event
+            ModelBakeEvent event
             //? }
     ) {
         // Put bonsai pot baked model into its model location.
-        event.getModels().computeIfPresent(new ModelResourceLocation(DynamicTrees.location("potted_sapling"), ""), (k, val) -> new BakedModelBlockPottedSapling(val));
+        //~ if < 1.19.2 '.getModels' -> '.getModelRegistry'
+        event.getModelRegistry().computeIfPresent(new ModelResourceLocation(DynamicTrees.location("potted_sapling"), ""), (k, val) -> new BakedModelBlockPottedSapling(val));
     }
 }

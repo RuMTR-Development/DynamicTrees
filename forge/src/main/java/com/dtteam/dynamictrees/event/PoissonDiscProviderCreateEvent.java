@@ -2,9 +2,15 @@ package com.dtteam.dynamictrees.event;
 
 import com.dtteam.dynamictrees.api.worldgen.PoissonDiscProvider;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.event.level.LevelEvent;
 
-public class PoissonDiscProviderCreateEvent extends LevelEvent {
+//? if >= 1.19.2 {
+/*import net.minecraftforge.event.level.LevelEvent;
+*///? } else {
+import net.minecraftforge.event.world.WorldEvent;
+//? }
+
+//~ if < 1.19.2 'LevelEvent' -> 'WorldEvent'
+public class PoissonDiscProviderCreateEvent extends WorldEvent {
 
     private PoissonDiscProvider poissonDiscProvider;
 

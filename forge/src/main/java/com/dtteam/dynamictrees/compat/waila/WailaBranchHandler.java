@@ -25,17 +25,30 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import snownee.jade.api.BlockAccessor;
+
+import java.util.LinkedList;
+import java.util.List;
+
+//? if >= 1.19.2 {
+/*import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
 import snownee.jade.impl.ui.ElementHelper;
+*///? } else {
+import mcp.mobius.waila.api.BlockAccessor;
+import mcp.mobius.waila.api.IComponentProvider;
+import mcp.mobius.waila.api.ITooltip;
+import mcp.mobius.waila.api.config.IPluginConfig;
+import mcp.mobius.waila.api.ui.IElement;
+import mcp.mobius.waila.impl.ui.ElementHelper;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+//? }
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class WailaBranchHandler implements IBlockComponentProvider {
+//~ if < 1.19.2 'IBlockComponentProvider' -> 'IComponentProvider'
+public class WailaBranchHandler implements IComponentProvider {
     public static final ResourceLocation ID = DynamicTrees.location("branch");
 
     private BlockPos lastPos = BlockPos.ZERO;
@@ -85,11 +98,13 @@ public class WailaBranchHandler implements IBlockComponentProvider {
 
         if (species != Species.NULL_SPECIES) {
             if (species.showSpeciesOnWaila()) {
-                tooltip.add(Component.translatable("tooltip.dynamictrees.species", species.getTextComponent()));
+                //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
+                tooltip.add(new TranslatableComponent("tooltip.dynamictrees.species", species.getTextComponent()));
             }
 
             if (Minecraft.getInstance().options.advancedItemTooltips) {
-                tooltip.add(Component.literal(ChatFormatting.DARK_GRAY + species.getRegistryName().toString()));
+                //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
+                tooltip.add(new TextComponent(ChatFormatting.DARK_GRAY + species.getRegistryName().toString()));
             }
 
             ItemStack seedStack = species.getSeedStack(1);
@@ -177,8 +192,10 @@ public class WailaBranchHandler implements IBlockComponentProvider {
         }
     }
 
-    @Override
+    //? if < 1.19.2 {
+    /*@Override
     public ResourceLocation getUid() {
         return ID;
     }
+    *///? }
 }

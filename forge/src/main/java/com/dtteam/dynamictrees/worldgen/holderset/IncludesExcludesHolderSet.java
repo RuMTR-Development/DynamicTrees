@@ -1,4 +1,5 @@
-package com.dtteam.dynamictrees.worldgen.holderset;
+//? if >= 1.19.2 {
+/*package com.dtteam.dynamictrees.worldgen.holderset;
 
 import com.dtteam.dynamictrees.registry.ForgeRegistryLoader;
 import com.mojang.serialization.Codec;
@@ -81,3 +82,4 @@ public class IncludesExcludesHolderSet<T> extends CompositeHolderSet<T> {
         return ForgeRegistryLoader.INCLUDES_EXCLUDES_HOLDER_SET_TYPE.get();
     }
 }
+*///? }

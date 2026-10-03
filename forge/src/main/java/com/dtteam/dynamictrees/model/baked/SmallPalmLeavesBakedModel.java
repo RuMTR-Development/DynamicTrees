@@ -119,7 +119,10 @@ public class SmallPalmLeavesBakedModel extends PalmLeavesBakedModel {
                     );
 
 
-                    bakedFronds[surr.ordinal()] = builder.build(renderGroup);
+                    bakedFronds[surr.ordinal()] = builder.build(
+                            //? if >= 1.19.2
+                            //renderGroup
+                    );
                 }
             }
         }

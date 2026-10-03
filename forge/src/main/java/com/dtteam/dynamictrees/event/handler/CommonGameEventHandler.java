@@ -22,10 +22,16 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.level.ChunkDataEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.common.Mod;
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.event.level.ChunkDataEvent;
+import net.minecraftforge.event.level.LevelEvent;
+*///? } else {
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.world.ChunkDataEvent;
+//? }
 
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID)
 public class CommonGameEventHandler {
@@ -35,16 +41,31 @@ public class CommonGameEventHandler {
     ///////////////////////////////////////////
 
     @SubscribeEvent
-    public static void onPreLevelTick(TickEvent.LevelTickEvent event) {
-        if (!event.level.isClientSide()) {
-            FutureBreak.process(event.level);
+    public static void onPreLevelTick(
+            //? if >= 1.19.2 {
+            /*TickEvent.LevelTickEvent event
+            *///? } else {
+            TickEvent.WorldTickEvent event
+            //? }
+    ) {
+        //~ if < 1.19.2 '.level' -> '.world' {
+        if (!event.world.isClientSide()) {
+            FutureBreak.process(event.world);
         }
-        SeasonHelper.updateTick(event.level, event.level.getDayTime());
+        SeasonHelper.updateTick(event.world, event.world.getDayTime());
+        //~ }
     }
 
     @SubscribeEvent
-    public static void onLevelLoad(LevelEvent.Load event) {
-        if (event.getLevel().isClientSide()) {
+    public static void onLevelLoad(
+            //? if >= 1.19.2 {
+            /*LevelEvent.Load event
+            *///? } else {
+            WorldEvent.Load event
+            //? }
+    ) {
+        //~ if < 1.19.2 '.getLevel' -> '.getWorld'
+        if (event.getWorld().isClientSide()) {
             ClientModEventHandler.discoverWoodColors();
         } else {
             BiomeDatabases.populateBlacklistFromConfig();
@@ -55,8 +76,15 @@ public class CommonGameEventHandler {
      * We'll use this instead because at least new chunks aren't created after the world is unloaded. I hope. >:(
      */
     @SubscribeEvent
-    public static void onLevelUnload(LevelEvent.Unload event) {
-        final LevelAccessor level = event.getLevel();
+    public static void onLevelUnload(
+            //? if >= 1.19.2 {
+            /*LevelEvent.Unload event
+             *///? } else {
+            WorldEvent.Unload event
+            //? }
+    ) {
+        //~ if < 1.19.2 '.getLevel' -> '.getWorld'
+        final LevelAccessor level = event.getWorld();
         if (!level.isClientSide()) {
             DynamicTreeFeature.DISC_PROVIDER.unloadWorld((ServerLevel) level);//clears the circles
         }
@@ -66,7 +94,8 @@ public class CommonGameEventHandler {
     public static void onChunkDataLoad(ChunkDataEvent.Load event) {
         if (!DTConfigs.SERVER.worldGen.get()) return;
 
-        final LevelAccessor level = event.getLevel();
+        //~ if < 1.19.2 '.getLevel' -> '.getWorld'
+        final LevelAccessor level = event.getWorld();
 
 		if (level == null || level.isClientSide()) {
 			return;
@@ -83,7 +112,8 @@ public class CommonGameEventHandler {
     public static void onChunkDataSave(ChunkDataEvent.Save event) {
         if (!DTConfigs.SERVER.worldGen.get()) return;
 
-        final LevelContext levelContext = LevelContext.create(event.getLevel());
+        //~ if < 1.19.2 '.getLevel' -> '.getWorld'
+        final LevelContext levelContext = LevelContext.create(event.getWorld());
         final UniversalPoissonDiscProvider discProvider = DynamicTreeFeature.DISC_PROVIDER;
         final ChunkAccess chunk = event.getChunk();
         final ChunkPos chunkPos = chunk.getPos();

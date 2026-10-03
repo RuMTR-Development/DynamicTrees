@@ -17,7 +17,6 @@ import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.treepack.Resources;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -32,6 +31,13 @@ import java.util.Set;
 import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 *///? }
 
+//? if >= 1.19.2 {
+/*import net.minecraftforge.data.event.GatherDataEvent;
+ *///? } else {
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+//? }
+
 @Mod(DynamicTrees.MOD_ID)
 public class DynamicTreesForge {
 
@@ -43,9 +49,14 @@ public class DynamicTreesForge {
         eventBus.addListener(this::onCommonSetup);
         eventBus.addListener(this::gatherData);
 
-        context.registerConfig(ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
-        context.registerConfig(ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
-        context.registerConfig(ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+        //? if < 1.19.2
+        ModLoadingContext configContext = ModLoadingContext.get();
+
+        //~ if < 1.19.2 'context.' -> 'configContext.' {
+        configContext.registerConfig(ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
+        configContext.registerConfig(ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
+        configContext.registerConfig(ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+        //~ }
 
         ForgeRegistryHandler.setup(DynamicTrees.MOD_ID, eventBus);
 

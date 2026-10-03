@@ -3,6 +3,7 @@ package com.dtteam.dynamictrees.registry;
 import com.dtteam.dynamictrees.api.registry.RegistryEntry;
 import com.dtteam.dynamictrees.api.registry.RegistryHandler;
 import com.dtteam.dynamictrees.api.registry.SimpleRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -12,13 +13,18 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegisterEvent;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.registries.RegisterEvent;
+*///? } else {
+import net.minecraftforge.event.RegistryEvent;
+//? }
 
 /**
  * Handles registries for the given mod ID in the constructor. Add-ons should instantiate one of these in their
@@ -31,12 +37,16 @@ import java.util.function.Supplier;
  * @author Harley O'Connor
  */
 public class ForgeRegistryHandler extends RegistryHandler {
-
     private static final Method ADD_ENTRIES_METHOD;
 
     static {
         try {
-            ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegisterEvent.class);
+            //? if >= 1.19.2 {
+            /*ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegisterEvent.class);
+            *///? } else {
+            ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegistryEvent.Register.class);
+            //? }
+
             ADD_ENTRIES_METHOD.setAccessible(true);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -81,12 +91,24 @@ public class ForgeRegistryHandler extends RegistryHandler {
 
     @Nullable
     public Supplier<Block> getBlock(final ResourceLocation registryName) {
-        return ForgeRegistries.BLOCKS.getHolder(registryName).orElse(null);
+        //? if >= 1.19.2 {
+        /*return ForgeRegistries.BLOCKS.getHolder(registryName).orElse(null);
+        *///? } else {
+        return ForgeRegistries.BLOCKS.getHolder(registryName)
+                .map(holder -> (Supplier<Block>) holder::value)
+                .orElse(null);
+        //? }
     }
 
     @Nullable
     public Supplier<Item> getItem(final ResourceLocation registryName) {
-        return ForgeRegistries.ITEMS.getHolder(registryName).orElse(null);
+        //? if >= 1.19.2 {
+        /*return ForgeRegistries.ITEMS.getHolder(registryName).orElse(null);
+         *///? } else {
+        return ForgeRegistries.ITEMS.getHolder(registryName)
+                .map(holder -> (Supplier<Item>) holder::value)
+                .orElse(null);
+        //? }
     }
 
     @SuppressWarnings("unchecked")
@@ -128,7 +150,8 @@ public class ForgeRegistryHandler extends RegistryHandler {
             this.deferredRegister = deferredRegister;
         }
 
-        // LOWEST allows DT to accumulate blocks & items from inside other listeners to this register event if necessary
+        //? if >= 1.19.2 {
+        /*// LOWEST allows DT to accumulate blocks & items from inside other listeners to this register event if necessary
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void onRegister(RegisterEvent event) {
             if (event.getRegistryKey() == this.deferredRegister.getRegistryKey()) {
@@ -139,6 +162,33 @@ public class ForgeRegistryHandler extends RegistryHandler {
                 }
             }
         }
+        *///? } else {
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onRegisterItem(RegistryEvent.Register<Item> event) {
+            if (!event.getRegistry().getRegistryName().equals(this.deferredRegister.getRegistryName())) {
+                return;
+            }
+
+            try {
+                ADD_ENTRIES_METHOD.invoke(this.deferredRegister, event);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void onRegisterBlock(RegistryEvent.Register<Block> event) {
+            if (!event.getRegistry().getRegistryName().equals(this.deferredRegister.getRegistryName())) {
+                return;
+            }
+
+            try {
+                ADD_ENTRIES_METHOD.invoke(this.deferredRegister, event);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //? }
     }
 
 }

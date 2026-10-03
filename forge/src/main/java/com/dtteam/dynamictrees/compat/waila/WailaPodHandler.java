@@ -7,10 +7,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.config.IPluginConfig;
 
 //? if >= 1.19.4 {
 /*import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,7 +14,21 @@ import snownee.jade.api.config.IPluginConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 //? }
 
-public class WailaPodHandler implements IBlockComponentProvider {
+//? if >= 1.19.2 {
+/*import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+*///? } else {
+import mcp.mobius.waila.api.BlockAccessor;
+import mcp.mobius.waila.api.IComponentProvider;
+import mcp.mobius.waila.api.ITooltip;
+import mcp.mobius.waila.api.config.IPluginConfig;
+import net.minecraft.network.chat.TranslatableComponent;
+//? }
+
+//~ if < 1.19.2 'IBlockComponentProvider' -> 'IComponentProvider'
+public class WailaPodHandler implements IComponentProvider {
 
     private static final ResourceLocation POD_UID = DynamicTrees.location("pod");
 
@@ -30,16 +40,20 @@ public class WailaPodHandler implements IBlockComponentProvider {
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
         if (accessor.getBlock() instanceof PodBlock podBlock && !ForgeRegistries.BLOCKS.getKey(accessor.getBlock()).equals(COCOA)) {
             float ageAsPercentage = podBlock.getAgeAsPercentage(accessor.getBlockState());
-            tooltip.add(Component.translatable(
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
+            tooltip.add(new TranslatableComponent(
                     "tooltip.jade.crop_growth",
                     ageAsPercentage < 100F ? String.format("%.0f%%", ageAsPercentage) :
-                            Component.translatable("tooltip.jade.crop_mature").withStyle(ChatFormatting.GREEN)
+                            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
+                            new TranslatableComponent("tooltip.jade.crop_mature").withStyle(ChatFormatting.GREEN)
             ));
         }
     }
 
-    @Override
+    //? if >= 1.19.2 {
+    /*@Override
     public ResourceLocation getUid() {
         return POD_UID;
     }
+    *///? }
 }

@@ -9,32 +9,49 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.Random;import java.util.function.Function;
 
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
+import net.minecraftforge.client.model.data.ModelData;
+*///? } else {
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.EmptyModelData;
+//? }
 
 public class QuadManipulator {
 
     public static final Direction[] everyFace = {Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, null};
 
-    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, RandomSource rand, ModelData modelData) {
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, Random rand, IModelData modelData) {
         return getQuads(modelIn, stateIn, offset, everyFace, rand, modelData);
     }
 
-    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, Direction[] sides, RandomSource rand, ModelData modelData) {
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, Direction[] sides, Random rand, IModelData modelData) {
         ArrayList<BakedQuad> outQuads = new ArrayList<>();
 
         if (stateIn != null) {
             for (Direction dir : sides) {
-                outQuads.addAll(modelIn.getQuads(stateIn, dir, rand, modelData, null));
+                outQuads.addAll(modelIn.getQuads(
+                        stateIn,
+                        dir,
+                        rand,
+                        modelData
+
+                        //? if >= 1.19.2
+                        //, null
+                ));
             }
         }
 
@@ -106,7 +123,8 @@ public class QuadManipulator {
             ResourceLocation closestTex = ResourceLocation.parse("missingno");
             if (model != null) {
                 //~ if < 1.19.4 '.contents().name()' -> '.getName()'
-                ResourceLocation tex = model.getParticleIcon(ModelData.EMPTY).getName();
+                //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE'
+                ResourceLocation tex = model.getParticleIcon(EmptyModelData.INSTANCE).getName();
                 TextureAtlasSprite tas = bakedTextureGetter.apply(tex);
                 float u = tas.getU(8);
                 float v = tas.getV(8);
@@ -130,9 +148,34 @@ public class QuadManipulator {
     public static float[] getSpriteUVFromBlockState(BlockState state, Direction side) {
         BakedModel bakedModel = getModelManager().getBlockModelShaper().getBlockModel(state);
         List<BakedQuad> quads = new ArrayList<>();
-        RandomSource random = RandomSource.create();
-        quads.addAll(bakedModel.getQuads(state, side, random, ModelData.EMPTY, null));
-        quads.addAll(bakedModel.getQuads(state, null, random, ModelData.EMPTY, null));
+
+        //? if >= 1.19.2 {
+        /*RandomSource random = RandomSource.create();
+        *///? } else {
+        Random random = new Random();
+        //? }
+
+        //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE' {
+        quads.addAll(bakedModel.getQuads(
+                state,
+                side,
+                random,
+                EmptyModelData.INSTANCE
+
+                //? if >= 1.19.2
+                //, null
+        ));
+
+        quads.addAll(bakedModel.getQuads(
+                state,
+                null,
+                random,
+                EmptyModelData.INSTANCE
+
+                //? if >= 1.19.2
+                //, null
+        ));
+        //~ }
 
         Optional<BakedQuad> quad = quads.stream().filter(q -> q.getDirection() == side).findFirst();
 

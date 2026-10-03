@@ -7,7 +7,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.registries.holdersets.ICustomHolderSet;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -20,27 +19,37 @@ import java.util.stream.Stream;
 import net.minecraft.core.HolderLookup;
 *///? }
 
-public abstract class RegexMatchHolderSet<T> extends StreamBackedHolderSet<T> implements ICustomHolderSet<T> {
+//? if >= 1.19.2 {
+/*import net.minecraftforge.registries.holdersets.ICustomHolderSet;
+*///? }
 
-    protected static <T> MapCodec<? extends ICustomHolderSet<T>> mapCodec(
+public abstract class RegexMatchHolderSet<T>
+        extends StreamBackedHolderSet<T>
+
+        //? if >= 1.19.2
+        //implements ICustomHolderSet<T>
+{
+    //? if >= 1.19.2 {
+    /*protected static <T> MapCodec<? extends ICustomHolderSet<T>> mapCodec(
             ResourceKey<? extends Registry<T>> registryKey,
 
             //? if >= 1.19.4 {
-            /*BiFunction<HolderLookup.RegistryLookup<T>, String, RegexMatchHolderSet<T>> factory
-            *///? } else {
+            BiFunction<HolderLookup.RegistryLookup<T>, String, RegexMatchHolderSet<T>> factory
+            //? } else {
             BiFunction<Registry<T>, String, RegexMatchHolderSet<T>> factory
             //? }
     ) {
         return RecordCodecBuilder.<RegexMatchHolderSet<T>>mapCodec(builder -> builder.group(
                 //? if >= 1.19.4 {
-                /*RegistryOps.retrieveRegistryLookup(registryKey).forGetter(RegexMatchHolderSet::registryLookup),
-                *///? } else {
+                RegistryOps.retrieveRegistryLookup(registryKey).forGetter(RegexMatchHolderSet::registryLookup),
+                //? } else {
                 RegistryOps.retrieveRegistry(registryKey).forGetter(RegexMatchHolderSet::registry),
                 //? }
 
                 Codec.STRING.fieldOf("regex").forGetter(RegexMatchHolderSet::regex)
         ).apply(builder, factory));
     }
+    *///? }
 
     //? if >= 1.19.4 {
     /*private final HolderLookup.RegistryLookup<T> registryLookup;

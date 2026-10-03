@@ -4,7 +4,7 @@ import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.data.tags.DTItemTags;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.HolderLookup;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 //? if >= 1.19.4 {
 /*import net.minecraft.data.PackOutput;
+import net.minecraft.core.HolderLookup;
 *///? }
 
 /**

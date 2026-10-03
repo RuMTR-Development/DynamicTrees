@@ -11,20 +11,25 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.IDynamicBakedModel;
-import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;import java.util.concurrent.ConcurrentHashMap;
 
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.IDynamicBakedModel;
+import net.minecraftforge.client.model.data.ModelData;
+*///? } else {
+import net.minecraftforge.client.model.data.IDynamicBakedModel;
+import net.minecraftforge.client.model.data.IModelData;
+//? }
 
 public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
 
@@ -37,14 +42,28 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
 
     @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+
+            //~ if < 1.19.2 'RandomSource' -> 'Random'
+            @NotNull Random rand,
+
+            //~ if < 1.19.2 'ModelData' -> 'IModelData'
+            @NotNull IModelData extraData
+
+            //? if >= 1.19.2
+            //, @Nullable RenderType renderType
+    ) {
         List<BakedQuad> quads = new ArrayList<>();
 
-        if (state == null || !extraData.has(PottedSaplingBlockEntityF.SPECIES) || !extraData.has(PottedSaplingBlockEntityF.POT_MIMIC)) {
+        //~ if < 1.19.2 '.has' -> '.hasProperty'
+        if (state == null || !extraData.hasProperty(PottedSaplingBlockEntityF.SPECIES) || !extraData.hasProperty(PottedSaplingBlockEntityF.POT_MIMIC)) {
             return quads;
         }
 
-        final BlockState potState = extraData.get(PottedSaplingBlockEntityF.POT_MIMIC);
+        //~ if < 1.19.2 '.get' -> '.getData'
+        final BlockState potState = extraData.getData(PottedSaplingBlockEntityF.POT_MIMIC);
 
         if (potState == null) {
             return quads;
@@ -52,10 +71,19 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
 
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         BakedModel potModel = dispatcher.getBlockModel(potState);
-        quads.addAll(potModel.getQuads(potState, side, rand, extraData, renderType));
+        quads.addAll(potModel.getQuads(
+                potState,
+                side,
+                rand,
+                extraData
+
+                //? if >= 1.19.2
+                //, renderType
+        ));
 
         if (side == null){
-            final Species species = extraData.get(PottedSaplingBlockEntityF.SPECIES);
+            //~ if < 1.19.2 '.get' -> '.getData'
+            final Species species = extraData.getData(PottedSaplingBlockEntityF.SPECIES);
             if (species == null || !species.isValid() || species.getSapling().isEmpty()) {
                 return quads;
             }
@@ -93,7 +121,8 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(ModelData data) {
+    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    public TextureAtlasSprite getParticleIcon(IModelData data) {
         return this.basePotModel.getParticleIcon(data);
     }
 
@@ -102,9 +131,10 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
         return ItemOverrides.EMPTY;
     }
 
-    @Override
+    //? if >= 1.19.2 {
+    /*@Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
         return ChunkRenderTypeSet.of(RenderType.cutoutMipped());
     }
-
+    *///? }
 }

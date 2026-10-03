@@ -11,23 +11,29 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.RenderTypeGroup;
-import net.minecraftforge.client.model.IDynamicBakedModel;
-import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
 
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.RenderTypeGroup;
+import net.minecraftforge.client.model.IDynamicBakedModel;
+import net.minecraftforge.client.model.data.ModelData;
+*///? } else {
+import net.minecraftforge.client.model.data.IDynamicBakedModel;
+//? }
 
 public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
+    //? if >= 1.19.2
+    //protected RenderTypeGroup renderGroup = new RenderTypeGroup(RenderType.cutout(), RenderType.cutout());
 
-    protected RenderTypeGroup renderGroup = new RenderTypeGroup(RenderType.cutout(), RenderType.cutout());
     protected final BlockModel blockModel;
 
     TextureAtlasSprite frondsTexture;
@@ -45,7 +51,19 @@ public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
 
     @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+
+            //~ if < 1.19.2 'RandomSource' -> 'Random'
+            @NotNull Random rand,
+
+            //~ if < 1.19.2 'ModelData' -> 'IModelData'
+            @NotNull IModelData extraData
+
+            //? if >= 1.19.2
+            //, @Nullable RenderType renderType
+    ) {
         if (state == null || side != null)
             return Collections.emptyList();
 
@@ -54,7 +72,15 @@ public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
         int direction = state.getValue(PalmLeavesProperties.DynamicPalmLeavesBlock.DIRECTION);
 
         if (direction != 0)
-            quads.addAll(bakedFronds[direction-1].getQuads(state, null, rand, extraData, renderType));
+            quads.addAll(bakedFronds[direction-1].getQuads(
+                    state,
+                    null,
+                    rand,
+                    extraData
+
+                    //? if >= 1.19.2
+                    //, renderType
+            ));
 
 
         return quads;
@@ -92,11 +118,13 @@ public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
         return ItemOverrides.EMPTY;
     }
 
-    @Override
+    //? if >= 1.19.2 {
+    /*@Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
     {
         return ChunkRenderTypeSet.of(RenderType.cutoutMipped());
     }
+    *///? }
 
     public static class BlockVertexData {
 

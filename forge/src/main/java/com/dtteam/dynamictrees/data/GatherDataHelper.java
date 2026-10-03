@@ -2,9 +2,7 @@ package com.dtteam.dynamictrees.data;
 
 import com.dtteam.dynamictrees.api.registry.Registry;
 import com.dtteam.dynamictrees.data.provider.*;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.data.event.GatherDataEvent;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,7 +11,14 @@ import java.util.concurrent.CompletableFuture;
 
 //? if >= 1.19.4 {
 /*import net.minecraft.data.PackOutput;
+import net.minecraft.core.HolderLookup;
 *///? }
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.data.event.GatherDataEvent;
+*///? } else {
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -50,8 +55,15 @@ public final class GatherDataHelper {
         final DTItemTagsProvider itemTagsProvider = new DTItemTagsProvider(generator, blockTagsProvider, modId, event.getExistingFileHelper());
         //? }
 
-        generator.addProvider(event.includeServer(), blockTagsProvider);
+        //? if >= 1.19.2 {
+        /*generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), itemTagsProvider);
+        *///? } else {
+        if (event.includeServer()) {
+            generator.addProvider(blockTagsProvider);
+            generator.addProvider(itemTagsProvider);
+        }
+        //? }
     }
 
     public static void gatherBlockStateAndModelData(final String modId, final GatherDataEvent event, Registry<?>... registries) {
@@ -60,7 +72,16 @@ public final class GatherDataHelper {
                 event.getLookupProvider(), modId, event.getExistingFileHelper(), registries));
         *///? }
 
-        event.getGenerator().addProvider(event.includeServer(), new DTBlockStateProvider(
+        //? if >= 1.19.2 {
+        /*event.getGenerator().addProvider(event.includeServer(),
+        */// } else {
+        if (!event.includeServer()) {
+            return;
+        }
+
+        event.getGenerator().addProvider(
+        //? }
+                new DTBlockStateProvider(
                 //? if >= 1.19.4 {
                 /*event.getGenerator().getPackOutput(),
                 *///? } else {
@@ -74,7 +95,16 @@ public final class GatherDataHelper {
     }
 
     public static void gatherItemModelData(final String modId, final GatherDataEvent event, Registry<?>... registries) {
-        event.getGenerator().addProvider(event.includeServer(), new DTItemModelProvider(
+        //? if >= 1.19.2 {
+        /*event.getGenerator().addProvider(event.includeServer(),
+        */// } else {
+        if (!event.includeServer()) {
+            return;
+        }
+
+        event.getGenerator().addProvider(
+        //? }
+                new DTItemModelProvider(
                 //? if >= 1.19.4 {
                 /*event.getGenerator().getPackOutput(),
                  *///? } else {
@@ -88,7 +118,16 @@ public final class GatherDataHelper {
     }
 
     public static void gatherLootData(final String modId, final GatherDataEvent event) {
-        event.getGenerator().addProvider(event.includeServer(), new DTLootTableProvider(
+        //? if >= 1.19.2 {
+        /*event.getGenerator().addProvider(event.includeServer(),
+        */// } else {
+        if (!event.includeServer()) {
+            return;
+        }
+
+        event.getGenerator().addProvider(
+        //? }
+                new DTLootTableProvider(
                 //? if >= 1.19.4 {
                 /*event.getGenerator().getPackOutput(),
                  *///? } else {
@@ -100,7 +139,16 @@ public final class GatherDataHelper {
         ));
     }
     public static void gatherLangData(final String modId, final GatherDataEvent event, Registry<?>... registries){
-        event.getGenerator().addProvider(event.includeClient(), new DTLangProvider(
+        //? if >= 1.19.2 {
+        /*event.getGenerator().addProvider(event.includeServer(),
+        */// } else {
+        if (!event.includeServer()) {
+            return;
+        }
+
+        event.getGenerator().addProvider(
+        //? }
+                new DTLangProvider(
                 //? if >= 1.19.4 {
                 /*event.getGenerator().getPackOutput(),
                  *///? } else {

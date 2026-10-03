@@ -7,7 +7,6 @@ import com.dtteam.dynamictrees.data.tags.DTBlockTags;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -18,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 //? if >= 1.19.4 {
 /*import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
 *///? } else {
 import net.minecraft.data.tags.BlockTagsProvider;
 //? }

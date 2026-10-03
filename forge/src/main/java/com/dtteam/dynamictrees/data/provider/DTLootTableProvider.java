@@ -1,7 +1,6 @@
 package com.dtteam.dynamictrees.data.provider;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +18,7 @@ import java.util.function.Supplier;
 
 //? if >= 1.19.4 {
 /*import net.minecraft.data.PackOutput;
+import net.minecraft.core.HolderLookup;
 *///? }
 
 /**

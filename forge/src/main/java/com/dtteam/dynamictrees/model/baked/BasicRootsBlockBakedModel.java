@@ -16,11 +16,8 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.IModelBuilder;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +30,15 @@ import java.util.function.Function;
 import com.mojang.math.Vector3f;
 //? }
 
+//? if >= 1.19.2 {
+/*import net.minecraft.util.RandomSource;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+*///? } else {
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.IModelConfiguration;
+//? }
+
 public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
     private static final int MIN_RADIUS_FOR_CROSS = 4;
@@ -40,7 +46,8 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
     private final BakedModel[][] sleeveEndFaces = new BakedModel[6][8];
 
-    public BasicRootsBlockBakedModel(IGeometryBakingContext customData, ResourceLocation barkTextureLocation, ResourceLocation ringsTextureLocation, Function<Material, TextureAtlasSprite> spriteGetter) {
+    //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
+    public BasicRootsBlockBakedModel(IModelConfiguration customData, ResourceLocation barkTextureLocation, ResourceLocation ringsTextureLocation, Function<Material, TextureAtlasSprite> spriteGetter) {
         super(customData, barkTextureLocation, ringsTextureLocation, spriteGetter);
         initModels();
     }
@@ -63,7 +70,8 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), bark, face, BlockModelRotation.X0_Y0));
+            //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), bark, face, BlockModelRotation.X0_Y0));
         }
 
         if (isTransparent()){
@@ -71,7 +79,8 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
             for (Map.Entry<Direction, BlockElementFace> e : insidePart.faces.entrySet()) {
                 Direction face = e.getKey();
-                builder.addCulledFace(face, ModelHelper.makeBakedQuad(insidePart, e.getValue(), bark, face.getOpposite(), BlockModelRotation.X0_Y0));
+                //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+                builder.addFaceQuad(face, ModelHelper.makeBakedQuad(insidePart, e.getValue(), bark, face.getOpposite(), BlockModelRotation.X0_Y0));
             }
 
             if (radius >= MIN_RADIUS_FOR_CROSS){
@@ -80,7 +89,8 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
                     BlockElement insideCross = generateSleeveAxisPlane(radius, axis, dir);
                     for (Map.Entry<Direction, BlockElementFace> e : insideCross.faces.entrySet()) {
                         Direction face = e.getKey();
-                        builder.addCulledFace(face, ModelHelper.makeBakedQuad(insideCross, e.getValue(), bark, face, BlockModelRotation.X0_Y0));
+                        //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+                        builder.addFaceQuad(face, ModelHelper.makeBakedQuad(insideCross, e.getValue(), bark, face, BlockModelRotation.X0_Y0));
                     }
                 }
             }
@@ -143,14 +153,16 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
         BlockElement part = generateCorePart(radius, coreAxis, false);
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
+            //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
         }
 
         if (isTransparent()){
             BlockElement insidePart = generateCorePart(radius, coreAxis, true);
             for (Map.Entry<Direction, BlockElementFace> e : insidePart.faces.entrySet()) {
                 Direction face = e.getKey();
-                builder.addCulledFace(face, ModelHelper.makeBakedQuad(insidePart, e.getValue(), icon, face.getOpposite(), BlockModelRotation.X0_Y0));
+                //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+                builder.addFaceQuad(face, ModelHelper.makeBakedQuad(insidePart, e.getValue(), icon, face.getOpposite(), BlockModelRotation.X0_Y0));
             }
 
             if (radius >= MIN_RADIUS_FOR_CROSS && icon != ringsTexture){
@@ -160,7 +172,8 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
                     for (Map.Entry<Direction, BlockElementFace> e : insideCross.faces.entrySet()) {
                         Direction face = e.getKey();
                         //this one is unculled cause the inside cross is always visible
-                        builder.addUnculledFace(ModelHelper.makeBakedQuad(insideCross, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
+                        //~ if < 1.19.2 '.addUnculledFace' -> '.addGeneralQuad'
+                        builder.addGeneralQuad(ModelHelper.makeBakedQuad(insideCross, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
                     }
                 }
             }
@@ -222,7 +235,8 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
-            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), rings, face, BlockModelRotation.X0_Y0));
+            //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
+            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), rings, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -230,40 +244,83 @@ public class BasicRootsBlockBakedModel extends BasicBranchBlockBakedModel {
 
     @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+
+            //~ if < 1.19.2 'RandomSource' -> 'Random'
+            @NotNull Random rand,
+
+            //~ if < 1.19.2 'ModelData' -> 'IModelData'
+            @NotNull IModelData extraData
+
+            //? if >= 1.19.2
+            //, @Nullable RenderType renderType
+    ) {
         if (state == null) return Collections.emptyList();
 
         final int coreRadius = getRadius(state);
         if (coreRadius > 8) return Collections.emptyList();
 
         int[] connections = new int[]{0, 0, 0, 0, 0, 0};
-        ModelConnections connectionsData = extraData.get(ModelConnections.CONNECTIONS_PROPERTY);
+        //~ if < 1.19.2 '.get' -> '.getData'
+        ModelConnections connectionsData = extraData.getData(ModelConnections.CONNECTIONS_PROPERTY);
         if (connectionsData != null) connections = connectionsData.getAllRadii();
 
         if (side == null) {
-            List<BakedQuad> quadsList = super.getQuads(state, null, rand, extraData, renderType);
-            //if its solid don't bother with the inside cross
+            List<BakedQuad> quadsList = super.getQuads(
+                    state,
+                    null,
+                    rand,
+                    extraData
+
+                    //? if >= 1.19.2
+                    //, renderType
+            );
+
+            //? if >= 1.19.2 {
+            /*//if its solid don't bother with the inside cross
             if (renderType == RenderType.solid())
                 return quadsList;
+            *///? }
 
             //The core inside cross is stored in the null side
             final Direction sourceDir = getSourceDir(coreRadius, connections);
             final int coreDir = resolveCoreDir(sourceDir);
 
-            quadsList.addAll(cores[coreDir][coreRadius - 1].getQuads(state, null, rand, extraData, renderType));
+            quadsList.addAll(cores[coreDir][coreRadius - 1].getQuads(
+                    state,
+                    null,
+                    rand,
+                    extraData
+
+                    //? if >= 1.19.2
+                    //, renderType
+            ));
+
             return quadsList;
         }
 
-        //From here on is to add the ends to solid roots
+        //? if >= 1.19.2 {
+        /*//From here on is to add the ends to solid roots
         if (renderType != RenderType.solid())
             return Collections.emptyList();
+        *///? }
 
         final List<BakedQuad> quadsList = new ArrayList<>(24);
 
         final int idx = side.get3DDataValue();
         final int connRadius = connections[idx];
         if (connRadius > 0) {
-            quadsList.addAll(sleeveEndFaces[idx][connRadius - 1].getQuads(state, side, rand, extraData, renderType));
+            quadsList.addAll(sleeveEndFaces[idx][connRadius - 1].getQuads(
+                    state,
+                    side,
+                    rand,
+                    extraData
+
+                    //? if >= 1.19.2
+                    //, renderType
+            ));
         }
 
         return quadsList;

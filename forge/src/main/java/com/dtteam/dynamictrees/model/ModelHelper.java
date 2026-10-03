@@ -11,10 +11,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.RenderTypeGroup;
 import net.minecraftforge.client.model.IModelBuilder;
 import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 
 import java.util.UUID;
 
@@ -22,6 +20,13 @@ import java.util.UUID;
 /*import org.joml.Vector3f;
 *///? } else {
 import com.mojang.math.Vector3f;
+//? }
+
+//? if >= 1.19.2 {
+/*import net.minecraftforge.client.RenderTypeGroup;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+*///? } else {
+import net.minecraftforge.client.model.IModelConfiguration;
 //? }
 
 public class ModelHelper {
@@ -80,12 +85,17 @@ public class ModelHelper {
         return new FaceBakery().bakeQuad(blockPart.from, blockPart.to, partFace, atlasSprite, dir, modelRotation, blockPart.rotation, true, new ResourceLocation(DynamicTrees.MOD_ID, UUID.randomUUID().toString()));
     }
 
-    public static IModelBuilder<?> getModelBuilder(IGeometryBakingContext context, TextureAtlasSprite particle) {
-        ResourceLocation renderTypeHint = context.getRenderTypeHint();
+    //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
+    public static IModelBuilder<?> getModelBuilder(IModelConfiguration context, TextureAtlasSprite particle) {
+        //? if >= 1.19.2 {
+        /*ResourceLocation renderTypeHint = context.getRenderTypeHint();
         RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
 
         return IModelBuilder.of(context.useAmbientOcclusion(), context.useBlockLight(), context.isGui3d(),
                 context.getTransforms(), ItemOverrides.EMPTY, particle, renderTypes);
+        *///? } else {
+        return IModelBuilder.of(context, ItemOverrides.EMPTY, particle);
+        //? }
     }
 
     @SuppressWarnings("deprecation")

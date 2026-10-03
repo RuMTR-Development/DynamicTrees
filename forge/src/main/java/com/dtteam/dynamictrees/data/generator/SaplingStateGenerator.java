@@ -38,7 +38,11 @@ public class SaplingStateGenerator implements Generator<DTDataProvider.BlockStat
 
             final BlockModelBuilder builder = provider.models().getBuilder(input.getSaplingModelName())
                     .parent(provider.models().getExistingFile(input.getSaplingSmartModelLocation()))
-                    .renderType("cutout_mipped");
+
+                    //? if >= 1.19.2
+                    //.renderType("cutout_mipped")
+
+                    ;
             input.addSaplingTextures(builder::texture, leavesTextureLocation.orElse(primitiveLogLocation), provider.block(primitiveLogLocation));
             provider.simpleBlock(dependencies.get(SAPLING), builder);
         }
