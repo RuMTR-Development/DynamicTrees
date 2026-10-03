@@ -5,7 +5,6 @@ import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.worldgen.BiomeGenSettingsBuilderWrapper;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -13,7 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Random;import java.util.Set;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? } else {
+/*import net.minecraft.world.level.levelgen.RandomSource;
+*///? }
 
 /**
  * Provides the forest density for a given biome. Mods should implement these interfaces

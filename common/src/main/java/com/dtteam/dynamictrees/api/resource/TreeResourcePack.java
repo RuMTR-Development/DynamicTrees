@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;import java.util.function.Consumer;
 //? if >= 1.19.4 {
 import net.minecraft.server.packs.resources.IoSupplier;
 //? } else {
-/*import net.minecraft.server.packs.PackType;import net.minecraft.server.packs.resources.Resource.IoSupplier;
+/*import net.minecraft.server.packs.PackType;
 *///? }
 
 /**
@@ -44,7 +44,16 @@ public interface TreeResourcePack extends PackResources {
     //? } else {
     /*@SuppressWarnings("ConstantConditions")
     default void listResources(String namespace, String path, Consumer<ResourceLocation> resourceOutput) {
-        this.getResources(null, namespace, path, (location) -> true).forEach(resourceOutput);
+        this.getResources(
+                null,
+                namespace,
+                path,
+
+                //? if < 1.19.2
+                //Integer.MAX_VALUE,
+
+                (location) -> true
+        ).forEach(resourceOutput);
     }
     *///? }
 

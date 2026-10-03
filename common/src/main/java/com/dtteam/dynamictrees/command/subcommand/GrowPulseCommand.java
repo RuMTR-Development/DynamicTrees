@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public final class GrowPulseCommand extends SubCommand {
 
     @Override
@@ -43,6 +47,7 @@ public final class GrowPulseCommand extends SubCommand {
             TreeHelper.growPulse(source.getLevel(), rootPos);
         }
 
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.grow_pulse",
                 CommandHelper.colour(String.valueOf(number), ChatFormatting.AQUA),
                 CommandHelper.posComponent(rootPos, ChatFormatting.AQUA)));

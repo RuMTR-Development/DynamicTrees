@@ -16,7 +16,6 @@ import com.dtteam.dynamictrees.systems.season.SeasonHelper;
 import com.dtteam.dynamictrees.treepack.Resettable;
 import com.dtteam.dynamictrees.utility.ResourceLocationUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -49,6 +48,7 @@ import net.minecraft.world.level.material.MaterialColor;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
 //? }
 
 /**

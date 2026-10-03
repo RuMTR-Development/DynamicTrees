@@ -1,7 +1,12 @@
 package com.dtteam.dynamictrees.deserialization.math.noise;
 
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? } else {
+/*import net.minecraft.world.level.levelgen.RandomSource;
+*///? }
 
 public class SimplexNoiseModel implements NoiseModel {
 	

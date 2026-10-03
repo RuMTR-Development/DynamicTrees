@@ -11,6 +11,7 @@ import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
@@ -36,7 +37,12 @@ public final class JsonResourcePreparer extends AbstractResourcePreparer<JsonEle
 
     @NotNull
     static JsonElement readResource(Resource resource) throws PreparationException, IOException {
+        //? if >= 1.19.2 {
         final Reader reader = resource.openAsReader();
+        //? } else {
+        /*final Reader reader = new InputStreamReader(resource.getInputStream());
+        *///? }
+
         return parseJson(reader);
     }
 

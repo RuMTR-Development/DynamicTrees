@@ -1,8 +1,10 @@
 package com.dtteam.dynamictrees.utility;
 
+//? if >= 1.19.2 {
 import net.minecraft.util.RandomSource;
+//? }
 
-/**
+import java.util.Random; /**
  * Just a few math helper functions.
  *
  * @author ferreusveritas
@@ -12,10 +14,11 @@ public class MathUtils {
     /**
      * Selects a random direction weighted from the given probability map.
      *
-     * @param random  An instance of {@link RandomSource}.
+     * @param random  An instance of RandomSource/Random.
      * @param distMap The probability map.
      * @return A random direction.
      */
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
     public static int selectRandomFromDistribution(final RandomSource random, final int[] distMap) {
         int distSize = 0;
 
@@ -51,6 +54,7 @@ public class MathUtils {
         return ang1 + shortDegreesDist(ang1, ang2) * t;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public static int randomBetween(RandomSource random, int min, int max) {
         if (min == max) {
             return min;

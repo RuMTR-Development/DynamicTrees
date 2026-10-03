@@ -30,7 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 //? }
 
 //~ if < 1.19.4 'BlockLootSubProvider' -> 'BlockLoot'
-public class DTBlockLootSubProvider extends BlockLoot {
+public class DTBlockLoot extends BlockLoot {
     private final String modId;
     private final ExistingFileHelper fileHelper;
 

@@ -28,12 +28,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -73,9 +71,14 @@ import net.minecraft.world.level.material.MaterialColor;
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.core.HolderLookup;
 //? } else {
 /*import net.minecraft.data.tags.BlockTagsProvider;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * This class provides a means of holding individual properties for leaves.  This is necessary since leaves can contain
@@ -155,6 +158,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
         }
 
         @Override
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         public boolean updateTick(LevelAccessor level, BlockPos pos, BlockState state, RandomSource rand) {
             return false;
         }
@@ -692,7 +696,7 @@ public class LeavesProperties extends RegistryEntry<LeavesProperties> implements
     // INTERACTION
     ///////////////////////////////////////////
 
-
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean updateTick(LevelAccessor level, BlockPos pos, BlockState state, RandomSource rand) {
         return shouldAge(false, state);
     }

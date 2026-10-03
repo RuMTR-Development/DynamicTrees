@@ -6,11 +6,17 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 
-import java.util.function.Function;
+import java.util.Random;import java.util.function.Function;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? } else {
+/*import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.RandomSource;
+*///? }
 
 public class BiomeRadiusCoordinator implements RadiusCoordinator {
     
@@ -38,8 +44,15 @@ public class BiomeRadiusCoordinator implements RadiusCoordinator {
     private double calcDensity(int x, int z) {
         final Holder<Biome> biome = this.level.getUncachedNoiseBiome((x + 8) >> 2, level.getMaxBuildHeight() >> 2, (z + 8) >> 2); // Placement is offset by +8,+8
         final Vec3i pos = new Vec3i(x, 0, z);
+
+        //? if >= 1.19.2 {
         final RandomSource randomSource = this.level.getRandom();
+        //? } else {
+        /*final RandomSource randomSource = new LegacyRandomSource(this.level.getRandom().nextLong());
+        *///? }
+
         final MathContext mathContext = new MathContext(pos, randomSource);
+
         return BiomeDatabases
             .getDimensionalOrDefault(this.dimensionName)
             .getDensitySelector(biome)

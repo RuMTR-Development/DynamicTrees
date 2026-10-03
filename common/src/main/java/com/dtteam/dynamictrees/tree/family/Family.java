@@ -575,7 +575,13 @@ public class Family extends RegistryEntry<Family> implements Resettable<Family> 
         /*BlockBehaviour.Properties properties = BlockBehaviour.Properties.of(Material.LEAVES, MaterialColor.WOOD)
         *///? }
                 .sound(SoundType.WOOD)
+
+                //? if >= 1.19.2 {
                 .noLootTable()
+                //? } else {
+                /*.noDrops()
+                *///? }
+
                 .explosionResistance(3.0F);
 
         //? if >=1.21 {

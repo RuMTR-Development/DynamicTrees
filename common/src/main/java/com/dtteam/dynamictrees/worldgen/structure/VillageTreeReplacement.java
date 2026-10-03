@@ -4,8 +4,9 @@ import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.data.CustomBootstrapContext;import com.dtteam.dynamictrees.tree.species.Species;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;import net.minecraft.core.RegistryAccess;import net.minecraft.data.worldgen.PlainVillagePools;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.data.worldgen.ProcessorLists;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -25,6 +26,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
 //? }
 
 /**
@@ -51,9 +53,7 @@ public final class VillageTreeReplacement {
         //? if >= 1.19.4 {
         HolderLookup.RegistryLookup<StructureProcessorList> processorLists = vanillaProvider.lookupOrThrow(Registries.PROCESSOR_LIST);
         //? } else {
-        /*HolderLookup.RegistryLookup<StructureProcessorList> processorLists = new HolderLookup.RegistryLookup<>(
-                RegistryAccess.BUILTIN.get().registryOrThrow(Registry.PROCESSOR_LIST_REGISTRY)
-        );
+        /*Registry<StructureProcessorList> processorLists = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.PROCESSOR_LIST_REGISTRY);
         *///? }
         
         final TreePoolElement townCenterTreePattern = new TreePoolElement(Species.REGISTRY.get(DynamicTrees.OAK), new BlockPos(5, 1, 5) /*new BlockPos(0, 1, 0)*/, RIGID);
@@ -69,7 +69,7 @@ public final class VillageTreeReplacement {
                         //? if >= 1.19.4 {
                         StructurePoolElement.legacy(REPLACEMENT_TOWN_CENTER_ID, processorLists.getOrThrow(ProcessorLists.MOSSIFY_70_PERCENT)).apply(RIGID),
                         //? } else {
-                        /*StructurePoolElement.legacy(REPLACEMENT_TOWN_CENTER_ID, processorLists.get(ProcessorLists.MOSSIFY_70_PERCENT.unwrapKey().orElseThrow()).orElseThrow()).apply(RIGID),
+                        /*StructurePoolElement.legacy(REPLACEMENT_TOWN_CENTER_ID, processorLists.getHolderOrThrow(ProcessorLists.MOSSIFY_70_PERCENT.unwrapKey().orElseThrow())).apply(RIGID),
                         *///? }
 
                         townCenterTreePattern
@@ -79,7 +79,7 @@ public final class VillageTreeReplacement {
                         //? if >= 1.19.4 {
                         StructurePoolElement.legacy(REPLACEMENT_TOWN_CENTER_ID, processorLists.getOrThrow(ProcessorLists.ZOMBIE_PLAINS)).apply(RIGID),
                          //? } else {
-                        /*StructurePoolElement.legacy(REPLACEMENT_TOWN_CENTER_ID, processorLists.get(ProcessorLists.ZOMBIE_PLAINS.unwrapKey().orElseThrow()).orElseThrow()).apply(RIGID),
+                        /*StructurePoolElement.legacy(REPLACEMENT_TOWN_CENTER_ID, processorLists.getHolderOrThrow(ProcessorLists.ZOMBIE_PLAINS.unwrapKey().orElseThrow())).apply(RIGID),
                         *///? }
                         
                         townCenterTreePattern

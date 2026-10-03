@@ -17,6 +17,11 @@ import java.util.Objects;
 import static com.dtteam.dynamictrees.command.CommandConstants.FERTILITY_SUGGESTIONS;
 import static com.dtteam.dynamictrees.command.CommandConstants.RAW;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.TextComponent;
+*///? }
+
 public final class FertilityCommand extends SubCommand {
 
     @Override
@@ -48,10 +53,12 @@ public final class FertilityCommand extends SubCommand {
         final int fertility = Objects.requireNonNull(TreeHelper.getRooty(state)).getFertility(state, source.getLevel(), rootPos);
 
         if (raw) {
+            //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
             sendSuccess(source, Component.literal(String.valueOf(fertility)));
             return;
         }
 
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccess(source, Component.translatable("commands.dynamictrees.success.get_fertility",
                 CommandHelper.posComponent(rootPos, ChatFormatting.AQUA),
                 CommandHelper.colour(String.valueOf(fertility), ChatFormatting.AQUA)));
@@ -61,6 +68,7 @@ public final class FertilityCommand extends SubCommand {
         final BlockState state = source.getLevel().getBlockState(rootPos);
         Objects.requireNonNull(TreeHelper.getRooty(state)).setFertility(source.getLevel(), rootPos, fertility);
 
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.set_fertility",
                 CommandHelper.posComponent(rootPos, ChatFormatting.AQUA),
                 CommandHelper.colour(String.valueOf(fertility), ChatFormatting.AQUA)));

@@ -3,8 +3,12 @@ package com.dtteam.dynamictrees.systems.genfeature.context;
 import com.dtteam.dynamictrees.api.worldgen.LevelContext;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
+import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -37,6 +41,7 @@ public abstract class GenFeatureContext {
         return species;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public final RandomSource random() {
         return this.level().getRandom();
     }

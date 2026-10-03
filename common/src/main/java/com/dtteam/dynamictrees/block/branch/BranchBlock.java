@@ -31,12 +31,10 @@ import com.dtteam.dynamictrees.utility.EntityUtils;
 import com.dtteam.dynamictrees.utility.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -78,9 +76,14 @@ import net.minecraft.world.level.storage.loot.LootTables;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
 //? } else {
 /*import net.minecraft.core.Registry;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public abstract class BranchBlock extends BlockWithDynamicHardness implements TreePart, FutureBreakable, BonemealableBlock {
 
@@ -186,6 +189,7 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
      *                  generation scenario as opposed to natural tree updates
      * @return true if the branch was destroyed because of postRot
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public abstract boolean checkForRot(LevelAccessor level, BlockPos pos, Species species, int fertility, int radius, RandomSource rand, float chance, boolean rapid);
 
     public static int setSupport(int branches, int leaves) {
@@ -323,11 +327,13 @@ public abstract class BranchBlock extends BlockWithDynamicHardness implements Tr
     }
 
     @Override
-    public boolean isBonemealSuccess(Level pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState){
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    public boolean isBonemealSuccess(Level pLevel, RandomSource pRandomSource, BlockPos pPos, BlockState pState){
         return true;
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource pRandom' -> 'Random pRandom'
     public void performBonemeal(ServerLevel pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState){
         BlockPos rootPos = TreeHelper.findRootNode(pLevel, pPos);
         if (rootPos == BlockPos.ZERO) return;

@@ -6,7 +6,6 @@ import com.dtteam.dynamictrees.platform.Services;
 import com.dtteam.dynamictrees.systems.season.SeasonHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,17 +19,22 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.PushReaction;import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;import java.util.Random;
 
 //? if >= 1.21.1 {
 
 import net.minecraft.world.ItemInteractionResult;
 //? } else {
 
+//? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
 //? }
 
 public class FruitBlock extends Block implements BonemealableBlock, Growable {
@@ -68,10 +72,12 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
     /*public
     *///?}
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         doTick(state, level, pos, random);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void doTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (!this.isSupported(level, pos, state)) {
             drop(level, pos, state);
@@ -102,6 +108,7 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
         level.destroyBlock(pos, false);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private void tryGrow(BlockState state, Level level, BlockPos pos, RandomSource random, int age,
                          @Nullable Float season) {
         final boolean doGrow = random.nextFloat() < getGrowthChance(level, pos);
@@ -241,11 +248,13 @@ public class FruitBlock extends Block implements BonemealableBlock, Growable {
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
         final int age = getAge(state);
         final int newAge = Math.min(age + 1, fruit.getMaxAge());

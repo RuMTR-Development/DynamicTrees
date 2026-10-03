@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -18,16 +17,17 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 //? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
 //? } else {
 /*import net.minecraft.world.InteractionResult;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * @author Max Hyper
@@ -138,6 +138,7 @@ public class SpreadableSoilProperties extends SoilProperties {
         }
 
         @Override
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
             super.randomTick(state, level, pos, random);
             SpreadableSoilProperties properties = getSoilProperties();

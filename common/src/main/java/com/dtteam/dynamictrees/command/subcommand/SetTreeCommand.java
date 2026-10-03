@@ -18,6 +18,10 @@ import net.minecraft.server.level.ServerLevel;
 
 import java.util.stream.Collectors;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 import static com.dtteam.dynamictrees.command.CommandConstants.*;
 
 public final class SetTreeCommand extends SubCommand {
@@ -63,6 +67,7 @@ public final class SetTreeCommand extends SubCommand {
         final ServerLevel level = source.getLevel();
         final JoCode joCode = species.getJoCode(codeString).rotate(Direction.from2DDataValue((3 - (turns % 4)) + 3)).setCareful(true);
 
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.set_tree", CommandHelper.posComponent(rootPos),
                 species.getTextComponent(), joCode.getTextComponent()));
         DynamicTreeGenerationContext context = new DynamicTreeGenerationContext(LevelContext.create(level), species, rootPos, rootPos.mutable(), source.getLevel().getBiome(rootPos), Direction.SOUTH, 8, false);
@@ -77,6 +82,7 @@ public final class SetTreeCommand extends SubCommand {
     private int setTreeWithRoots(final CommandSourceStack source, final BlockPos rootPos, final Species species, final String codeString, final String rootsCodeString, final int turns, final int fertility) {
         final JoCode rootsJoCode = species.getRootsJoCode(rootsCodeString);
         if (!species.getFamily().hasRootSystem()) {
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
             sendFailure(source, Component.translatable("commands.dynamictrees.error.no_roots", species.getTextComponent(), rootsJoCode.getTextComponent()));
             return 0;
         }
@@ -86,6 +92,7 @@ public final class SetTreeCommand extends SubCommand {
         final JoCode joCode = species.getJoCode(codeString).rotate(dir).setCareful(true);
         rootsJoCode.rotate(dir).setCareful(true);
 
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.set_tree_roots", CommandHelper.posComponent(rootPos),
                 species.getTextComponent(), joCode.getTextComponent(), rootsJoCode.getTextComponent()));
         DynamicTreeGenerationContext context = new DynamicTreeGenerationContext(LevelContext.create(level), species, rootPos, rootPos.mutable(), source.getLevel().getBiome(rootPos), Direction.SOUTH, 8, false);

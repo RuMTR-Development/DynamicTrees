@@ -26,7 +26,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -51,7 +50,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Optional;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class AerialRootsSoilProperties extends SoilProperties {
 
@@ -219,6 +222,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
         /*public
         *///?}
 
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
             if (!state.is(this)) return;
 
@@ -232,6 +236,7 @@ public class AerialRootsSoilProperties extends SoilProperties {
         }
 
         @Override
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         public void updateTree(BlockState rootyState, Level level, BlockPos rootPos, RandomSource random, boolean natural) {
             int radOld = TreeHelper.getRadius(level, rootPos.offset(getTrunkDirection(level, rootPos).getNormal()));
 

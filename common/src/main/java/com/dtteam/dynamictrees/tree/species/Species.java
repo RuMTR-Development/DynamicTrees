@@ -86,7 +86,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -134,6 +133,12 @@ import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 /*import net.minecraft.data.tags.BlockTagsProvider;
 *///? }
 
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? } else {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class Species extends RegistryEntry<Species> implements Resettable<Species> {
 
     public static final HashMap<ResourceLocation, Supplier<Generator<DTDataProvider.BlockState, Species>>> blockStateGenerators = new HashMap<>();
@@ -178,10 +183,12 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
 
         @Override
         public Component getTextComponent() {
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
             return this.formatComponent(Component.translatable("gui.none"), ChatFormatting.DARK_RED);
         }
 
         @Override
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         public boolean update(Level level, SoilBlock rootyDirt, BlockPos rootPos, int fertility, TreePart treeBase, BlockPos treePos, RandomSource random, boolean rapid) {
             return false;
         }
@@ -439,6 +446,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
 
     @Override
     public Component getTextComponent() {
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         return this.formatComponent(Component.translatable(this.getUnlocalizedName()), ChatFormatting.AQUA);
     }
 
@@ -1017,6 +1025,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
     }
 
     //Returns whether the bonemealing should cause sapling growth.
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean canSaplingGrowAfterBoneMeal(Level level, RandomSource rand, BlockPos pos) {
         return canBoneMealTree() && canSaplingGrow(level, pos);
     }
@@ -1458,6 +1467,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      * @return true if network is viable.  false if network is not viable(will destroy the {@link SoilBlock} this tree
      * is on)
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean update(Level level, SoilBlock rootyDirt, BlockPos rootPos, int fertility, TreePart treeBase, BlockPos treePos, RandomSource random, boolean natural) {
 
         //Analyze structure to gather all the endpoints.  They will be useful for this entire update
@@ -1552,6 +1562,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      * @param growLeaves    {@code true} if this rot should attempt to grow leaves first.
      * @return true if the branch should rot
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean rot(LevelAccessor level, BlockPos pos, int neighborCount, int radius, int fertility, RandomSource random, boolean rapid, boolean growLeaves) {
         if (!doesRot) {
             return false;
@@ -1599,6 +1610,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      * @param radius The radius of the {@link BranchBlock}
      * @return The chance this will postRot. 0.0(never) -> 1.0(always)
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public float rotChance(LevelAccessor level, BlockPos pos, RandomSource rand, int radius) {
         if (radius == 0) {
             return 0;
@@ -1621,6 +1633,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      * @return true if network is viable.  false if network is not viable(will destroy the {@link SoilBlock} this tree
      * is on)
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean grow(Level level, SoilBlock rootyDirt, BlockPos rootPos, int fertility, TreePart treeBase, BlockPos treePos, RandomSource random, boolean natural) {
 
         float growthRate = (float) (getGrowthRate(level, rootPos) * DTConfigs.SERVER.treeGrowthMultiplier.get());
@@ -1710,6 +1723,7 @@ public class Species extends RegistryEntry<Species> implements Resettable<Specie
      *
      * @return true if the tree became diseased
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean handleDisease(Level level, TreePart baseTreePart, BlockPos treePos, RandomSource random, int fertility) {
         if (fertility == 0 && DTConfigs.SERVER.diseaseChance.get() > random.nextFloat()) {
             baseTreePart.analyse(level.getBlockState(treePos), level, treePos, Direction.DOWN, new MapSignal(new DiseaseNode(this)));

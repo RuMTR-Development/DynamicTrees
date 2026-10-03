@@ -67,6 +67,7 @@ public final class MultiJsonResourcePreparer extends
     private List<JsonElement> collectResources(ResourceManager resourceManager, ResourceLocation location)
             throws IOException, PreparationException {
         final List<JsonElement> resources = new LinkedList<>();
+        //~ if < 1.19.2 '.getResourceStack' -> '.getResources'
         for (Resource resource : resourceManager.getResourceStack(location)) {
             resources.add(JsonResourcePreparer.readResource(resource));
         }

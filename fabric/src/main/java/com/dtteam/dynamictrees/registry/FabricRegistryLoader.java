@@ -3,8 +3,6 @@ package com.dtteam.dynamictrees.registry;
 import com.dtteam.dynamictrees.DynamicTrees;
 import com.dtteam.dynamictrees.recipe.DendroPotionRecipeHandler;
 import com.mojang.brigadier.arguments.ArgumentType;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -55,6 +53,14 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.registries.BuiltInRegistries;
 //? } else {
 /*import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+*///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+//? } else {
+/*import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
 *///? }
 
 public class FabricRegistryLoader extends RegistryLoader {
@@ -145,13 +151,19 @@ public class FabricRegistryLoader extends RegistryLoader {
     }
     //? }
 
+    //? if >= 1.19.2 {
     @Override
     public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>> Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo) {
         ArgumentTypeInfos.BY_CLASS.put(infoClass, argumentTypeInfo);
         //~ if < 1.19.4 'BuiltInRegistries.COMMAND_ARGUMENT_TYPE' -> 'Registry.COMMAND_ARGUMENT_TYPE'
         I type = Registry.register(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, DynamicTrees.location(name), argumentTypeInfo);
         return ()-> type;
+    }//? } else {
+    /*public <A extends ArgumentType<?>, I extends ArgumentSerializer<A>> Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo) {
+        ArgumentTypes.register(DynamicTrees.location(name).toString(), infoClass, argumentTypeInfo);
+        return () -> argumentTypeInfo;
     }
+    *///? }
 
     //? if >= 1.21 {
     @Override

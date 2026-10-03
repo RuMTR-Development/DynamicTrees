@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +37,7 @@ import net.minecraft.world.ticks.ScheduledTick;
 import net.minecraft.world.ticks.TickPriority;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
+import java.util.Random;import java.util.function.BiConsumer;
 
 //? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
@@ -46,6 +45,10 @@ import net.minecraft.world.ItemInteractionResult;
 /*import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.material.Material;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleWaterloggedBlock {
 
@@ -80,6 +83,7 @@ public class TrunkShellBlock extends BlockWithDynamicHardness implements SimpleW
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         ShellMuse muse = this.getMuseUnchecked(level, state, pos);
         if (!isValid(muse)) {

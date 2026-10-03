@@ -91,8 +91,10 @@ public class MegaSeedRecipe extends CustomRecipe {
     ) {
         //? if >=1.21 {
         return craftingInput.items().stream().anyMatch(s -> !s.isEmpty() && s.getItem() instanceof Seed);
-        //? } else {
+        //? } else if >= 1.19.2 {
         /*return craftingInput.hasAnyMatching(s -> !s.isEmpty() && s.getItem() instanceof Seed);
+        *///? } else {
+        /*return nonEmptyStacksStream(craftingInput).anyMatch(s -> s.getItem() instanceof Seed);
         *///? }
     }
 

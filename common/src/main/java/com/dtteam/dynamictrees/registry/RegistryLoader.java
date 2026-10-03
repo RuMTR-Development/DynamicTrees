@@ -1,7 +1,6 @@
 package com.dtteam.dynamictrees.registry;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -39,6 +38,12 @@ import com.mojang.serialization.MapCodec;
 /*import net.minecraft.world.level.storage.loot.Serializer;
 *///? }
 
+//? if >= 1.19.2 {
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+//? } else {
+/*import net.minecraft.commands.synchronization.ArgumentSerializer;
+*///? }
+
 public abstract class RegistryLoader {
 
     abstract public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, Consumer<Consumer<ItemStack>> displayItems);
@@ -59,8 +64,12 @@ public abstract class RegistryLoader {
     abstract public <T> Supplier<DataComponentType<T>> registerDataComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> operator);
     //? }
 
+    //? if >= 1.19.2 {
     abstract public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>>
     Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo);
+    //? } else {
+    /*abstract public <A extends ArgumentType<?>, I extends ArgumentSerializer<A>> Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo);
+    *///? }
 
     //? if >= 1.21 {
     abstract public Supplier<LootItemConditionType> registerLootConditionType(String name, MapCodec<? extends LootItemCondition> serializerFactory);

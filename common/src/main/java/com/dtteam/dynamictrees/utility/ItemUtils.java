@@ -6,7 +6,6 @@ import com.dtteam.dynamictrees.platform.Services;
 import com.dtteam.dynamictrees.systems.nodemapper.NetVolumeNode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.21.1 {
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
 //? }
 
 /**

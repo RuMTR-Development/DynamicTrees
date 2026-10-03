@@ -20,6 +20,10 @@ import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+//? if < 1.19.2 {
+/*import net.minecraft.server.packs.resources.SimpleResource;
+*///? }
+
 /**
  * @author Harley O'Connor
  */
@@ -109,18 +113,34 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
                 .collect(CommonCollectors.toLinkedSet());
     }
 
+    //? if < 1.19.2 {
+    /*@Override
+    public boolean hasResource(ResourceLocation path) {
+        return this.getOptionalResource(path).isPresent();
+    }
+    *///? }
+
+    //? if >= 1.19.2 {
     @Override
-    public Optional<Resource> getResource(final ResourceLocation location) {
+    public Optional<Resource> getResource(final ResourceLocation location)
+    //? } else {
+    /*public Optional<Resource> getOptionalResource(final ResourceLocation location)
+    *///? }
+    {
+        //~ if < 1.19.2 'getResourceStack' -> 'getResources'
         final List<Resource> resources = this.getResourceStack(location);
         return resources.isEmpty() ? Optional.empty() : Optional.of(resources.get(resources.size() - 1));
     }
 
     @Override
+    //~ if < 1.19.2 'getResourceOrThrow' -> 'getResource'
     public Resource getResourceOrThrow(ResourceLocation location) throws FileNotFoundException {
+        //~ if < 1.19.2 'getResource' -> 'getOptionalResource'
         return getResource(location).orElseThrow(() -> new FileNotFoundException("Could not find path '" + location + "' in any tree packs."));
     }
 
     @Override
+    //~ if < 1.19.2 'getResourceStack' -> 'getResources'
     public List<Resource> getResourceStack(ResourceLocation path) {
         return this.resourcePacks.stream()
                 .filter(resourcePack -> resourcePack.hasResource(path))
@@ -131,13 +151,31 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
     private Resource getResource(ResourceLocation path, TreeResourcePack resourcePack) {
         //? if >= 1.19.4 {
         return new Resource(resourcePack, resourcePack.getResource(path));
-        //? } else {
+        //? } else if >= 1.19.2 {
         /*return new Resource(DynamicTrees.MOD_ID, () -> resourcePack.getResource(path));
+        *///? } else {
+        /*return new SimpleResource(DynamicTrees.MOD_ID, path, resourcePack.getResource(path), null);
         *///? }
     }
 
     @Override
-    public Map<ResourceLocation, Resource> listResources(String path, Predicate<ResourceLocation> filter) {
+    public
+
+    //? if >= 1.19.2 {
+    Map<ResourceLocation, Resource>
+    //? } else {
+    /*Collection<ResourceLocation>
+    *///? }
+
+    listResources(
+            String path,
+
+            //? if >= 1.19.2 {
+            Predicate<ResourceLocation> filter
+            //? } else {
+            /*Predicate<String> filter
+            *///? }
+    ) {
         Map<ResourceLocation, Resource> resources = new LinkedHashMap<>();
 
         for (TreeResourcePack pack : this.resourcePacks) {
@@ -151,6 +189,7 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
                         //? }
                 ) -> {
                     // TODO Mcmeta files? See FallbackResourceManager#listResources for an example
+                    //~ if < 1.19.2 'loc' -> 'loc.getPath()'
                     if (filter.test(loc)) {
                         // TODO Should this throw or doing anything if the key already has an associated value?
                         resources.put(loc, getResource(loc, pack));
@@ -159,9 +198,14 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
             }
         }
 
+        //? if >= 1.19.2 {
         return resources;
+        //? } else {
+        /*return resources.keySet();
+        *///? }
     }
 
+    //? if >= 1.19.2 {
     @Override
     public Map<ResourceLocation, List<Resource>> listResourceStacks(String path, Predicate<ResourceLocation> filter) {
         Map<ResourceLocation, List<Resource>> resources = new LinkedHashMap<>();
@@ -186,6 +230,7 @@ public final class TreesResourceManager implements ResourceManager, TreeResource
 
         return resources;
     }
+    //? }
 
     @SuppressWarnings("unchecked")
     @Override

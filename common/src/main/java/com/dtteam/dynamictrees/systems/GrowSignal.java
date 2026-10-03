@@ -3,7 +3,12 @@ package com.dtteam.dynamictrees.systems;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+
+import java.util.Random;
+
+//? if >= 1.19.2 {
 import net.minecraft.util.RandomSource;
+//? }
 
 public class GrowSignal {
 
@@ -28,11 +33,15 @@ public class GrowSignal {
      */
     public boolean choked;
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public RandomSource rand;
+
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public GrowSignal(Species species, BlockPos rootPos, float energy, RandomSource random) {
         this(species, rootPos, energy, random, Direction.UP);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public GrowSignal(Species species, BlockPos rootPos, float energy, RandomSource random, Direction defaultDir) {
         this.species = species;
         this.energy = energy;

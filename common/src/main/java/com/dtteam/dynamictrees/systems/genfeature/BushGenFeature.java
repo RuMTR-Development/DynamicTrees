@@ -10,14 +10,17 @@ import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class BushGenFeature extends GenFeature {
 
@@ -79,8 +82,8 @@ public class BushGenFeature extends GenFeature {
         return false;
     }
 
-    protected void commonGen(GenFeatureConfiguration configuration, LevelAccessor level, BlockPos rootPos, Species species,
-                             RandomSource random, int radius, boolean worldGen) {
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    protected void commonGen(GenFeatureConfiguration configuration, LevelAccessor level, BlockPos rootPos, Species species, RandomSource random, int radius, boolean worldGen) {
         if (radius <= 2) {
             return;
         }
@@ -122,6 +125,7 @@ public class BushGenFeature extends GenFeature {
         }
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private void placeLeaves(GenFeatureConfiguration configuration, LevelAccessor level, RandomSource random,
                              BlockPos leafPos) {
         final Block leavesBlock = selectLeavesBlock(random, configuration.get(SECONDARY_LEAVES_CHANCE),
@@ -129,6 +133,7 @@ public class BushGenFeature extends GenFeature {
         placeLeavesBlock(level, leafPos, leavesBlock);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private Block selectLeavesBlock(RandomSource random, int secondaryLeavesChance, Block leavesBlock,
                                     @Nullable Block secondaryLeavesBlock) {
         return secondaryLeavesBlock == null || random.nextInt(secondaryLeavesChance) != 0 ? leavesBlock :

@@ -6,8 +6,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -16,14 +14,22 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Random;import java.util.function.Function;
 
 //? if >= 1.21 {
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 //? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+//? } else {
+/*import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.StructureFeatureManager;
+*///? }
 
 public class DTCancelVanillaTreePoolElement extends StructurePoolElement {
     public static final MapCodec<DTCancelVanillaTreePoolElement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -50,11 +56,14 @@ public class DTCancelVanillaTreePoolElement extends StructurePoolElement {
     }
 
     @Override
+    //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
     public Vec3i getSize(StructureTemplateManager structureTemplateManager, Rotation rotation) {
         return this.isEnabled() ? this.enabled.getSize(structureTemplateManager, rotation) : this.disabled.getSize(structureTemplateManager, rotation);
     }
 
     @Override
+    //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public List<StructureTemplate.StructureBlockInfo> getShuffledJigsawBlocks(StructureTemplateManager structureTemplateManager, BlockPos pos, Rotation rotation, RandomSource random) {
         return this.isEnabled()
                 ? this.enabled.getShuffledJigsawBlocks(structureTemplateManager, pos, rotation, random)
@@ -62,27 +71,71 @@ public class DTCancelVanillaTreePoolElement extends StructurePoolElement {
     }
 
     @Override
+    //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
     public BoundingBox getBoundingBox(StructureTemplateManager structureTemplateManager, BlockPos pos, Rotation rotation) {
         return this.isEnabled()
                 ? this.enabled.getBoundingBox(structureTemplateManager, pos, rotation)
                 : this.disabled.getBoundingBox(structureTemplateManager, pos, rotation);
     }
 
-    //? if >= 1.21.1 {
     @Override
-    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox box, RandomSource random, LiquidSettings liquidSettings, boolean b) {
+    public boolean place(
+             //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
+             StructureTemplateManager structureTemplateManager,
+
+             WorldGenLevel level,
+
+             //~ if < 1.19.2 'StructureManager' -> 'StructureFeatureManager'
+             StructureManager structureManager,
+
+             ChunkGenerator generator,
+             BlockPos blockPos,
+             BlockPos blockPos1,
+             Rotation rotation,
+             BoundingBox box,
+
+             //~ if < 1.19.2 'RandomSource' -> 'Random'
+             RandomSource random,
+
+             //? if >= 1.21.1
+             LiquidSettings liquidSettings,
+
+             boolean b
+    ) {
         return this.isEnabled()
-                ? this.enabled.place(structureTemplateManager, level, structureManager, generator, blockPos, blockPos1, rotation, box, random, liquidSettings, b)
-                : this.disabled.place(structureTemplateManager, level, structureManager, generator, blockPos, blockPos1, rotation, box, random, liquidSettings, b);
+                ? this.enabled.place(
+                        structureTemplateManager,
+                        level,
+                        structureManager,
+                        generator,
+                        blockPos,
+                        blockPos1,
+                        rotation,
+                        box,
+                        random,
+
+                        //? if >= 1.21.1
+                        liquidSettings,
+
+                        b
+                )
+                : this.disabled.place(
+                        structureTemplateManager,
+                        level,
+                        structureManager,
+                        generator,
+                        blockPos,
+                        blockPos1,
+                        rotation,
+                        box,
+                        random,
+
+                        //? if >= 1.21.1
+                        liquidSettings,
+
+                        b
+            );
     }
-    //? } else {
-    /*@Override
-    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox box, RandomSource random, boolean b) {
-        return this.isEnabled()
-                ? this.enabled.place(structureTemplateManager, level, structureManager, generator, blockPos, blockPos1, rotation, box, random, b)
-                : this.disabled.place(structureTemplateManager, level, structureManager, generator, blockPos, blockPos1, rotation, box, random, b);
-    }
-    *///? }
 
     @Override
     public StructureTemplatePool.Projection getProjection() {

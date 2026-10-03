@@ -2,9 +2,7 @@ package com.dtteam.dynamictrees.api.registry;
 
 import com.dtteam.dynamictrees.data.DTDataProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -127,12 +125,14 @@ public abstract class RegistryEntry<T extends RegistryEntry<T>> {
     }
 
     public Component getTextComponent() {
+        //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
         return this.formatComponent(Component.literal(this.getRegistryName().toString()), ChatFormatting.AQUA);
     }
 
     protected Component formatComponent(final Component component, final ChatFormatting colour) {
         return component.copy().withStyle(style -> style.withColor(colour)
                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                         Component.translatable("chat.registry_name", this.getRegistryName().toString())))
                 .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,
                         this.getRegistryName().toString())));

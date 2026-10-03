@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -30,7 +29,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.ScheduledTick;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
 
@@ -273,6 +276,7 @@ public class SurfaceRootBlock extends Block implements SimpleWaterloggedBlock {
     /*public
     *///?}
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
         if (!canBlockStay(level, pos, state)) {

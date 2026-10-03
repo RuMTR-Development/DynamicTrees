@@ -10,11 +10,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class ParticleHelper {
 
@@ -25,10 +30,12 @@ public class ParticleHelper {
         }
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public static void spawnParticles(Level level, SimpleParticleType particleType, BlockPos pos, int numParticles, RandomSource random) {
         spawnParticles(level, particleType, pos.getX(), pos.getY(), pos.getZ(), numParticles, random);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public static void spawnParticles(LevelAccessor level, SimpleParticleType particleType, int x, int y, int z, int numParticles, RandomSource random) {
         if (level.isClientSide()) {
             for (int i1 = 0; i1 < numParticles; ++i1) {
@@ -45,6 +52,7 @@ public class ParticleHelper {
     }
     public static void crushLeavesBlock(Level level, BlockPos pos, BlockState blockState, Entity entity) {
         if (level.isClientSide()) {
+            //~ if < 1.19.2 'RandomSource random' -> 'Random random'
             RandomSource random = level.getRandom();
             TreePart treePart = TreeHelper.getTreePart(blockState);
             if (treePart instanceof DynamicLeavesBlock leaves) {

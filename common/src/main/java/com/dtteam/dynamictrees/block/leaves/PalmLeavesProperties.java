@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -25,7 +24,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.function.BiConsumer;
+import java.util.Random;import java.util.function.BiConsumer;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class PalmLeavesProperties extends LeavesProperties {
 
@@ -106,6 +109,7 @@ public class PalmLeavesProperties extends LeavesProperties {
         };
 
         @Override
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
             if (state.getBlock() == this) {
                 int dist = state.getValue(DISTANCE);

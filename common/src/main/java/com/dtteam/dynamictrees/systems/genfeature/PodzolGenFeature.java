@@ -16,13 +16,16 @@ import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
+import java.util.List;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class PodzolGenFeature extends GenFeature {
 
@@ -61,6 +64,7 @@ public class PodzolGenFeature extends GenFeature {
         final List<BlockPos> endPoints = endFinder.getEnds();
         if (endPoints.isEmpty()) return false;
 
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         final RandomSource random = context.random();
         final BlockPos pos = endPoints.get(random.nextInt(endPoints.size()));
 

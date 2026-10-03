@@ -34,7 +34,6 @@ import com.dtteam.dynamictrees.worldgen.feature.DynamicTreeFeature;
 import com.dtteam.dynamictrees.worldgen.structure.DTCancelVanillaTreePoolElement;
 import com.dtteam.dynamictrees.worldgen.structure.TreePoolElement;
 import com.mojang.serialization.Codec;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
@@ -77,6 +76,14 @@ import net.minecraft.world.item.component.DyedItemColor;
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.Registries;
 //? }
+
+//? if >= 1.19.2 {
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+//? } else {
+/*import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+*///? }
 
 public class DTRegistries {
 
@@ -148,6 +155,7 @@ public class DTRegistries {
     public static final Supplier<CreativeModeTab> DT_CREATIVE_TAB = Services.REGISTRY.getRegistryLoader()
             .registerCreativeTab(DynamicTrees.MOD_ID,
                     ()-> Species.findSpecies(DynamicTrees.OAK).getSeedStack(1),
+                    //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                     Component.translatable("itemGroup.dynamictrees"),
                     (output) -> {
                         for (final DendroPotion.DendroPotionType potion : DendroPotion.DendroPotionType.values()) {
@@ -228,8 +236,13 @@ public class DTRegistries {
     // COMMAND ARGUMENTS
     ///////////////////////////////////////////
 
+    //? if >= 1.19.2 {
     public static final Supplier<SingletonArgumentInfo<HexColorArgument>> HEX_COLOR = Services.REGISTRY.getRegistryLoader()
             .registerCommandArgumentType("hex_color", HexColorArgument.class, SingletonArgumentInfo.contextFree(HexColorArgument::hex));
+    //? } else {
+    /*public static final Supplier<ArgumentSerializer<HexColorArgument>> HEX_COLOR = Services.REGISTRY.getRegistryLoader()
+            .registerCommandArgumentType("hex_color", HexColorArgument.class, new EmptyArgumentSerializer(HexColorArgument::hex));
+    *///? }
 
     ///////////////////////////////////////////
     // LOOT

@@ -11,9 +11,10 @@ import com.google.common.base.Suppliers;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.NonNullList;import net.minecraft.core.Registry;import net.minecraft.network.chat.Component;import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -61,8 +62,17 @@ import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 //? }
 
+//? if >= 1.19.2 {
+/*import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+*///? } else {
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+//? }
+
 public class ForgeRegistryLoader extends RegistryLoader {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, DynamicTrees.MOD_ID);
+    //~ if < 1.19.2 'ENTITY_TYPES' -> 'ENTITIES'
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, DynamicTrees.MOD_ID);
 
     //? if >= 1.19.4 {
@@ -79,16 +89,20 @@ public class ForgeRegistryLoader extends RegistryLoader {
 
     public static final List<Consumer<CreativeModeTabEvent.Register>> CREATIVE_TABS = new ArrayList<>();
     *///? } else {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(Registry.PLACEMENT_MODIFIER_REGISTRY, DynamicTrees.MOD_ID);
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<BlockStateProviderType<?>> BLOCK_STATE_PROVIDER_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_STATE_PROVIDER_TYPES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<StructurePoolElementType<?>> STRUCTURE_POOL_ELEMENT_TYPES = DeferredRegister.create(Registry.STRUCTURE_POOL_ELEMENT_REGISTRY, DynamicTrees.MOD_ID);
-    public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<LootItemConditionType> LOOT_CONDITION_TYPES = DeferredRegister.create(Registry.LOOT_CONDITION_TYPE.key(), DynamicTrees.MOD_ID);
     public static final DeferredRegister<LootPoolEntryType> LOOT_POOL_ENTRY_TYPES = DeferredRegister.create(Registry.LOOT_POOL_ENTRY_TYPE.key(), DynamicTrees.MOD_ID);
     public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTION_TYPES = DeferredRegister.create(Registry.LOOT_FUNCTION_TYPE.key(), DynamicTrees.MOD_ID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, DynamicTrees.MOD_ID);
+
+    //~ if < 1.19.2 'BLOCK_ENTITY_TYPES' -> 'BLOCK_ENTITIES'
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, DynamicTrees.MOD_ID);
+
+    //? if >= 1.19.2
+    //public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, DynamicTrees.MOD_ID);
     //? }
 
     public static void setup(IEventBus modBus) {
@@ -99,11 +113,13 @@ public class ForgeRegistryLoader extends RegistryLoader {
         SOUND_EVENTS.register(modBus);
         BLOCK_STATE_PROVIDER_TYPES.register(modBus);
         STRUCTURE_POOL_ELEMENT_TYPES.register(modBus);
-        ARGUMENT_TYPES.register(modBus);
         LOOT_POOL_ENTRY_TYPES.register(modBus);
         LOOT_CONDITION_TYPES.register(modBus);
         LOOT_FUNCTION_TYPES.register(modBus);
         RECIPE_SERIALIZER.register(modBus);
+
+        //? if >= 1.19.2
+        //ARGUMENT_TYPES.register(modBus);
 
         //MinecraftForge
         BIOME_MODIFIER_SERIALIZERS.register(modBus);
@@ -148,9 +164,15 @@ public class ForgeRegistryLoader extends RegistryLoader {
 
         return tab::get;
         *///? } else {
-        CreativeModeTab tab = new CreativeModeTab(
-                ResourceLocation.fromNamespaceAndPath(DynamicTrees.MOD_ID, name).toLanguageKey()
-        ) {
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(DynamicTrees.MOD_ID, name);
+
+        //? if >= 1.19.2 {
+        /*String label = location.toLanguageKey();
+        *///? } else {
+        String label = String.format("%s.%s", location.getNamespace(), location.getPath().replace('/', '.'));
+        //? }
+
+        CreativeModeTab tab = new CreativeModeTab(label) {
             @Override
             public ItemStack makeIcon() {
                 return icon.get();
@@ -191,10 +213,17 @@ public class ForgeRegistryLoader extends RegistryLoader {
         return SOUND_EVENTS.register(name, () -> new SoundEvent(DynamicTrees.location(name)));
     }
 
-    @Override
+    //? if >= 1.19.2 {
+    /*@Override
     public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>> Supplier<I> registerCommandArgumentType (String name, Class<A> infoClass, I argumentTypeInfo){
         return ARGUMENT_TYPES.register(name, () -> ArgumentTypeInfos.registerByClass(infoClass, argumentTypeInfo));
+    }*///? } else {
+    @Override
+    public <A extends ArgumentType<?>, I extends ArgumentSerializer<A>> Supplier<I> registerCommandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo) {
+        ArgumentTypes.register(DynamicTrees.location(name).toString(), infoClass, argumentTypeInfo);
+        return () -> argumentTypeInfo;
     }
+    //? }
 
     @Override
     public Supplier<LootItemConditionType> registerLootConditionType(String name, Serializer<? extends LootItemCondition> serializerFactory) {

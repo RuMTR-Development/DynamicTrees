@@ -13,6 +13,11 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public final class GetRootsCommand extends SubCommand {
 
     @Override
@@ -41,12 +46,16 @@ public final class GetRootsCommand extends SubCommand {
                     final Optional<JoCode> joCode = TreeHelper.getRootsJoCode(level, pos);
 
                     if (codeRaw) {
+                        //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
                         sendSuccess(source, Component.literal(joCode.map(JoCode::toString).orElse("?")));
                     } else {
+                        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                         sendSuccess(source, Component.translatable("commands.dynamictrees.success.get_roots",
                                 species.getTextComponent(), joCode.map(JoCode::getTextComponent)
+                                //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
                                 .orElse(Component.literal("?"))));
                     }
+                //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                 }, () -> sendFailure(source, Component.translatable("commands.dynamictrees.error.get_tree",
                         CommandHelper.posComponent(pos).copy().withStyle(style -> style.withColor(ChatFormatting.DARK_RED))))
         ) ? 1 : 0;

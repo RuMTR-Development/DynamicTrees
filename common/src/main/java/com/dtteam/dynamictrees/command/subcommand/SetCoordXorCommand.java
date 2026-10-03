@@ -9,6 +9,10 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public final class SetCoordXorCommand extends SubCommand {
 
     @Override
@@ -31,6 +35,7 @@ public final class SetCoordXorCommand extends SubCommand {
 
     private void setXor(final CommandSourceStack source, final int xor) {
         CoordUtils.coordXor = xor;
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.set_xor", aqua(xor)));
     }
 

@@ -5,10 +5,13 @@ import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class DTReplaceNyliumFungiBlockStateProvider extends BlockStateProvider {
     public static final MapCodec<DTReplaceNyliumFungiBlockStateProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -29,6 +32,7 @@ public class DTReplaceNyliumFungiBlockStateProvider extends BlockStateProvider {
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public BlockState getState(RandomSource random, BlockPos state) {
         return DTConfigs.COMMON.replaceNyliumFungi.get()
                 ? this.enabled.getState(random, state)

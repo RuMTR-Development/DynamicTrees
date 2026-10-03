@@ -15,6 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class DendroPotion extends Item implements SubstanceEffectProvider, Emptiable {
     //? if < 1.21.1 {
     /*public static final String INDEX_TAG_KEY = "potion_index";
@@ -69,6 +73,7 @@ public class DendroPotion extends Item implements SubstanceEffectProvider, Empti
         }
 
         public Component getDescription() {
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
             return Component.translatable("potion." + this.name + ".description")
                     .withStyle(style -> style.withColor(ChatFormatting.GRAY));
         }

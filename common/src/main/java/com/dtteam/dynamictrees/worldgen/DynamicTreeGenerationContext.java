@@ -6,9 +6,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biome;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class DynamicTreeGenerationContext {
 
@@ -41,6 +44,7 @@ public class DynamicTreeGenerationContext {
         return levelContext.accessor();
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public RandomSource random() {
         return level().getRandom();
     }

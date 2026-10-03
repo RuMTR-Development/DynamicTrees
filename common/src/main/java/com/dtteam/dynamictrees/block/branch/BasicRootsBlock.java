@@ -32,7 +32,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,6 +80,10 @@ import net.minecraft.world.ItemInteractionResult;
 /*import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.InteractionResult;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlock {
     public static final String NAME_SUFFIX = "_roots";
@@ -510,6 +513,7 @@ public class BasicRootsBlock extends BranchBlock implements SimpleWaterloggedBlo
     //////////////////////////////
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean checkForRot(LevelAccessor level, BlockPos pos, Species species, int fertility, int radius, RandomSource rand, float chance, boolean rapid) {
 
         if (!rapid && (chance == 0.0f || rand.nextFloat() > chance)) {

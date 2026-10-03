@@ -8,16 +8,19 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.function.Predicate;
+import java.util.Random;import java.util.function.Predicate;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.Registries;
+//? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
 //? }
 
 /**
@@ -77,6 +80,7 @@ public class RootSystemGenFeature extends GenFeature {
         return true;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private static void placeRootedDirt(LevelAccessor level, GenFeatureConfiguration configuration, RandomSource random, int x, int z, BlockPos.MutableBlockPos pos) {
         int radius = configuration.get(ROOT_RADIUS);
         //~ if < 1.19.4 'Registries.BLOCK' -> 'Registry.BLOCK_REGISTRY'
@@ -95,6 +99,7 @@ public class RootSystemGenFeature extends GenFeature {
         }
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private static void placeHangingRoots(LevelAccessor level, GenFeatureConfiguration configuration, RandomSource random, BlockPos originPos, BlockPos.MutableBlockPos pos) {
         int radius = configuration.get(HANGING_ROOT_RADIUS);
         int verticalSpan = configuration.get(HANGING_ROOT_VERTICAL_SPAN);

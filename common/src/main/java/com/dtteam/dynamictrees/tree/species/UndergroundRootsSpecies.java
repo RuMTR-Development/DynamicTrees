@@ -20,7 +20,6 @@ import com.dtteam.dynamictrees.worldgen.JoCodeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -30,7 +29,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.List;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class UndergroundRootsSpecies extends Species {
 
@@ -137,6 +140,7 @@ public class UndergroundRootsSpecies extends Species {
     // ROT
     //////////////////////
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public float rotChance(LevelAccessor level, BlockPos pos, RandomSource rand, int radius) {
         BlockState branchState = level.getBlockState(pos);
         if (branchState.getBlock() instanceof BasicRootsBlock){
@@ -146,6 +150,8 @@ public class UndergroundRootsSpecies extends Species {
         }
         return super.rotChance(level, pos, rand, radius);
     }
+
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean update(Level level, SoilBlock rootyDirt, BlockPos rootPos, int fertility, TreePart treeBase, BlockPos treePos, RandomSource random, boolean natural) {
 
         //Analyze structure to gather all the root's endpoints.
@@ -164,7 +170,13 @@ public class UndergroundRootsSpecies extends Species {
 
     @Override
     public boolean generate(DynamicTreeGenerationContext context) {
-        int yOffset = context.random().nextIntBetweenInclusive(minWorldGenHeightOffset, maxWorldGenHeightOffset)
+        //? if >= 1.19.2 {
+        int heightOffset = context.random().nextIntBetweenInclusive(minWorldGenHeightOffset, maxWorldGenHeightOffset);
+        //? } else {
+        /*int heightOffset = context.random().nextInt(minWorldGenHeightOffset, maxWorldGenHeightOffset + 1);
+        *///? }
+
+        int yOffset = heightOffset
                 - countWaterBlocksBelow(context.level(), context.rootPos(), getAllowedWaterHeightForWorldgen());
         context.rootPos().move(Direction.UP, yOffset);
 

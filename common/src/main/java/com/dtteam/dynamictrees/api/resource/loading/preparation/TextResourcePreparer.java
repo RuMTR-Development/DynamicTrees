@@ -7,6 +7,8 @@ import net.minecraft.server.packs.resources.Resource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,15 @@ public class TextResourcePreparer extends AbstractResourcePreparer<List<String>>
     }
 
     private List<String> readResource(Resource resource) throws IOException {
-        return this.readLines(resource.openAsReader(), new ArrayList<>());
+        //? if >= 1.19.2 {
+        final BufferedReader reader = resource.openAsReader();
+         //? } else {
+        /*final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(resource.getInputStream())
+        );
+        *///? }
+
+        return this.readLines(reader, new ArrayList<>());
     }
 
     private List<String> readLines(BufferedReader reader, List<String> lines) throws IOException {

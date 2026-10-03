@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Harley O'Connor
@@ -38,7 +39,24 @@ public abstract class AbstractResourcePreparer<R> implements ResourcePreparer<R>
     }
 
     protected Map<ResourceLocation, Resource> collectResources(ResourceManager resourceManager) {
-        return resourceManager.listResources(this.folderName, (fileName) -> fileName.getPath().endsWith(this.extension));
+        return resourceManager.listResources(this.folderName, (fileName) -> {
+            //? if >= 1.19.2 {
+            return fileName.getPath().endsWith(this.extension);
+            //? } else {
+            /*return fileName.endsWith(this.extension);
+            *///? }
+        })
+                //? if >= 1.19.2 {
+                ;
+                //? } else {
+                /*.stream().collect(Collectors.toMap(location -> location, location -> {
+                    try {
+                        return resourceManager.getResource(location);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }));
+                *///? }
     }
 
     protected void readAndPutResources(ResourceManager resourceManager, Map<ResourceLocation, Resource> resourceMap) {

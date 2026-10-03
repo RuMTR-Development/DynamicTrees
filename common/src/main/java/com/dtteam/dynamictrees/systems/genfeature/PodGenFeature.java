@@ -13,10 +13,13 @@ import com.dtteam.dynamictrees.tree.TreeHelper;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class PodGenFeature extends GenFeature {
 
@@ -58,6 +61,7 @@ public class PodGenFeature extends GenFeature {
         return false;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private boolean shouldGrow(GenFeatureConfiguration configuration, LevelContext levelContext, BlockPos treePos, RandomSource random) {
         Pod pod = configuration.get(POD);
         final float fruitingFactor = pod.seasonalFruitProductionFactor(levelContext, treePos);
@@ -77,6 +81,7 @@ public class PodGenFeature extends GenFeature {
         return false;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private boolean shouldGenerate(GenFeatureConfiguration configuration, RandomSource random) {
         return random.nextFloat() <= configuration.get(PLACE_CHANCE);
     }

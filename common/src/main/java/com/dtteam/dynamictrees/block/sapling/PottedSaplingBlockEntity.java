@@ -3,7 +3,7 @@ package com.dtteam.dynamictrees.block.sapling;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -16,6 +16,10 @@ import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+
+//? if >= 1.21.1 {
+import net.minecraft.core.HolderLookup;
+//? }
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.BuiltInRegistries;

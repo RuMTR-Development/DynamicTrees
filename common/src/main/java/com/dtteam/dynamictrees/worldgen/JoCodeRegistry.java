@@ -2,10 +2,13 @@ package com.dtteam.dynamictrees.worldgen;
 
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -69,10 +72,13 @@ public final class JoCodeRegistry {
      * @return the randomly selected {@linkplain JoCode}; otherwise {@code null} if there were none to choose from
      */
     @Nullable
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
     public static JoCode getRandomCode(ResourceLocation speciesName, int radius, RandomSource random) {
         return getRandomCode(speciesName,radius,random,false);
     }
+
     @Nullable
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
     public static JoCode getRandomCode(ResourceLocation speciesName, int radius, RandomSource random, boolean root) {
         final List<JoCode> list = getCodes(speciesName, radius, root);
 

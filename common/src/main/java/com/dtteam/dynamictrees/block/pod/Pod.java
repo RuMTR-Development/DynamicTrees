@@ -17,7 +17,6 @@ import com.google.common.collect.Maps;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -51,6 +50,7 @@ import net.minecraft.world.level.material.Material;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
 //? }
 
 /**

@@ -1,7 +1,6 @@
 package com.dtteam.dynamictrees.worldgen;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

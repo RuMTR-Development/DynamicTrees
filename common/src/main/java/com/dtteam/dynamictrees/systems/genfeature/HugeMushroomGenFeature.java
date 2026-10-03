@@ -11,14 +11,17 @@ import com.dtteam.dynamictrees.tree.species.Species;
 import com.google.common.collect.Iterables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static net.minecraft.world.level.block.HugeMushroomBlock.*;
+import java.util.Random;import static net.minecraft.world.level.block.HugeMushroomBlock.*;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * Generates a singular huge mushroom
@@ -177,6 +180,7 @@ public class HugeMushroomGenFeature extends GenFeature {
     protected int maxHeightBase = 5;
     protected int maxHeightVar = 6;
     //Override this for custom mushroom heights
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     protected int getMushroomHeight(LevelAccessor level, BlockPos rootPos, Biome biome, RandomSource random, int radius) {
         return this.height > 0 ? this.height : random.nextInt(maxHeightVar) + maxHeightBase;
     }

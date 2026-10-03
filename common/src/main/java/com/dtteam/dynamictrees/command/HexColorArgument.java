@@ -14,8 +14,12 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
-public final class HexColorArgument implements ArgumentType<Integer> {
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
 
+public final class HexColorArgument implements ArgumentType<Integer> {
+    //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
     public static final DynamicCommandExceptionType COLOR_INVALID = new DynamicCommandExceptionType(colourString -> Component.translatable("argument.color.invalid", colourString));
 
     public static HexColorArgument hex() {

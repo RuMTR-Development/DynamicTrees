@@ -11,8 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.JigsawBlock;
@@ -24,14 +22,23 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
 
 //? if >= 1.21 {
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
- //? }
+//? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+//? } else {
+/*import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.StructureFeatureManager;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -80,6 +87,8 @@ public final class TreePoolElement extends StructurePoolElement {
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
     public List<StructureTemplate.StructureBlockInfo> getShuffledJigsawBlocks(StructureTemplateManager structureManager, BlockPos pos, Rotation rotation, RandomSource random) {
         return Lists.newArrayList(
                 new StructureTemplate.StructureBlockInfo(pos, Blocks.JIGSAW.defaultBlockState().setValue(JigsawBlock.ORIENTATION, FrontAndTop.fromFrontAndTop(Direction.DOWN, Direction.SOUTH)),
@@ -89,28 +98,44 @@ public final class TreePoolElement extends StructurePoolElement {
 
 
     @Override
+    //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
     public BoundingBox getBoundingBox(StructureTemplateManager structureManager, BlockPos pos, Rotation rotation) {
         return new BoundingBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
-    public Vec3i getSize(StructureTemplateManager pStructureManager, Rotation pRotation) {
+    //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
+    public Vec3i getSize(StructureTemplateManager pStructureTemplateManager, Rotation pRotation) {
         return Vec3i.ZERO;
     }
 
-    //? if >= 1.21.1 {
     @Override
-    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox box, RandomSource random, LiquidSettings liquidSettings, boolean b) {
+    public boolean place(
+            //~ if < 1.19.2 'StructureTemplateManager' -> 'StructureManager'
+            StructureTemplateManager structureTemplateManager,
+
+            WorldGenLevel level,
+
+            //~ if < 1.19.2 'StructureManager' -> 'StructureFeatureManager'
+            StructureManager structureManager,
+
+            ChunkGenerator generator,
+            BlockPos blockPos,
+            BlockPos blockPos1,
+            Rotation rotation,
+            BoundingBox box,
+
+            //~ if < 1.19.2 'RandomSource' -> 'Random'
+            RandomSource random,
+
+            //? if >= 1.21.1
+            LiquidSettings liquidSettings,
+
+            boolean b
+    ) {
         species.plantSapling(level, blockPos, true);
         return true;
     }
-    //? } else {
-    /*@Override
-    public boolean place(StructureTemplateManager structureTemplateManager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos blockPos, BlockPos blockPos1, Rotation rotation, BoundingBox box, RandomSource random, boolean b) {
-        species.plantSapling(level, blockPos, true);
-        return true;
-    }
-    *///? }
 
     private int getOffsetX(Rotation rotation) {
         return offset.getX() * (rotation.rotation().inverts(Direction.Axis.X) ? -1 : 1);

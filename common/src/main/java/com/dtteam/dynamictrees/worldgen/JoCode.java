@@ -22,9 +22,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -505,8 +503,10 @@ public class JoCode {
     }
 
     public Component getTextComponent() {
+        //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
         return Component.literal(this.toString()).withStyle(style ->
                 style.withColor(ChatFormatting.AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, this.toString()))
+                        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.copy.click")))
         );
     }

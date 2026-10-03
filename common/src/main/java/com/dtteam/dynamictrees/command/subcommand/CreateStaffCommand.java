@@ -24,6 +24,10 @@ import java.util.stream.Stream;
 import static com.dtteam.dynamictrees.command.CommandConstants.DEFAULT_JO_CODE;
 import static com.dtteam.dynamictrees.command.CommandConstants.JO_CODE;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public final class CreateStaffCommand extends SubCommand {
 
     @Override
@@ -79,6 +83,7 @@ public final class CreateStaffCommand extends SubCommand {
 
         ItemUtils.spawnItemStack(source.getLevel(), pos, wandStack, true);
 
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.create_staff", species.getTextComponent(),
                 new JoCode(code).getTextComponent(), aqua(String.format("#%08X", colour)), aqua(readOnly), aqua(maxDamage), CommandHelper.posComponent(pos, ChatFormatting.AQUA)));
 

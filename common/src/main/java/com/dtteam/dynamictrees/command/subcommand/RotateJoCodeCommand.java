@@ -9,6 +9,10 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 import static com.dtteam.dynamictrees.command.CommandConstants.*;
 
 public final class RotateJoCodeCommand extends SubCommand {
@@ -31,6 +35,7 @@ public final class RotateJoCodeCommand extends SubCommand {
     }
 
     private void rotateJoCode(final CommandSourceStack source, final String code, final int turns) {
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccess(source, Component.translatable("commands.dynamictrees.success.rotate_jo_code",
                 new JoCode(code).rotate(Direction.from2DDataValue((3 - (turns % 4)) + 3)).getTextComponent()));
     }

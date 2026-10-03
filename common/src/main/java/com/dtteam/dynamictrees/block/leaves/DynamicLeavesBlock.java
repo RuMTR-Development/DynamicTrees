@@ -25,7 +25,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,6 +53,12 @@ import java.util.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 //? } else {
 /*import net.minecraft.world.level.storage.loot.LootContext;
+*///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? } else {
+/*import static net.minecraft.world.level.block.CrossCollisionBlock.WATERLOGGED;
 *///? }
 
 public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable {
@@ -135,14 +140,16 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     ///////////////////////////////////////////
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public int age(LevelAccessor level, BlockPos pos, BlockState state, RandomSource rand, boolean worldgen) {
-        return updateLeaves(level, pos, state, rand,worldgen);
+        return updateLeaves(level, pos, state, rand, worldgen);
     }
 
     /**
      * TODO: fix this up, the growth multiplier, it's kinda pointless
      */
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
         double growthMultiplier = DTConfigs.SERVER.treeGrowthMultiplier.get();
         if (rand.nextFloat() > growthMultiplier) {
@@ -180,6 +187,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
      * Ticks scheduled by neighborChanged
      */
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
         updateHydro(level, pos, state, false);
     }
@@ -188,6 +196,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
      * Pulses recursively through the canopy using BFS, updating hydro and growing around if possible.
      * @return False if the leaves decayed. True if they survived.
      */
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean updateAllLeaves(LevelAccessor level, BlockPos startPos, BlockState startState, RandomSource rand, boolean worldGen){
         //We store the position and hydro of the next block.
         Queue<Tuple<BlockPos, Integer>> toProcess = new ArrayDeque<>();
@@ -224,6 +233,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         return true;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public int updateLeaves(LevelAccessor level, BlockPos pos, BlockState state, RandomSource rand, boolean worldGen){
         int newHydro = updateHydro(level, pos, state, worldGen);
         if (newHydro == 0) return 0; //If the leaves died don't bother
@@ -398,6 +408,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
         return level.getBrightness(LightLayer.SKY, pos) >= (TreeHelper.isLeaves(state) ? leavesProperties.getLightRequirement() - 2 : leavesProperties.getLightRequirement());
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean removeIfInvalid(BlockState state, LevelAccessor level, BlockPos pos, RandomSource rand){
         if (getLeavesProperties().updateTick(level, pos, state, rand)) {
             //waterlogged leaves drown
@@ -879,6 +890,7 @@ public class DynamicLeavesBlock extends LeavesBlock implements TreePart, Ageable
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (properties.hasTickParticles && properties.getPrimitiveLeavesBlock().isPresent()) {
             properties.getPrimitiveLeavesBlock().ifPresent((b)->b.animateTick(state,level,pos,random));

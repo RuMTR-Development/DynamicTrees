@@ -12,6 +12,10 @@ import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public final class KillTreeCommand extends SubCommand {
 
     @Override
@@ -33,6 +37,7 @@ public final class KillTreeCommand extends SubCommand {
         final Level level = source.getLevel();
 
         Objects.requireNonNull(TreeHelper.getRooty(level.getBlockState(rootPos))).destroyTree(level, rootPos);
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
         sendSuccessAndLog(source, Component.translatable("commands.dynamictrees.success.kill_tree",
                 CommandHelper.posComponent(rootPos, ChatFormatting.AQUA)));
     }

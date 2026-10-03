@@ -9,11 +9,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Comparator;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * Used to add mushrooms under a tree canopy.  Currently used by dark oaks for roofed forests.
@@ -56,6 +59,8 @@ public class HugeMushroomUndergrowthGenFeature extends HugeMushroomGenFeature {
         final LevelAccessor level = context.level();
         final BlockPos rootPos = context.pos();
         final BlockPos lowest = Collections.min(context.endPoints(), Comparator.comparingInt(Vec3i::getY));
+
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         final RandomSource rand = context.random();
 
         int success = 0;

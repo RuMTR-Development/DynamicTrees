@@ -4,7 +4,6 @@ import com.dtteam.dynamictrees.config.DTConfigs;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.systems.SeedSaplingRecipe;
 import com.dtteam.dynamictrees.tree.species.Species;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -20,6 +19,7 @@ import java.util.stream.Stream;
 
 //? if >= 1.21.1 {
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.core.HolderLookup;
 //? } else {
 /*import net.minecraft.world.inventory.CraftingContainer;
 *///? }

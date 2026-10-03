@@ -13,7 +13,8 @@ import com.dtteam.dynamictrees.worldgen.JoCode;
 import com.dtteam.dynamictrees.worldgen.RootsJoCode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
@@ -41,9 +42,11 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-//? } else {
-
 //? }
+
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
 
 /**
  * Try the following in a command block to demonstrate the extra tag functionality. {@code /give @p
@@ -423,11 +426,13 @@ public class Staff extends Item {
             List<Component> tooltipComponents,
             TooltipFlag tooltipFlag
     ) {
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent' {
         tooltipComponents.add(Component.translatable("tooltip.dynamictrees.species", this.getSpecies(stack).getTextComponent()));
         tooltipComponents.add(Component.translatable("tooltip.dynamictrees.jo_code", new JoCode(this.getCode(stack)).getTextComponent()));
         String rootsCode = getRootsCode(stack);
         if (!rootsCode.isEmpty())
             tooltipComponents.add(Component.translatable("tooltip.dynamictrees.roots_jo_code", new RootsJoCode(rootsCode).getTextComponent()));
+        //~ }
 
         //? if >= 1.21.1 {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);

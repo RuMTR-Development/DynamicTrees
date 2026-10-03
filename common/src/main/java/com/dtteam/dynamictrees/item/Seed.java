@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -32,10 +31,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class Seed extends Item {//implements IPlantable {
 
+    //~ if < 1.19.2 'LazyValue<RandomSource>' -> 'LazyValue<Random>'
+    //~ if < 1.19.2 'RandomSource::create' -> 'Random::new'
     private static final LazyValue<RandomSource> BACKUP_RANDOM = LazyValue.supplied(RandomSource::create);
 
     /**
@@ -162,6 +167,7 @@ public class Seed extends Item {//implements IPlantable {
         return lifespan;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public String getCode(ItemStack seedStack, RandomSource random) {
         String joCode = "";
 //        if (seedStack.hasTag()) {
@@ -182,6 +188,7 @@ public class Seed extends Item {//implements IPlantable {
     }
 
     @Nullable
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private JoCode getJoCodeForRadius(RandomSource random, int radius) {
         return JoCodeRegistry.getRandomCode(species.getRegistryName(), Mth.clamp(radius, 2, 8), random);
     }

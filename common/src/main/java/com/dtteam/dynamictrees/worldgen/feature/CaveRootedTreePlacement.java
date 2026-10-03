@@ -7,13 +7,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
-import java.util.stream.Stream;
+import java.util.Random;import java.util.stream.Stream;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class CaveRootedTreePlacement extends PlacementModifier {
     public static final CaveRootedTreePlacement INSTANCE = new CaveRootedTreePlacement(Unit.INSTANCE);
@@ -26,6 +29,7 @@ public class CaveRootedTreePlacement extends PlacementModifier {
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
         return DynamicTreeFeature.DISC_PROVIDER.getPoissonDiscs(LevelContext.create(context.getLevel()), new ChunkPos(pos))
                 .stream()

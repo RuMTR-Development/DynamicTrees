@@ -8,7 +8,6 @@ import com.dtteam.dynamictrees.loot.function.MultiplyByLogsCount;
 import com.dtteam.dynamictrees.loot.function.MultiplyBySticksCount;
 import com.dtteam.dynamictrees.utility.ItemUtils;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -35,6 +34,10 @@ import java.util.List;
 
 //? if >= 1.21.1 {
 import net.minecraft.core.registries.Registries;
+//? }
+
+//? if >= 1.19.4 {
+import net.minecraft.core.HolderLookup;
 //? }
 
 public class DTLootTableBuilder {

@@ -13,7 +13,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Level;
@@ -31,7 +30,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.Random;import java.util.function.BiFunction;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * Gen feature for bee nests. Can be fully customized with a custom predicate for natural growth and with a custom
@@ -116,6 +119,7 @@ public class BeeNestGenFeature extends GenFeature {
         return this.placeBeeNestInValidPlace(configuration, context.level(), context.pos(), false, context.random());
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     protected boolean placeBeeNestInValidPlace(GenFeatureConfiguration configuration, LevelAccessor world, BlockPos rootPos, boolean worldGen, RandomSource random) {
         Block nestBlock = configuration.get(NEST_BLOCK);
 
@@ -141,6 +145,7 @@ public class BeeNestGenFeature extends GenFeature {
         return false;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     protected boolean placeBeeNestWithBees(LevelAccessor world, Block nestBlock, BlockPos pos, Direction faceDir, boolean worldGen, RandomSource random) {
         BlockState nestState = nestBlock.defaultBlockState();
         if (nestState.hasProperty(BeehiveBlock.FACING)) {
@@ -158,6 +163,7 @@ public class BeeNestGenFeature extends GenFeature {
         return true;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     protected void storeBee(RandomSource random, BeehiveBlockEntity blockEntity, LevelAccessor world) {
         //? if >= 1.21 {
         blockEntity.storeBee(BeehiveBlockEntity.Occupant.create(random.nextInt(599)));

@@ -1,11 +1,17 @@
 package com.dtteam.dynamictrees.api.worldgen;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.levelgen.ThreadSafeLegacyRandomSource;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+//? if >= 1.19.2 {
+import net.minecraft.world.level.levelgen.ThreadSafeLegacyRandomSource;
+//? } else {
+/*import net.minecraft.world.level.levelgen.LegacyRandomSource;
+*///? }
+
+//~ if < 1.19.2 'ThreadSafeLegacyRandomSource' -> 'LegacyRandomSource'
 public class RandomXOR extends ThreadSafeLegacyRandomSource implements Serializable {
 
     @Serial

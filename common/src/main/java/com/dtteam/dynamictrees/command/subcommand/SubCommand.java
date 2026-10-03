@@ -34,14 +34,20 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 /**
  * @author Harley O'Connor
  */
 public abstract class SubCommand {
-
+    //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent' {
     protected static final DynamicCommandExceptionType NO_TREE_FOUND = new DynamicCommandExceptionType(pos -> Component.translatable("commands.dynamictrees.error.get_tree", Component.translatable("chat.coordinates", getVector3i(pos).getX(), getVector3i(pos).getY(), getVector3i(pos).getZ()).withStyle(style -> style.withColor(ChatFormatting.DARK_RED))));
     protected static final DynamicCommandExceptionType SPECIES_UNKNOWN = new DynamicCommandExceptionType(resLocStr -> Component.translatable("commands.dynamictrees.error.unknown_species", darkRed(resLocStr)));
-//    protected static final DynamicCommandExceptionType SPECIES_NOT_TRANSFORMABLE = new DynamicCommandExceptionType(nonTransformableSpecies -> Component.translatable("commands.dynamictrees.error.not_transformable", darkRed(nonTransformableSpecies)));
+    //~ }
+
+//    protected static final DynamicCommandExceptionType SPECIES_NOT_TRANSFORMABLE = new DynamicCommandExceptionType(nonTransformableSpecies -> new TranslatableComponent("commands.dynamictrees.error.not_transformable", darkRed(nonTransformableSpecies)));
 
     private static Vec3i getVector3i(final Object vecObj) {
         if (vecObj instanceof Vec3i) {

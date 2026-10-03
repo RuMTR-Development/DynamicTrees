@@ -6,9 +6,16 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class Tooltips {
 
     public static void applySeasonalTooltips(List<Component> tipList, int flags, ClimateZoneType climate) {
+        //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent' {
+        //~ if < 1.19.2 'Component.literal' -> 'new TextComponent' {
         if (flags == -1) return;
         if (flags == 0) {
             tipList.add(Component.translatable("desc.dynamictrees.seasonal.infertile", Component.translatable(climate.unlocalizedName)).withStyle(ChatFormatting.RED));
@@ -33,6 +40,8 @@ public class Tooltips {
                 }
             }
         }
+        //~ }
+        //~ }
     }
 
 }

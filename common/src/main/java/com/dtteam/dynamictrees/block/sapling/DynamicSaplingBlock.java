@@ -7,7 +7,6 @@ import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -24,10 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //? if >= 1.21.1 {
 
@@ -38,6 +34,10 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class DynamicSaplingBlock extends Block implements BonemealableBlock {
 
@@ -95,6 +95,7 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     /*public
     *///?}
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (this.getSpecies().canSaplingGrowNaturally(level, pos)) {
             this.performBonemeal(level, random, pos, state);
@@ -140,11 +141,13 @@ public class DynamicSaplingBlock extends Block implements BonemealableBlock {
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public boolean isBonemealSuccess(@NotNull Level level, @NotNull RandomSource rand, @NotNull BlockPos pos, @NotNull BlockState state) {
         return this.getSpecies().canSaplingGrowAfterBoneMeal(level, rand, pos);
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void performBonemeal(@NotNull ServerLevel level, @NotNull RandomSource rand, @NotNull BlockPos pos, @NotNull BlockState state) {
         if (this.canSurvive(state, level, pos)) {
             final Species species = this.getSpecies().selfOrLocationOverride(level, pos);;

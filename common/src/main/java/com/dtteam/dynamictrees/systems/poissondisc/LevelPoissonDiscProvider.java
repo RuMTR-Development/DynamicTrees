@@ -8,7 +8,6 @@ import com.dtteam.dynamictrees.utility.CoordUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.ArrayList;
@@ -17,6 +16,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? } else {
+/*import net.minecraft.world.level.levelgen.RandomSource;
+*///? }
 
 /**
  * Manages and creates all the Poisson discs in a single level (world).

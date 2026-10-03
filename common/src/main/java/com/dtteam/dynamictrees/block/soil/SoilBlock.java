@@ -22,7 +22,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Optional;import java.util.Random;
 
 //? if >= 1.21.1 {
 import net.minecraft.world.ItemInteractionResult;
@@ -54,6 +53,10 @@ import net.minecraft.world.level.storage.loot.LootParams;
 /*import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.storage.loot.LootContext;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 /**
  * A version of Rooty Dirt block that holds on to a species with a TileEntity.
@@ -273,6 +276,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         double growthMultiplier = DTConfigs.SERVER.treeGrowthMultiplier.get();
         //Growth multiplier lower than 1 causes only some ticks to grow
@@ -289,6 +293,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
         return Direction.UP;
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void updateTree(BlockState rootyState, Level level, BlockPos soilPos, RandomSource random, boolean natural) {
         if (ChunkTreeHelper.isSurroundedByLoadedChunks(level, soilPos)) {
             boolean viable = false;
@@ -449,11 +454,13 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
     }
 
     @Override
-    public boolean isBonemealSuccess(Level pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState){
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    public boolean isBonemealSuccess(Level pLevel, RandomSource pRandomSource, BlockPos pPos, BlockState pState){
         return true;
     }
     @Override
-    public void performBonemeal(ServerLevel pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState){
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    public void performBonemeal(ServerLevel pLevel, RandomSource pRandomSource, BlockPos pPos, BlockState pState){
         Species species = getSpecies(pState, pLevel, pPos);
         if (species.isValid()){
             species.applySubstance(pLevel, pPos, pPos, null, null, new ItemStack(Items.BONE_MEAL));
@@ -569,6 +576,7 @@ public class SoilBlock extends BlockWithDynamicHardness implements TreePart, Ent
     /*public
     *///?}
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!state.is(this)) return; //The root has already been destroyed / removed.
         if (getMainTrunk(level, pos) == null){

@@ -13,6 +13,10 @@ import java.util.Locale;
 
 import static com.dtteam.dynamictrees.command.CommandConstants.RAW;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TextComponent;
+*///? }
+
 /**
  * @author Harley O'Connor
  */
@@ -49,7 +53,8 @@ public final class RegistrySubCommand<V extends RegistryEntry<V>> extends SubCom
                     //? if >= 1.21 {
                     () -> Component.literal(entry.getRegistryName().toString()),
                     //? } else {
-                    /*Component.literal(entry.getRegistryName().toString()),
+                    /*//~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
+                    Component.literal(entry.getRegistryName().toString()),
                     *///? }
 
                     false));
@@ -60,7 +65,8 @@ public final class RegistrySubCommand<V extends RegistryEntry<V>> extends SubCom
                 //? if >= 1.21 {
                 () -> Component.literal("- ")
                 //? } else {
-                /*Component.literal("- ")
+                /*//~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
+                Component.literal("- ")
                 *///? }
 
                 .append(entry.getTextComponent()).withStyle(ChatFormatting.GREEN), false)

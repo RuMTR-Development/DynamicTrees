@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.DataResult;
 import net.minecraft.FileUtil;
-import net.minecraft.Util;
+import net.minecraft.ResourceLocationException;import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.AbstractPackResources;import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.nio.file.*;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;import java.util.stream.Collectors;
+import java.util.function.Predicate;import java.util.function.Supplier;import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 //? if >= 1.21 {
@@ -99,9 +99,32 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
     }
     *///? } else {
     /*@Override
-    public Collection<ResourceLocation> getResources(PackType type, String namespace, String path, Predicate<ResourceLocation> filter) {
+    public Collection<ResourceLocation> getResources(
+             PackType type,
+             String namespace,
+             String path,
+
+             //? if >= 1.19.2 {
+             Predicate<ResourceLocation> filter
+             //? } else {
+             /^int maxDepth,
+             Predicate<String> filter
+             ^///? }
+    ) {
         List<ResourceLocation> result = new ArrayList<>();
-        listPath(namespace, this.root.resolve(namespace).toAbsolutePath(), Arrays.asList(path.split("/")), (location, supplier) -> result.add(location));
+        listPath(namespace, this.root.resolve(namespace).toAbsolutePath(), Arrays.asList(path.split("/")), (location, supplier) -> {
+            //? if >= 1.19.2 {
+            if (!filter.test(location)) {
+                return;
+            }
+            //? } else {
+            /^if (!filter.test(location.getPath())) {
+                return;
+            }
+            ^///? }
+
+            result.add(location);
+        });
         return result;
     }
     *///? }
@@ -157,17 +180,33 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
         return Files.newInputStream(path);
     }
 
-    public static void listPath(String namespace, Path namespacePath, List<String> decomposedPath, BiConsumer<ResourceLocation, Resource.IoSupplier<InputStream>> resourceOutput) {
+    public static void listPath(String namespace, Path namespacePath, List<String> decomposedPath, BiConsumer<ResourceLocation, Supplier<InputStream>> resourceOutput) {
         Path resolved = resolvePath(namespacePath, decomposedPath);
 
         try (Stream<Path> stream = Files.find(resolved, Integer.MAX_VALUE, (file, attrs) -> attrs.isRegularFile())) {
             stream.forEach((path) -> {
                 String s = PATH_JOINER.join(namespacePath.relativize(path));
+
+                //? if >= 1.19.2 {
                 ResourceLocation resourcelocation = ResourceLocation.tryBuild(namespace, s);
+                //? } else {
+                /^ResourceLocation resourcelocation = null;
+
+                try {
+                    resourcelocation = new ResourceLocation(namespace, s);
+                } catch (ResourceLocationException ignored) {}
+                ^///? }
+
                 if (resourcelocation == null) {
                     Util.logAndPauseIfInIde(String.format(Locale.ROOT, "Invalid path in pack: %s:%s, ignoring", namespace, s));
                 } else {
-                    resourceOutput.accept(resourcelocation, () -> Files.newInputStream(path));
+                    resourceOutput.accept(resourcelocation, () -> {
+                        try {
+                            return Files.newInputStream(path);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }
 
             });

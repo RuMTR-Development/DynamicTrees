@@ -12,7 +12,6 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,8 +24,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 //? if >= 1.19.4 {
 import com.mojang.math.Axis;
  //? } else {
-/*import com.mojang.math.Vector3f;
+/*import com.mojang.math.Vector3f;import java.util.Random;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 //~ if < 1.21.1 '.level()' -> '.level' {
 public class PhysicsAnimationHandler implements AnimationHandler {
@@ -66,6 +69,8 @@ public class PhysicsAnimationHandler implements AnimationHandler {
         //playStartSound(entity);
 
         final long seed = entity.level().random.nextLong();
+        //~ if < 1.19.2 'final RandomSource' -> 'final Random'
+        //~ if < 1.19.2 'RandomSource.create' -> 'new Random'
         final RandomSource random = RandomSource.create(seed ^ (((long) cutPos.getX()) << 32 | ((long) cutPos.getZ())));
         final float mass = entity.getDestroyData().woodVolume.getVolume();
         final float inertialMass = Mth.clamp(mass, 1, 3);

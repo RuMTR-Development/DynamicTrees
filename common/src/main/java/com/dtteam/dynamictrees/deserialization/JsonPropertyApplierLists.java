@@ -30,6 +30,7 @@ public final class JsonPropertyApplierLists {
             .register("light", Integer.class, (properties, light) -> properties.lightLevel(state -> light))
             .registerIfTrueApplier("random_ticks", BlockBehaviour.Properties::randomTicks)
             .registerIfTrueApplier("dynamic_shape", BlockBehaviour.Properties::dynamicShape)
+            //~ if < 1.19.2 '::noLootTable' -> '::noDrops'
             .registerIfTrueApplier("no_loot_table", BlockBehaviour.Properties::noLootTable)
             .registerIfTrueApplier("air", BlockBehaviour.Properties::air)
             .registerIfTrueApplier("requires_correct_tool_for_drops", BlockBehaviour.Properties::requiresCorrectToolForDrops)

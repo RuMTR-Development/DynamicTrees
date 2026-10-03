@@ -17,7 +17,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -29,13 +28,17 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;import java.util.stream.Collectors;
 
 //? if >= 1.19.4 {
 import com.mojang.math.Axis;
 //? } else {
 /*import com.mojang.math.Vector3f;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 //~ if < 1.21.1 '.level()' -> '.level' {
 public class FalloverAnimationHandler implements AnimationHandler {
@@ -124,6 +127,7 @@ public class FalloverAnimationHandler implements AnimationHandler {
             limitChance = maxParticleBlocks / (double)data.getNumLeaves();
         limitChance *= Math.exp(-bounces);
 
+        //~ if < 1.19.2 'RandomSource' -> 'Random'
         RandomSource rand = entity.level().random;
         int particleCount = (int)((bounces == 0 ? (int)(fallSpeed*5) : 1) * data.species.falloverParticleFlingMultiplier());
 
@@ -142,6 +146,7 @@ public class FalloverAnimationHandler implements AnimationHandler {
         }
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     protected void spawnParticlesAtLeaves(FallingTreeEntity entity, BlockPos leavesPos, BlockState leavesState, Vec3 velocity, RandomSource rand, int particleCount, double limitChance){
         Vec3 newPos = getRelativeLeavesPosition(
                 entity,

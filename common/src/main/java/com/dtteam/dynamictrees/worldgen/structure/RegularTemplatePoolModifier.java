@@ -2,8 +2,9 @@ package com.dtteam.dynamictrees.worldgen.structure;
 
 import com.dtteam.dynamictrees.data.CustomBootstrapContext;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;import net.minecraft.core.RegistryAccess;import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -16,6 +17,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
 //? }
 
 // @author Harley O'Connor

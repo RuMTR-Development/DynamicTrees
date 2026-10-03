@@ -3,12 +3,15 @@ package com.dtteam.dynamictrees.block.soil;
 import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+//? if >= 1.21.1 {
+import net.minecraft.core.HolderLookup;
+//? }
 
 /**
  * A TileEntity that holds a species value.
