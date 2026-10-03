@@ -259,8 +259,10 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
             DynamicTrees.LOG.warn("Could not get model for {}! Branch needs to be handled manually!", state.getBlock());
             return 0;
         }
+        //~ if < 1.19.2 'RandomSource.create' -> 'new Random'
         List<BakedQuad> quads = model.getQuads(state, face, RandomSource.create());
         if (quads.isEmpty()) {
+            //~ if < 1.19.2 'RandomSource.create' -> 'new Random'
             quads = model.getQuads(state, null, RandomSource.create());
         }
         if (quads.isEmpty()) {

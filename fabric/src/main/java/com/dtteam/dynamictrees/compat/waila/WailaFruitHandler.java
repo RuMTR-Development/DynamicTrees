@@ -10,6 +10,10 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class WailaFruitHandler implements IBlockComponentProvider {
 
     public static final ResourceLocation FRUIT_UID = DynamicTrees.location("fruit");
@@ -18,9 +22,11 @@ public class WailaFruitHandler implements IBlockComponentProvider {
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         if (accessor.getBlock() instanceof FruitBlock fruitBlock) {
             float ageAsPercentage = fruitBlock.getAgeAsPercentage(accessor.getBlockState());
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
             tooltip.add(Component.translatable(
                     "tooltip.waila.crop_growth",
                     ageAsPercentage < 100F ? String.format("%.0f%%", ageAsPercentage) :
+                            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                             Component.translatable("tooltip.waila.crop_mature").withStyle(ChatFormatting.GREEN)
             ));
         }

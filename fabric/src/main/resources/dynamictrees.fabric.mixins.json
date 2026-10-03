@@ -15,6 +15,7 @@
     "TextureAtlasMixin"
   ],
   "client": [
+    "ForwardingBakedModelAccessor",
     "ModelBakeryMixin",
     "ModelManagerMixin"
   ],

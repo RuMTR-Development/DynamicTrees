@@ -5,10 +5,13 @@ import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
     public List<Holder<T>> contents() {
@@ -35,7 +38,8 @@ public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
     }
 
     @Override
-    public Optional<Holder<T>> getRandomElement(RandomSource random) {
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    public Optional<Holder<T>> getRandomSourceElement(RandomSource random) {
         return Util.getRandomSafe(this.contents(), random);
     }
 

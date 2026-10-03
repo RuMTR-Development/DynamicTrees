@@ -25,7 +25,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,6 +38,10 @@ import org.joml.Vector3f;
 //? } else {
 /*import com.mojang.math.Vector3f;
 *///? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 @SuppressWarnings("unchecked")
 public class BasicBranchBlockBakedModel implements BakedModel, FabricBakedModel {
@@ -199,6 +202,7 @@ public class BasicBranchBlockBakedModel implements BakedModel, FabricBakedModel 
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
         EnumMap<Direction, List<BakedQuad>> bakedQuads = collectQuads(blockView, state, pos);
         if (bakedQuads == null) return;
@@ -293,6 +297,7 @@ public class BasicBranchBlockBakedModel implements BakedModel, FabricBakedModel 
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public void emitItemQuads(ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
     }
 
@@ -327,6 +332,7 @@ public class BasicBranchBlockBakedModel implements BakedModel, FabricBakedModel 
     }
 
     @Override
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction direction, RandomSource random) {
         return Collections.emptyList();
     }

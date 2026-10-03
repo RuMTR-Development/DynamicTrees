@@ -4,12 +4,15 @@ import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;import java.util.Random;
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class BakedModelBlockPottedSapling extends ForwardingBakedModel {
 
@@ -24,6 +27,7 @@ public class BakedModelBlockPottedSapling extends ForwardingBakedModel {
 
     @Override
     @NotNull
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     public List<BakedQuad> getQuads(BlockState state, Direction face, RandomSource random) {
         return new ArrayList<>(wrapped.getQuads(state, face, random));
     }

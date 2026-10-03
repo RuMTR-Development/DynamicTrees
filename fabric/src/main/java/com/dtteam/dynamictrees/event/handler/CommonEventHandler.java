@@ -13,7 +13,6 @@ import com.dtteam.dynamictrees.treepack.Resources;
 import com.dtteam.dynamictrees.worldgen.BiomeDatabases;
 import com.dtteam.dynamictrees.worldgen.feature.DynamicTreeFeature;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
@@ -29,6 +28,12 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+
+//? if >= 1.19.2 {
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+//? } else {
+/*import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+*///? }
 
 public class CommonEventHandler {
 
@@ -51,8 +56,17 @@ public class CommonEventHandler {
         ServerLifecycleEvents.SERVER_STARTED.register((minecraftServer -> {
             SeasonCompatibilityHandler.getSeasonManager().flushMappings();
         }));
-        
-        CommandRegistrationCallback.EVENT.register(((commandDispatcher, commandBuildContext, commandSelection) -> {
+
+        CommandRegistrationCallback.EVENT.register(((
+                commandDispatcher,
+
+                //? if >= 1.19.2 {
+                commandBuildContext,
+                commandSelection
+                //? } else {
+                /*dedicated
+                *///? }
+        ) -> {
             new DTCommand().registerDTCommand(commandDispatcher);
         }));
 

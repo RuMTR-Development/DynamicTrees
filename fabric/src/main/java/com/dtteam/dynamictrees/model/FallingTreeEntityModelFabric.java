@@ -14,17 +14,21 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;import net.minecraft.util.RandomSource;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;import java.util.Random;
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.BuiltInRegistries;
+//? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
 //? }
 
 public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
@@ -51,8 +55,10 @@ public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
 
                 //? if >= 1.21 {
                 RandomSource random = entity.getRandom();
-                //? } else {
+                //? } else if >= 1.19.2 {
                 /*RandomSource random = entity.level.getRandom();
+                *///? } else {
+                /*Random random = entity.level.getRandom();
                 *///? }
 
                 boolean rootyBlockAdded = false;
@@ -128,6 +134,7 @@ public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
         return offsetAllQuads(offset, allQuads);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private List<BakedQuad> getBranchQuadsWithConnections(BakedModel model, BlockState state, Vec3 offset, RandomSource random, int[] connections, int coreRadius, Direction forceRingDir) {
         List<BakedQuad> allQuads = new ArrayList<>();
 
@@ -149,6 +156,7 @@ public class FallingTreeEntityModelFabric extends FallingTreeEntityModel {
         return offsetAllQuads(offset, allQuads);
     }
 
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
     private List<BakedQuad> getQuadsWithOffset(BakedModel model, BlockState state, Vec3 offset, RandomSource random) {
         List<BakedQuad> allQuads = new ArrayList<>();
 

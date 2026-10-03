@@ -3,11 +3,9 @@ package com.dtteam.dynamictrees.worldgen.holderset;
 import com.dtteam.dynamictrees.worldgen.IDTBiomeHolderSet;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +16,10 @@ import java.util.stream.Stream;
 //? if >= 1.19.4 {
 import net.minecraft.core.HolderOwner;
  //? }
+
+//? if >= 1.19.2 {
+import net.minecraft.util.RandomSource;
+//? }
 
 public class DTBiomeHolderSet implements IDTBiomeHolderSet {
 
@@ -73,7 +75,8 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
     }
 
     @Override
-    public Optional<Holder<Biome>> getRandomElement(RandomSource random) {
+    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    public Optional<Holder<Biome>> getRandomSourceElement(RandomSource random) {
         Set<Holder<Biome>> set = this.getSet();
         if (set.isEmpty()) {
             return Optional.empty();
@@ -143,7 +146,7 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
                 //? if >= 1.19.4 {
                 registrySupplier.get().asLookup(),
                  //? } else {
-                /*new HolderLookup.RegistryLookup<>(registrySupplier.get()),
+                /*registrySupplier,
                 *///? }
 
                 regex
@@ -158,7 +161,7 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
                 //? if >= 1.19.4 {
                 registrySupplier.get().asLookup(),
                  //? } else {
-                /*new HolderLookup.RegistryLookup<>(registrySupplier.get()),
+                /*registrySupplier,
                 *///? }
 
                 regex

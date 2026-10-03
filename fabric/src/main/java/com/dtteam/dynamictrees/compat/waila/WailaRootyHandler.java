@@ -10,6 +10,10 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class WailaRootyHandler implements IBlockComponentProvider {
 
     public static final ResourceLocation ROOTY_UID = DynamicTrees.location("rooty");
@@ -18,6 +22,7 @@ public class WailaRootyHandler implements IBlockComponentProvider {
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         if (accessor.getBlock() instanceof final SoilBlock rooty) {
             final int fertility = rooty.getFertility(accessor.getBlockState(), accessor.getLevel(), accessor.getPosition());
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
             tooltip.add(Component.translatable("tooltip.dynamictrees.fertility", Mth.floor(fertility * 100 / 15f) + "%"));
         }
     }

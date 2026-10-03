@@ -35,6 +35,11 @@ import snownee.jade.impl.ui.ElementHelper;
 import java.util.LinkedList;
 import java.util.List;
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class WailaBranchHandler implements IBlockComponentProvider {
     public static final ResourceLocation ID = DynamicTrees.location("branch");
 
@@ -86,10 +91,12 @@ public class WailaBranchHandler implements IBlockComponentProvider {
 
         if (species != Species.NULL_SPECIES) {
             if (species.showSpeciesOnWaila()) {
+                //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                 tooltip.add(Component.translatable("tooltip.dynamictrees.species", species.getTextComponent()));
             }
 
             if (Minecraft.getInstance().options.advancedItemTooltips) {
+                //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
                 tooltip.add(Component.literal(ChatFormatting.DARK_GRAY + species.getRegistryName().toString()));
             }
 

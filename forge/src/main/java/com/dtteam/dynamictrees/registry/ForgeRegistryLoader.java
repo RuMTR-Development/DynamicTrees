@@ -72,7 +72,7 @@ import net.minecraft.commands.synchronization.ArgumentTypes;
 
 public class ForgeRegistryLoader extends RegistryLoader {
     //~ if < 1.19.2 'ENTITY_TYPES' -> 'ENTITIES'
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, DynamicTrees.MOD_ID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, DynamicTrees.MOD_ID);
 
     //? if >= 1.19.4 {
@@ -99,7 +99,7 @@ public class ForgeRegistryLoader extends RegistryLoader {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, DynamicTrees.MOD_ID);
 
     //~ if < 1.19.2 'BLOCK_ENTITY_TYPES' -> 'BLOCK_ENTITIES'
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, DynamicTrees.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, DynamicTrees.MOD_ID);
 
     //? if >= 1.19.2
     //public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, DynamicTrees.MOD_ID);

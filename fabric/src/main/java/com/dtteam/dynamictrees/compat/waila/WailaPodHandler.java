@@ -15,6 +15,10 @@ import snownee.jade.api.config.IPluginConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 //? }
 
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TranslatableComponent;
+*///? }
+
 public class WailaPodHandler implements IBlockComponentProvider {
     private static final ResourceLocation POD_UID = DynamicTrees.location("pod");
 
@@ -26,9 +30,11 @@ public class WailaPodHandler implements IBlockComponentProvider {
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'Registry.BLOCK'
         if (accessor.getBlock() instanceof PodBlock podBlock && !BuiltInRegistries.BLOCK.getKey(accessor.getBlock()).equals(COCOA)) {
             float ageAsPercentage = podBlock.getAgeAsPercentage(accessor.getBlockState());
+            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
             tooltip.add(Component.translatable(
                     "tooltip.waila.crop_growth",
                     ageAsPercentage < 100F ? String.format("%.0f%%", ageAsPercentage) :
+                            //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
                             Component.translatable("tooltip.waila.crop_mature").withStyle(ChatFormatting.GREEN)
             ));
         }

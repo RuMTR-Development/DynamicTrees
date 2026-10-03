@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
@@ -18,7 +17,8 @@ import java.util.stream.Stream;
 
 //? if >= 1.19.4 {
 /*import net.minecraft.core.HolderOwner;
- *///? }
+import net.minecraft.core.HolderLookup;
+*///? }
 
 public abstract class RegexMatchHolderSet<T> extends StreamBackedHolderSet<T> implements ICustomHolderSet<T> {
 
