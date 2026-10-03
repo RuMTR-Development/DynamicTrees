@@ -3,13 +3,16 @@ package com.dtteam.dynamictrees.compat.waila;
 import com.dtteam.dynamictrees.DynamicTrees;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+
+//? if < 1.19.2 {
+/*import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+*///? }
 
 public class WailaRootyWaterHandler implements IBlockComponentProvider {
 

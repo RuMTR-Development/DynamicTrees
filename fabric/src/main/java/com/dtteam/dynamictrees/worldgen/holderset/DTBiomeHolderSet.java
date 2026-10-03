@@ -75,8 +75,8 @@ public class DTBiomeHolderSet implements IDTBiomeHolderSet {
     }
 
     @Override
-    //~ if < 1.19.2 'RandomSource' -> 'Random'
-    public Optional<Holder<Biome>> getRandomSourceElement(RandomSource random) {
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
+    public Optional<Holder<Biome>> getRandomElement(RandomSource random) {
         Set<Holder<Biome>> set = this.getSet();
         if (set.isEmpty()) {
             return Optional.empty();

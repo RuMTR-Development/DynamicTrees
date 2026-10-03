@@ -43,8 +43,8 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
     }
 
     @Override
-    //~ if < 1.19.2 'RandomSource' -> 'Random'
-    public Optional<Holder<T>> getRandomSourceElement(RandomSource random) {
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
+    public Optional<Holder<T>> getRandomElement(RandomSource random) {
         return this.holderSetSupplier.get().getRandomElement(random);
     }
 
