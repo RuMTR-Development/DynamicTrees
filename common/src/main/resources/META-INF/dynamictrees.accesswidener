@@ -5,13 +5,13 @@ accessible method net/minecraft/world/level/PathNavigationRegion getChunk (Lnet/
 accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
 accessible field net/minecraft/world/level/storage/loot/parameters/LootContextParamSets REGISTRY Lcom/google/common/collect/BiMap;
 
-#? if >= 1.21.1 {
+# if >= 1.21.1 {
 accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType <init> (Lcom/mojang/serialization/MapCodec;)V
 accessible method net/minecraft/client/renderer/texture/atlas/SpriteSources register (Ljava/lang/String;Lcom/mojang/serialization/MapCodec;)Lnet/minecraft/client/renderer/texture/atlas/SpriteSourceType;
-#? } else {
-#accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType <init> (Lcom/mojang/serialization/Codec;)V
-#accessible method net/minecraft/client/renderer/texture/atlas/SpriteSources register (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lnet/minecraft/client/renderer/texture/atlas/SpriteSourceType;
-#? }
+# } else {
+accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType <init> (Lcom/mojang/serialization/Codec;)V
+accessible method net/minecraft/client/renderer/texture/atlas/SpriteSources register (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lnet/minecraft/client/renderer/texture/atlas/SpriteSourceType;
+# }
 
 accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool rawTemplates Ljava/util/List;
 mutable field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool rawTemplates Ljava/util/List;
@@ -29,32 +29,32 @@ accessible field net/minecraft/commands/synchronization/ArgumentTypeInfos BY_CLA
 accessible class net/minecraft/world/inventory/BrewingStandMenu$PotionSlot
 accessible class net/minecraft/data/tags/IntrinsicHolderTagsProvider$IntrinsicTagAppender
 
-#? if >= 1.21.1 {
+# if >= 1.21.1 {
 accessible method net/minecraft/client/renderer/texture/SpriteContents metadata ()Lnet/minecraft/server/packs/resources/ResourceMetadata;
-#? }
+# }
 
-#? if < 1.21.1 {
-#accessible field net/minecraft/world/level/Explosion x D
-#accessible field net/minecraft/world/level/Explosion y D
-#accessible field net/minecraft/world/level/Explosion z D
-#? }
+# if < 1.21.1 {
+accessible field net/minecraft/world/level/Explosion x D
+accessible field net/minecraft/world/level/Explosion y D
+accessible field net/minecraft/world/level/Explosion z D
+# }
 
-#? if < 1.19.4
-#accessible class net/minecraft/data/tags/TagsProvider$TagAppender
+# if < 1.19.4
+accessible class net/minecraft/data/tags/TagsProvider$TagAppender
 
-#? if < 1.19.4
-#accessible field net/minecraft/client/renderer/texture/TextureAtlasSprite mainImage [Lcom/mojang/blaze3d/platform/NativeImage;
+# if < 1.19.4
+accessible field net/minecraft/client/renderer/texture/TextureAtlasSprite mainImage [Lcom/mojang/blaze3d/platform/NativeImage;
 
-#? if >= 1.19.2 {
+# if >= 1.19.2 {
 accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool templates Lit/unimi/dsi/fastutil/objects/ObjectArrayList;
-#? } else {
-#accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool templates Ljava/util/List;
-#? }
+# } else {
+accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool templates Ljava/util/List;
+# }
 
-#? if < 1.19.4 {
-#accessible field net/minecraft/world/item/CreativeModeTab displayName Lnet/minecraft/network/chat/Component;
-#mutable field net/minecraft/world/item/CreativeModeTab displayName Lnet/minecraft/network/chat/Component;
-#? }
+# if < 1.19.4 {
+accessible field net/minecraft/world/item/CreativeModeTab displayName Lnet/minecraft/network/chat/Component;
+mutable field net/minecraft/world/item/CreativeModeTab displayName Lnet/minecraft/network/chat/Component;
+# }
 
 accessible field net/minecraft/client/renderer/texture/SpriteContents originalImage Lcom/mojang/blaze3d/platform/NativeImage;
 
