@@ -8,7 +8,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.ModelDataManager;import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
 //? if >= 1.19.2 {
@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 *///? } else {
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.ModelDataManager;
 //? }
 
 public class PottedSaplingBlockEntityF extends PottedSaplingBlockEntity {

@@ -10,13 +10,12 @@ version = mod_version
 
 
 neoForge {
-    validateAccessTransformers = stonecutter.current.isActive
+    validateAccessTransformers = true
+
     version = neoforge_version
-    // Automatically enable neoforge AccessTransformers if the file exists
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-    if (at.exists()) {
-        accessTransformers.from(at.absolutePath)
-    }
+
+    accessTransformers.from(project(":neoforge").file("src/main/resources/accesstransformers/$accesstransformer"))
+
     parchment {
         minecraftVersion = parchment_minecraft
         mappingsVersion = parchment_version

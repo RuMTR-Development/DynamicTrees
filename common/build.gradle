@@ -6,11 +6,7 @@ plugins {
 version = "${mod_version}"
 
 loom {
-    def aw = project(":common").file("src/main/resources/META-INF/${mod_id}.accesswidener")
-
-    if (aw.exists()) {
-        accessWidenerPath.set(aw)
-    }
+    accessWidenerPath = project(":common").file("src/main/resources/accesswideners/${minecraft_version}.accesswidener")
 
     mixin {
         useLegacyMixinAp = false

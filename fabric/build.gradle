@@ -62,13 +62,8 @@ dependencies {
 }
 
 loom {
-    def aw = project(':common').file("src/main/resources/META-INF/${mod_id}.accesswidener")
-    if (aw.exists()) {
-        accessWidenerPath.set(aw)
-    }
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
-    }
+    accessWidenerPath = project(":common").file("src/main/resources/accesswideners/${accesswidener}")
+
     runs {
         client {
             client()
@@ -96,4 +91,3 @@ loom {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
-

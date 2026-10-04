@@ -38,7 +38,7 @@ public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
     }
 
     @Override
-    //~ if < 1.19.2 'RandomSource' -> 'Random'
+    //~ if < 1.19.2 'RandomSource random' -> 'Random random'
     public Optional<Holder<T>> getRandomElement(Random random) {
         return Util.getRandomSafe(this.contents(), random);
     }

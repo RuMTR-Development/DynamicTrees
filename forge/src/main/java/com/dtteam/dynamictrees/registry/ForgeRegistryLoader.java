@@ -12,7 +12,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Direction;import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;import net.minecraft.data.worldgen.placement.PlacementUtils;import net.minecraft.network.chat.Component;
+import net.minecraft.data.worldgen.placement.PlacementUtils;import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -51,8 +51,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+/*import net.minecraft.core.registries.Registries;
 import net.minecraftforge.event.CreativeModeTabEvent;
 *///? } else {
 import net.minecraftforge.registries.ForgeRegistries;
@@ -159,7 +158,7 @@ public class ForgeRegistryLoader extends RegistryLoader {
             CreativeModeTab newTab = e.registerCreativeModeTab(new ResourceLocation(DynamicTrees.MOD_ID, name), builder ->
                     builder.icon(icon)
                             .title(title)
-                            .displayItems(displayItems)
+                            .displayItems((parameters, output) -> displayItems.accept(output::accept))
                             .build());
 
             tab.set(newTab);

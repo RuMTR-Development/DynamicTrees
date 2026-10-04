@@ -50,6 +50,11 @@ versionKeys.each { key ->
     }
 }
 
+ext {
+    accesswidener = "${minecraft_version}.accesswidener"
+    accesstransformer = "${minecraft_version}_at.cfg"
+}
+
 base {
     archivesName = "${mod_id}-${parent.name}-${minecraft_version}"
 }
@@ -161,7 +166,9 @@ processResources {
             "forge_version": forge_version,
             "forge_loader_version_range": forge_loader_version_range,
             'credits'                      : credits,
-            'java_version'                 : java_version
+            'java_version'                 : java_version,
+            'aw_file' : accesswidener,
+            'at_file' : accesstransformer
     ]
 
     if (rootBranch.hasProperty("neoforge_version")) {
@@ -176,6 +183,12 @@ processResources {
         expand expandProps
     }
     inputs.properties(expandProps)
+
+    dependsOn ":common:${minecraft_version}:stonecutterGenerate"
+}
+
+sourcesJar {
+    dependsOn ":common:${minecraft_version}:stonecutterGenerate"
 }
 
 publishing {

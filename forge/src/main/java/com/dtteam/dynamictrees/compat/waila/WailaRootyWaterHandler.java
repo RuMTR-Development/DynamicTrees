@@ -3,7 +3,7 @@ package com.dtteam.dynamictrees.compat.waila;
 import com.dtteam.dynamictrees.DynamicTrees;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 //? if >= 1.19.2 {
 /*import snownee.jade.api.BlockAccessor;
@@ -16,6 +16,7 @@ import mcp.mobius.waila.api.IComponentProvider;
 import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.TextComponent;
 //? }
 
 //~ if < 1.19.2 'IBlockComponentProvider' -> 'IComponentProvider'

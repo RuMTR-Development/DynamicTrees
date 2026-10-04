@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;import net.minecraftforge.registries.ForgeRegistries;
 
@@ -26,7 +25,9 @@ import net.minecraftforge.fml.common.Mod;import net.minecraftforge.registries.Fo
 //? if >= 1.19.2 {
 /*import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ModifiableBiomeInfo;
-*///? }
+*///? } else {
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+//? }
 
 //? if < 1.19.2
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -83,7 +84,7 @@ public class RunFeatureCancellersBiomeModifier
         ResourceKey<Biome> biomeKey = biome.unwrapKey().orElseThrow();
         BiomeGenerationSettingsBuilder generationSettings = builder.getGenerationSettings();
 
-        apply(biomekey, generationSettings);
+        apply(biomeKey, generationSettings);
     }
 
     @Override

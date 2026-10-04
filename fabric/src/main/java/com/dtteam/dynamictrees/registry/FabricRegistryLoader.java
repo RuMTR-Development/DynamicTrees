@@ -99,7 +99,7 @@ public class FabricRegistryLoader extends RegistryLoader {
 
         return ()-> tab;
         //? } else if >= 1.19.4 {
-        /*CreativeModeTab tab = FabricItemGroup.builder(DynamicTrees.location(DynamicTrees.MOD_ID)).icon(icon).title(title).displayItems((parameters, output) -> displayItems.accept(output)).build();
+        /*CreativeModeTab tab = FabricItemGroup.builder(DynamicTrees.location(DynamicTrees.MOD_ID)).icon(icon).title(title).displayItems((parameters, output) -> displayItems.accept(output::accept)).build();
 
         try {
             ItemGroupHelper.appendItemGroup(tab);
@@ -188,22 +188,22 @@ public class FabricRegistryLoader extends RegistryLoader {
     //? } else {
     /*@Override
     public Supplier<LootItemConditionType> registerLootConditionType(String name, Serializer<? extends LootItemCondition> serializerFactory) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        LootItemConditionType type = BuiltInRegistries.register(BuiltInRegistries.LOOT_CONDITION_TYPE, DynamicTrees.location(name), new LootItemConditionType(serializerFactory));
+        //~ if < 1.19.4 'BuiltInRegistries.LOOT_CONDITION_TYPE' -> 'Registry.LOOT_CONDITION_TYPE'
+        LootItemConditionType type = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, DynamicTrees.location(name), new LootItemConditionType(serializerFactory));
         return ()-> type;
     }
 
     @Override
     public Supplier<LootPoolEntryType> registerLootPoolEntryType(String name, Serializer<? extends LootPoolEntryContainer> serializerFactory) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        LootPoolEntryType type = BuiltInRegistries.register(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, DynamicTrees.location(name), new LootPoolEntryType(serializerFactory));
+        //~ if < 1.19.4 'BuiltInRegistries.LOOT_POOL_ENTRY_TYPE' -> 'Registry.LOOT_POOL_ENTRY_TYPE'
+        LootPoolEntryType type = Registry.register(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, DynamicTrees.location(name), new LootPoolEntryType(serializerFactory));
         return ()-> type;
     }
 
     @Override
     public <L extends LootItemFunction> Supplier<LootItemFunctionType> registerLootFunctionType(String name, Serializer<L> serializerFactory) {
-        //~ if < 1.19.4 'BuiltInRegistries' -> 'Registry'
-        LootItemFunctionType type = BuiltInRegistries.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, DynamicTrees.location(name), new LootItemFunctionType(serializerFactory));
+        //~ if < 1.19.4 'BuiltInRegistries.LOOT_FUNCTION_TYPE' -> 'Registry.LOOT_FUNCTION_TYPE'
+        LootItemFunctionType type = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, DynamicTrees.location(name), new LootItemFunctionType(serializerFactory));
         return ()-> type;
     }
     *///? }

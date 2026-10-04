@@ -3,6 +3,9 @@ plugins {
     id "net.neoforged.moddev.legacyforge"
 }
 
+mod_version = "${mod_version}-forge${forgeVersionAppend}"
+version = mod_version
+
 stonecutter {
     constants["serene_seasons"] = project.hasProperty("forge_serene_seasons_version")
 }
@@ -19,13 +22,9 @@ legacyForge {
         forgeVersion = "${minecraft_version}-${forge_version}"
     }
 
-//    validateAccessTransformers = stonecutter.current.isActive
+    validateAccessTransformers = true
 
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    if (at.exists()) {
-        accessTransformers.from(at.absolutePath)
-    }
+    accessTransformers.from(project(":forge").file("src/main/resources/accesstransformers/$accesstransformer"))
 
     parchment {
         minecraftVersion = parchment_minecraft
@@ -104,6 +103,13 @@ java {
     }
 }
 
-tasks.named('createMinecraftArtifacts') {
+createMinecraftArtifacts {
     dependsOn ":forge:${minecraft_version}:stonecutterGenerate"
+}
+
+processResources {
+    from(project(":forge").file("src/main/resources/accesstransformers/$accesstransformer")) {
+        into("META-INF")
+        rename { "accesstransformer.cfg" }
+    }
 }

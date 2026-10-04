@@ -5,13 +5,14 @@ import com.dtteam.dynamictrees.block.branch.BranchBlock;
 import com.dtteam.dynamictrees.tree.family.Family;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.CompositeModel;
-import net.minecraftforge.client.model.data.ModelDataMap;import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.19.2 {
 /*import net.minecraftforge.client.model.data.ModelData;
 *///? } else {
 import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 //? }
 
 /**

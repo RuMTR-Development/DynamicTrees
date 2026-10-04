@@ -6,7 +6,6 @@ import com.dtteam.dynamictrees.tree.family.Family;
 import com.dtteam.dynamictrees.tree.species.Species;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -22,7 +21,10 @@ import java.util.concurrent.CompletableFuture;
 //? if >= 1.19.4 {
 /*import net.minecraft.data.PackOutput;
 import net.minecraft.core.HolderLookup;
-*///? }
+import net.minecraftforge.common.data.BlockTagsProvider;
+*///? } else {
+import net.minecraft.data.tags.BlockTagsProvider;
+//? }
 
 /**
  * @author Harley O'Connor

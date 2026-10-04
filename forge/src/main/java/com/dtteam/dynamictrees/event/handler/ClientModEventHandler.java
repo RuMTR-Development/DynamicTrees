@@ -31,7 +31,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,6 +49,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.event.ModelBakeEvent;
 //? }
 
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -218,7 +218,7 @@ public class ClientModEventHandler {
     public static final ResourceLocation SMALL_PALM_FRONDS = DynamicTrees.location("small_palm_fronds");
 
     @SubscribeEvent
-    //~ if < 1.19.2 'ModelEvent.RegisterGeometryLoaders' -> 'ModelRegistryEvent'
+    //~ if < 1.19.2 'ModelEvent.RegisterGeometryLoaders event' -> 'ModelRegistryEvent event'
     public static void onModelRegistryEvent(ModelRegistryEvent event) {
         // Register model loaders for baked models.
 

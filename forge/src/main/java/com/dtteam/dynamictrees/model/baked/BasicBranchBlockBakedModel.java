@@ -20,7 +20,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.IModelBuilder;
-import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +43,7 @@ import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 *///? } else {
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.IModelConfiguration;
+import net.minecraftforge.client.model.data.IModelData;
 //? }
 
 public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
@@ -320,6 +320,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
     @NotNull
     @Override
     //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
+    //~ if < 1.19.2 'ModelData tileData' -> 'IModelData tileData'
     public IModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull IModelData tileData) {
         ModelConnections modelConnections;
         if (state.getBlock() instanceof BranchBlock branchBlock) {

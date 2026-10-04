@@ -46,7 +46,7 @@ public class DendroPotionRecipeHandler {
 
     public static ItemStack setPotion(ItemStack pStack, String potionName) {
         //? if >= 1.19.4 {
-        /*Optional<Holder.Reference<Potion>> potion = BuiltInRegistrieFo.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
+        /*Optional<Holder.Reference<Potion>> potion = BuiltInRegistries.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
 
         potion.ifPresent(holder -> PotionUtils.setPotion(pStack, holder.value()));
         *///? } else {

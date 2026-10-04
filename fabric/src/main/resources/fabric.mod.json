@@ -14,7 +14,7 @@
   "license": "${license}",
   "icon": "${mod_id}.png",
   "environment": "*",
-  "accessWidener": "META-INF/${mod_id}.accesswidener",
+  "accessWidener": "accesswideners/${aw_file}",
   "entrypoints": {
     "main": [
       "com.dtteam.dynamictrees.DynamicTreesFabric"

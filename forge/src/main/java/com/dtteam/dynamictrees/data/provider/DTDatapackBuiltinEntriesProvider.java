@@ -1,7 +1,8 @@
 package com.dtteam.dynamictrees.data.provider;
 
 import com.dtteam.dynamictrees.DynamicTrees;
-import com.dtteam.dynamictrees.data.CustomBootstrapContext;import com.dtteam.dynamictrees.registry.DTRegistries;
+import com.dtteam.dynamictrees.data.CustomBootstrapContext;
+import com.dtteam.dynamictrees.registry.DTRegistries;
 import com.dtteam.dynamictrees.tree.species.Species;
 import com.dtteam.dynamictrees.worldgen.feature.CaveRootedTreePlacement;
 import com.dtteam.dynamictrees.worldgen.feature.DTReplaceNyliumFungiBlockStateProvider;
@@ -151,7 +152,7 @@ public class DTDatapackBuiltinEntriesProvider
             //? if >= 1.19.4
             //HolderLookup.Provider vanillaProvider,
 
-            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
             CustomBootstrapContext<StructureTemplatePool> context
     ) {
         // TODO 1.20: Verify this works
@@ -167,7 +168,7 @@ public class DTDatapackBuiltinEntriesProvider
             //? if >= 1.19.4
             //HolderLookup.Provider vanillaProvider,
 
-            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
             CustomBootstrapContext<ConfiguredFeature<?, ?>> context
     ) {
         context.register(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE,
@@ -184,7 +185,7 @@ public class DTDatapackBuiltinEntriesProvider
         );
     }
 
-    //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+    //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
     private static void bootstrapPlacedFeatures(CustomBootstrapContext<PlacedFeature> context) {
         //? if >= 1.19.4 {
         /*var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -222,7 +223,7 @@ public class DTDatapackBuiltinEntriesProvider
             //? if >= 1.19.4
             //HolderLookup.Provider vanillaProvider,
 
-            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
             CustomBootstrapContext<ConfiguredFeature<?, ?>> context
     ) {
         Species.findSpecies(DynamicTrees.CRIMSON).getSapling().ifPresent(crimsonSapling ->
@@ -253,7 +254,7 @@ public class DTDatapackBuiltinEntriesProvider
     }
 
     private static void replaceFeature(
-            //~ if < 1.19.4 'BootstrapContext' -> 'CustomBootstrapContext'
+            //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
             CustomBootstrapContext<ConfiguredFeature<?, ?>> context,
 
             //~ if < 1.19.4 'HolderLookup.RegistryLookup' -> 'Registry'

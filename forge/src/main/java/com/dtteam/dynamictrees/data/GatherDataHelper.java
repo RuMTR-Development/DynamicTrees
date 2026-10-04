@@ -43,25 +43,23 @@ public final class GatherDataHelper {
     public static void gatherRecipeData(final String modId, final GatherDataEvent event) {
         final DataGenerator generator = event.getGenerator();
 
+        //? if >= 1.19.4 {
+        /*PackOutput packOutput = generator.getPackOutput();
+        *///? }
+
+        //? if >= 1.19.4 {
+        /*final DTRecipeProvider recipeProvider = new DTRecipeProvider(packOutput);
+        *///? } else {
         final DTRecipeProvider recipeProvider = new DTRecipeProvider(generator);
+        //? }
 
-        if (!event.includeServer()) {
-            return;
+        //? if >= 1.19.2 {
+        /*generator.addProvider(event.includeServer(), recipeProvider);
+        *///? } else {
+        if (event.includeServer()) {
+            generator.addProvider(recipeProvider);
         }
-
-        generator.addProvider(recipeProvider);
-    }
-
-    public static void gatherRecipeData(final String modId, final GatherDataEvent event) {
-        final DataGenerator generator = event.getGenerator();
-
-        final DTRecipeProvider recipeProvider = new DTRecipeProvider(generator);
-
-        if (!event.includeServer()) {
-            return;
-        }
-
-        generator.addProvider(recipeProvider);
+        //? }
     }
 
     public static void gatherTagData(final String modId, final GatherDataEvent event) {

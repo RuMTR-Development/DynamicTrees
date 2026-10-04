@@ -28,7 +28,7 @@ import net.minecraft.data.loot.BlockLoot;
 import net.minecraftforge.registries.ForgeRegistries;
 //? }
 
-//~ if < 1.19.4 'extends BlockLootSubProvider' -> 'exteds BlockLoot'
+//~ if < 1.19.4 'extends BlockLootSubProvider' -> 'extends BlockLoot'
 public class DTBlockLootSubProvider extends BlockLoot {
     private final String modId;
     private final ExistingFileHelper fileHelper;

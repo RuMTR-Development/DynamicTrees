@@ -7,10 +7,9 @@ import com.dtteam.dynamictrees.registry.ForgeRegistryLoader;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +22,9 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 //? if >= 1.19.2 {
 /*import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ModifiableBiomeInfo;
-*///? }
+*///? } else {
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+//? }
 
 //? if < 1.19.2
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
