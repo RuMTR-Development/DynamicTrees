@@ -32,11 +32,36 @@ public final class GatherDataHelper {
         gatherItemModelData(modId, event, registries);
         gatherLootData(modId, event);
         gatherLangData(modId, event, registries);
+        gatherRecipeData(modId, event);
     }
 
     public static void gatherAllData(final String modId, final GatherDataEvent event, Generator<DTDataProvider.Language, String> generator, Registry<?>... registries) {
         addLangGenerator(modId, generator);
         gatherAllData(modId, event, registries);
+    }
+
+    public static void gatherRecipeData(final String modId, final GatherDataEvent event) {
+        final DataGenerator generator = event.getGenerator();
+
+        final DTRecipeProvider recipeProvider = new DTRecipeProvider(generator);
+
+        if (!event.includeServer()) {
+            return;
+        }
+
+        generator.addProvider(recipeProvider);
+    }
+
+    public static void gatherRecipeData(final String modId, final GatherDataEvent event) {
+        final DataGenerator generator = event.getGenerator();
+
+        final DTRecipeProvider recipeProvider = new DTRecipeProvider(generator);
+
+        if (!event.includeServer()) {
+            return;
+        }
+
+        generator.addProvider(recipeProvider);
     }
 
     public static void gatherTagData(final String modId, final GatherDataEvent event) {
@@ -68,14 +93,14 @@ public final class GatherDataHelper {
 
     public static void gatherBlockStateAndModelData(final String modId, final GatherDataEvent event, Registry<?>... registries) {
         //? if >= 1.19.4 {
-        /*event.getGenerator().addProvider(event.includeServer(), new DTSpriteSourceProvider(event.getGenerator().getPackOutput(),
+        /*event.getGenerator().addProvider(event.includeClient(), new DTSpriteSourceProvider(event.getGenerator().getPackOutput(),
                 event.getLookupProvider(), modId, event.getExistingFileHelper(), registries));
         *///? }
 
         //? if >= 1.19.2 {
-        /*event.getGenerator().addProvider(event.includeServer(),
-        */// } else {
-        if (!event.includeServer()) {
+        /*event.getGenerator().addProvider(event.includeClient(),
+        *///? } else {
+        if (!event.includeClient()) {
             return;
         }
 
@@ -96,9 +121,9 @@ public final class GatherDataHelper {
 
     public static void gatherItemModelData(final String modId, final GatherDataEvent event, Registry<?>... registries) {
         //? if >= 1.19.2 {
-        /*event.getGenerator().addProvider(event.includeServer(),
-        */// } else {
-        if (!event.includeServer()) {
+        /*event.getGenerator().addProvider(event.includeClient(),
+        *///? } else {
+        if (!event.includeClient()) {
             return;
         }
 
@@ -120,7 +145,7 @@ public final class GatherDataHelper {
     public static void gatherLootData(final String modId, final GatherDataEvent event) {
         //? if >= 1.19.2 {
         /*event.getGenerator().addProvider(event.includeServer(),
-        */// } else {
+        *///? } else {
         if (!event.includeServer()) {
             return;
         }
@@ -140,9 +165,9 @@ public final class GatherDataHelper {
     }
     public static void gatherLangData(final String modId, final GatherDataEvent event, Registry<?>... registries){
         //? if >= 1.19.2 {
-        /*event.getGenerator().addProvider(event.includeServer(),
-        */// } else {
-        if (!event.includeServer()) {
+        /*event.getGenerator().addProvider(event.includeClient(),
+        *///? } else {
+        if (!event.includeClient()) {
             return;
         }
 

@@ -7,6 +7,13 @@ stonecutter {
     constants["serene_seasons"] = project.hasProperty("forge_serene_seasons_version")
 }
 
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+
+    config "${mod_id}.mixins.json"
+    config "${mod_id}.forge.mixins.json"
+}
+
 legacyForge {
     enable {
         forgeVersion = "${minecraft_version}-${forge_version}"
@@ -31,6 +38,7 @@ legacyForge {
     runs {
         configureEach {
             ideName = "Forge ${it.name.capitalize()} (${project.path})"
+            systemProperty "mixin.config", "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
         }
 
         client {
@@ -67,10 +75,17 @@ sourceSets.main {
 tasks {
     jar {
         finalizedBy("reobfJar")
+
+        manifest {
+            attributes([
+                    "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+            ])
+        }
     }
 }
 
 dependencies {
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
     compileOnly("org.jetbrains:annotations:24.1.0")
 
     modImplementation "curse.maven:jade-324717:${forge_jade_version}"
@@ -79,6 +94,8 @@ dependencies {
 
     modRuntimeOnly "curse.maven:patchouli-306770:${forge_patchouli_version}"
     modRuntimeOnly "curse.maven:spark-361579:${forge_spark_version}"
+
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.5.5"))
 }
 
 java {

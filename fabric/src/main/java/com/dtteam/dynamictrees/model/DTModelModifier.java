@@ -181,7 +181,8 @@ public class DTModelModifier {
             return new ThickBranchBlockBakedModel(barkSprite, ringsSprite, thickRingsSprite);
         }
 
-        return new BasicBranchBlockBakedModel(barkSprite, ringsSprite);
+        return new
+                BasicBranchBlockBakedModel(barkSprite, ringsSprite);
     }
 
     private static BakedModel createRootModel(ResourceLocation barkTexture, Function<Material, TextureAtlasSprite> spriteGetter) {

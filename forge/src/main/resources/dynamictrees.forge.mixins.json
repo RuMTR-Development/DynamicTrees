@@ -8,6 +8,7 @@
     "MixinBushBlock"
   ],
   "client": [
+    "MixinTextureAtlas"
   ],
   "server": [],
   "injectors": {

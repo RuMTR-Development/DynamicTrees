@@ -114,6 +114,8 @@ public class FabricRegistryLoader extends RegistryLoader {
                 })
                 .build();
 
+        tab.displayName = title;
+
         return () -> tab;
         *///? }
     }

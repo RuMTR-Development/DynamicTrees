@@ -57,6 +57,8 @@ dependencies {
     if (project.hasProperty("fabric_indium_version")) {
         modRuntimeOnly "maven.modrinth:indium:${fabric_indium_version}"
     }
+
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.5")))
 }
 
 loom {

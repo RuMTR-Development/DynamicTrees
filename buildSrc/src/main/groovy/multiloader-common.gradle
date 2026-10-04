@@ -164,12 +164,12 @@ processResources {
             'java_version'                 : java_version
     ]
 
-    if (ext.hasProperty("neoforge_version")) {
-        expandProps['neoforge_version'] = property("neoforge_version")
+    if (rootBranch.hasProperty("neoforge_version")) {
+        expandProps['neoforge_version'] = rootBranch.property("neoforge_version")
     }
 
-    if (ext.hasProperty("neoforge_loader_version_range")) {
-        expandProps['neoforge_loader_version_range'] = property("neoforge_loader_version_range")
+    if (rootBranch.hasProperty("neoforge_loader_version_range")) {
+        expandProps['neoforge_loader_version_range'] = rootBranch.property("neoforge_loader_version_range")
     }
 
     filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {

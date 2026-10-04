@@ -1,7 +1,11 @@
 package com.dtteam.dynamictrees.client;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.TextureAtlas;import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.metadata.animation.AnimationFrame;
+import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
@@ -32,31 +36,38 @@ public class ThickBranchRingsSprite extends SpriteContents {
         super(name, getFrameSize(originalSprite), processImage(originalSprite.originalImage), new AnimationMetadataSection(new ArrayList<>(), 0, 0, 0, false));
     }
     *///? } else {
-    /*public ThickBranchRingsSprite(
-            TextureAtlas atlas,
-            ResourceLocation thickLocation,
-            TextureAtlasSprite originalSprite,
-            int mipmapLevels,
-            int storageX,
-            int storageY,
-            int x,
-            int y
-    ) {
-        super(
-                atlas,
-                new TextureAtlasSprite.Info(
-                        thickLocation,
-                        originalSprite.getWidth() * LAYERS,
-                        originalSprite.getHeight() * LAYERS,
-                        AnimationMetadataSection.EMPTY
-                ),
-                mipmapLevels,
-                storageX,
-                storageY,
-                x,
-                y,
-                processImage(originalSprite.mainImage[0])
-        );
+    /*public ThickBranchRingsSprite(TextureAtlas atlas, Info spriteInfo, int mipLevel, int storageX, int storageY, int x, int y, TextureAtlasSprite original) {
+        super(atlas, spriteInfo, mipLevel, storageX, storageY, x, y, processImage(original.mainImage[0]));
+    }
+
+    public static class Params {
+        public int storageX;
+        public int storageY;
+        public int x;
+        public int y;
+
+        public final Info info;
+
+        public final ResourceLocation baseLocation;
+        public final ResourceLocation thickLocation;
+
+        public Params(ResourceLocation baseLocation) {
+            this.baseLocation = baseLocation;
+            this.thickLocation = new ResourceLocation(baseLocation.getNamespace(), baseLocation.getPath() + "_thick");
+
+            this.info = new Info(
+                    thickLocation,
+                    RESOLUTION * LAYERS,
+                    RESOLUTION * LAYERS,
+                    new AnimationMetadataSection(
+                            ImmutableList.of(new AnimationFrame(0, -1)),
+                            RESOLUTION * LAYERS,
+                            RESOLUTION * LAYERS,
+                            1,
+                            false
+                    )
+            );
+        }
     }
     *///? }
 

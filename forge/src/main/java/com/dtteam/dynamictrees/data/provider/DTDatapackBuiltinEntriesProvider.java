@@ -41,7 +41,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.worldgen.BootstapContext;
-*///? }
+*///? } else {
+import net.minecraft.data.BuiltinRegistries;
+//? }
 
 //? if >= 1.19.2 {
 /*import net.minecraftforge.common.data.JsonCodecProvider;
@@ -98,40 +100,50 @@ public class DTDatapackBuiltinEntriesProvider
         }
         //? }
 
-        //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
         generator.addProvider(
                 //? if >= 1.19.2
                 //run,
 
+                //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
                 CustomJsonCodecProvider.forDatapackRegistry(
                     generator,
                     fileHelper,
                     modId,
-                    RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                    RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS),
                     Registry.TEMPLATE_POOL_REGISTRY,
                     templatePools
                 )
         );
 
-        //? if >= 1.19.2 {
-        /*generator.addProvider(run, CustomJsonCodecProvider.forDatapackRegistry(
+        generator.addProvider(
+                //? if >= 1.19.2
+                //run,
+
+                //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
+                CustomJsonCodecProvider.forDatapackRegistry(
                     generator,
                     fileHelper,
                     modId,
-                    RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
+                    RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS),
                     Registry.CONFIGURED_FEATURE_REGISTRY,
                     configuredFeatures
-        ));
+                )
+        );
 
-        generator.addProvider(run, CustomJsonCodecProvider.forDatapackRegistry(
-                generator,
-                fileHelper,
-                modId,
-                RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy()),
-                Registry.PLACED_FEATURE_REGISTRY,
-                placedFeatures
-        ));
-        *///? }
+        generator.addProvider(
+                //? if >= 1.19.2
+                //run,
+
+                //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
+                CustomJsonCodecProvider.forDatapackRegistry(
+                    generator,
+                    fileHelper,
+                    modId,
+                    RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS),
+                    Registry.PLACED_FEATURE_REGISTRY,
+                    placedFeatures
+            )
+        );
     }
     //? }
 
@@ -177,7 +189,7 @@ public class DTDatapackBuiltinEntriesProvider
         //? if >= 1.19.4 {
         /*var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         *///? } else {
-        var configuredFeatures = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
+        var configuredFeatures = BuiltinRegistries.ACCESS.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
 
         //? }
 
@@ -195,7 +207,7 @@ public class DTDatapackBuiltinEntriesProvider
                 new PlacedFeature(
                         //? if >= 1.19.4 {
                         /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
-                         *///? } else {
+                        *///? } else {
                         configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
                         //? }
 
@@ -218,7 +230,7 @@ public class DTDatapackBuiltinEntriesProvider
                     //? if >= 1.19.4 {
                     /*var configuredFeatures = vanillaProvider.lookup(Registries.CONFIGURED_FEATURE).orElseThrow();
                     *///? } else {
-                    var configuredFeatures = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
+                    var configuredFeatures = BuiltinRegistries.ACCESS.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
                     //? }
 
                     List.of(NetherFeatures.CRIMSON_FOREST_VEGETATION, NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL,

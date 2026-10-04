@@ -24,7 +24,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class DirtBucket extends Item {
     public DirtBucket() {
-        super(new Properties().stacksTo(1));
+        super(
+                new Properties().stacksTo(1)
+                        //? if < 1.19.4
+                        //.tab(DTRegistries.DT_CREATIVE_TAB.get())
+        );
         DTRegistries.CREATIVE_TAB_ITEMS.add(this);
         craftingRemainingItem = this;
     }

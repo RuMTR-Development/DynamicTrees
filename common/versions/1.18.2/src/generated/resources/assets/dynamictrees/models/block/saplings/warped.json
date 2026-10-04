@@ -1,0 +1,7 @@
+{
+  "parent": "dynamictrees:block/smartmodel/mushroom_flat",
+  "textures": {
+    "stem": "dynamictrees:block/warped_cap",
+    "cap": "dynamictrees:block/warped_cap"
+  }
+}

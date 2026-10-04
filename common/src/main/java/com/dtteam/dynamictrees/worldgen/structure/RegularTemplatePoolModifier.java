@@ -1,9 +1,8 @@
 package com.dtteam.dynamictrees.worldgen.structure;
 
 import com.dtteam.dynamictrees.data.CustomBootstrapContext;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.Lists;import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -18,7 +17,9 @@ import net.minecraft.data.worldgen.BootstrapContext;
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.HolderLookup;
-//? }
+//? } else {
+/*import net.minecraft.data.BuiltinRegistries;
+*///? }
 
 // @author Harley O'Connor
 public class RegularTemplatePoolModifier implements TemplatePoolModifier {
@@ -32,6 +33,8 @@ public class RegularTemplatePoolModifier implements TemplatePoolModifier {
 
     public TemplatePoolModifier replaceTemplate(int index, StructurePoolElement element) {
         if (templatePool.rawTemplates.size() <= index) return this;
+        //? if < 1.19.4
+        //templatePool.rawTemplates = Lists.newArrayList(templatePool.rawTemplates);
         Pair<StructurePoolElement, Integer> removedRawTemplate = templatePool.rawTemplates.remove(index);
         var elementFinal = new DTCancelVanillaTreePoolElement(element, removedRawTemplate.getFirst());
         templatePool.rawTemplates.add(index, Pair.of(elementFinal, removedRawTemplate.getSecond()));
@@ -102,7 +105,7 @@ public class RegularTemplatePoolModifier implements TemplatePoolModifier {
         //? if >= 1.19.4 {
         StructureTemplatePool pattern = lookupProvider.lookupOrThrow(Registries.TEMPLATE_POOL).getOrThrow(key).value();
         //? } else {
-        /*StructureTemplatePool pattern = RegistryAccess.BUILTIN.get().registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrThrow(key);
+        /*StructureTemplatePool pattern = BuiltinRegistries.ACCESS.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrThrow(key);
         *///? }
 
         // if (pattern == null) {

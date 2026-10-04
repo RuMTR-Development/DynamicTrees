@@ -283,7 +283,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
     @NotNull
     @Override
-    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
     public IModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull IModelData tileData) {
         RootConnections rootConnections = state.getBlock() instanceof SurfaceRootBlock surfaceRootBlock
                 ? new RootConnections(surfaceRootBlock.getConnectionData(world, pos))

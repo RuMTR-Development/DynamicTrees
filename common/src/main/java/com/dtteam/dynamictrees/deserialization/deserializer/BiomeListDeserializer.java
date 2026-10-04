@@ -16,7 +16,6 @@ import net.minecraft.ResourceLocationException;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
@@ -28,7 +27,9 @@ import java.util.function.Predicate;import java.util.function.Supplier;import ja
 
 //? if >= 1.19.4 {
 import net.minecraft.core.registries.Registries;
-//? }
+//? } else {
+/*import net.minecraft.data.BuiltinRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -49,8 +50,8 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
         return currentServer.registryAccess().registryOrThrow(Registries.BIOME);
     };
 
-    //? if < 1.19.2
-    //private static HolderSet<Biome> legacySubstituteTag(ResourceLocation tagLocation) {
+    //? if < 1.19.2 {
+    /*private static HolderSet<Biome> legacySubstituteTag(ResourceLocation tagLocation) {
         Predicate<Biome.BiomeCategory> biomeFilter;
 
         switch (tagLocation.toString()) {
@@ -74,6 +75,7 @@ public final class BiomeListDeserializer implements JsonDeserializer<IDTBiomeHol
             return biomeFilter.test(category);
         }).collect(Collectors.toList()));
     }
+    *///? }
 
     private static final Applier<IDTBiomeHolderSet, String> TAG_APPLIER = (biomeList, tagRegex) -> {
         tagRegex = tagRegex.toLowerCase(Locale.ENGLISH);

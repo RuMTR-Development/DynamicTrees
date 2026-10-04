@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 //? if >= 1.19.2 {
 /*import net.minecraftforge.client.model.data.ModelData;
-*///} else {
+*///? } else {
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 //? }
@@ -45,7 +45,7 @@ public class PottedSaplingBlockEntityF extends PottedSaplingBlockEntity {
 
     @NotNull
     @Override
-    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
     public IModelData getModelData() {
         //~ if < 1.19.2 'ModelData.builder' -> 'new ModelDataMap.Builder'
         //~ if < 1.19.2 '.with' -> '.withInitial'

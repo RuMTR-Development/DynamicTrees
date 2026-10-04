@@ -1,0 +1,7 @@
+{
+  "parent": "dynamictrees:block/smartmodel/large_mushroom_round",
+  "textures": {
+    "stem": "dynamictrees:block/mega_crimson_cap",
+    "cap": "dynamictrees:block/mega_crimson_cap"
+  }
+}

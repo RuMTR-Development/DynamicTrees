@@ -24,11 +24,22 @@ public final class GatherDataHelper {
         gatherItemModelData(modId, event, registries);
         gatherLootData(modId, event);
         gatherLangData(modId, event, registries);
+        gatherRecipeData(modId, event);
     }
 
     public static void gatherAllData(final String modId, final GatherDataEvent event, Generator<DTDataProvider.Language, String> generator, Registry<?>... registries) {
         addLangGenerator(modId, generator);
         gatherAllData(modId, event, registries);
+    }
+
+    public static void gatherRecipeData(final String modId, final GatherDataEvent event) {
+        final DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+
+        final DTRecipeProvider recipeProvider = new DTRecipeProvider(packOutput, lookupProvider);
+
+        generator.addProvider(event.includeServer(), recipeProvider);
     }
 
     public static void gatherTagData(final String modId, final GatherDataEvent event) {

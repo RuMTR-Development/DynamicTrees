@@ -51,10 +51,7 @@ import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 
 //? if >= 1.19.4 {
 import net.minecraft.client.renderer.texture.atlas.SpriteSources;
-//? } else {
-/*import com.dtteam.dynamictrees.event.handler.ThickBranchRingsHandler;
-*///? }
-
+//? }
 //? if >= 1.21 {
 import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
 //? } else if >= 1.19.4 {
@@ -80,8 +77,6 @@ public class DynamicTreesFabricClient implements ClientModInitializer {
         AtlasSourceTypeRegistryImpl.register(ThickBranchRingsSource.ID, ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC));
         //? } else if >= 1.19.4 {
         /*SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
-        *///? } else {
-        /*ThickBranchRingsHandler.register();
         *///? }
 
         registerModelLoaders();

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "dynamictrees:cherry_leaves",
+    "dynamictrees:oak_leaves",
+    "dynamictrees:mangrove_leaves",
+    "dynamictrees:acacia_leaves",
+    "dynamictrees:azalea_leaves",
+    "dynamictrees:flowering_azalea_leaves",
+    "dynamictrees:dark_oak_leaves",
+    "dynamictrees:jungle_undergrowth_leaves",
+    "dynamictrees:jungle_leaves",
+    "dynamictrees:birch_leaves",
+    "dynamictrees:spruce_leaves",
+    "dynamictrees:oak_undergrowth_leaves"
+  ]
+}

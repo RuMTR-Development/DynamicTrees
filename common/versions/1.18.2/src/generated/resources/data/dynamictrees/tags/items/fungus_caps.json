@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "dynamictrees:mega_warped_seed",
+    "dynamictrees:warped_seed",
+    "dynamictrees:crimson_seed",
+    "dynamictrees:mega_crimson_seed"
+  ]
+}

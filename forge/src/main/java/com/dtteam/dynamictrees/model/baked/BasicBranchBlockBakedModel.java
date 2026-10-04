@@ -319,7 +319,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
      */
     @NotNull
     @Override
-    //~ if < 1.19.2 'ModelData' -> 'IModelData'
+    //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
     public IModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull IModelData tileData) {
         ModelConnections modelConnections;
         if (state.getBlock() instanceof BranchBlock branchBlock) {

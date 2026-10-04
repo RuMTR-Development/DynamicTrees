@@ -11,13 +11,13 @@
     "MixinChunkSerializer",
     "MixinMinecraftServer",
     "MixinPotionBrewing",
-    "MixinSaplingBlock",
-    "TextureAtlasMixin"
+    "MixinSaplingBlock"
   ],
   "client": [
     "ForwardingBakedModelAccessor",
     "ModelBakeryMixin",
-    "ModelManagerMixin"
+    "ModelManagerMixin",
+    "MixinTextureAtlas"
   ],
   "server": [],
   "injectors": {

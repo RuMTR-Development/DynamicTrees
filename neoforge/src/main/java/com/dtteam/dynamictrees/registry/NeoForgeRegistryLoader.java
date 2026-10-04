@@ -46,6 +46,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.holdersets.HolderSetType;
 
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -109,9 +110,9 @@ public class NeoForgeRegistryLoader extends RegistryLoader {
     }
 
     @Override
-    public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, CreativeModeTab.DisplayItemsGenerator displayItems) {
+    public Supplier<CreativeModeTab> registerCreativeTab(String name, Supplier<ItemStack> icon, MutableComponent title, Consumer<Consumer<ItemStack>> displayItems) {
         return CREATIVE_MODE_TABS.register(name,
-                () -> CreativeModeTab.builder().icon(icon).title(title).displayItems(displayItems).build());
+                () -> CreativeModeTab.builder().icon(icon).title(title).displayItems((params, output) -> displayItems.accept(output::accept)).build());
     }
 
     @Override

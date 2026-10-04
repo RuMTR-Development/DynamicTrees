@@ -192,7 +192,7 @@ public class WailaBranchHandler implements IComponentProvider {
         }
     }
 
-    //? if < 1.19.2 {
+    //? if >= 1.19.2 {
     /*@Override
     public ResourceLocation getUid() {
         return ID;

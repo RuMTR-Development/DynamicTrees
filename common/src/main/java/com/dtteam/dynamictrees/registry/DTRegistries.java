@@ -137,12 +137,6 @@ public class DTRegistries {
             .registerItem("dendro_potion", DendroPotion::new);
 
     /**
-     * A bucket of dirt item, for crafting saplings into seeds and vice versa.
-     */
-    public static final Supplier<DirtBucket> DIRT_BUCKET = Services.REGISTRY.getRegistryLoader()
-            .registerItem("dirt_bucket", DirtBucket::new);
-
-    /**
      * A staff, a creative tool for copying and pasting tree shapes.
      */
     public static final Supplier<Staff> STAFF = Services.REGISTRY.getRegistryLoader()
@@ -165,6 +159,16 @@ public class DTRegistries {
                         }
                         CREATIVE_TAB_ITEMS.forEach(e -> output.accept(e.getDefaultInstance()));
                     });
+
+    ///////////////////////////////////////////
+    // POST CREATIVE TAB ITEMS
+    ///////////////////////////////////////////
+
+    /**
+     * A bucket of dirt item, for crafting saplings into seeds and vice versa.
+     */
+    public static final Supplier<DirtBucket> DIRT_BUCKET = Services.REGISTRY.getRegistryLoader()
+            .registerItem("dirt_bucket", DirtBucket::new);
 
     ///////////////////////////////////////////
     // ENTITIES
