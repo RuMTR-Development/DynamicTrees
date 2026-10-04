@@ -55,7 +55,7 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
     }
     *///? } else {
     /*public TreePackResources(Path root) {
-        super(root.toFile());
+        super(null);
         this.root = root;
     }
     *///? }
@@ -233,6 +233,16 @@ public class TreePackResources extends PathPackResources implements com.dtteam.d
         } catch (IOException ignored) {
             return false;
         }
+    }
+
+    @Override
+    protected void logWarning(String namespace) {
+        LOGGER.warn("ResourcePack: ignored non-lowercase namespace: {} in {}", namespace, this.root);
+    }
+
+    @Override
+    public String getName() {
+        return this.root.getFileName().toString();
     }
     *///? }
 }
