@@ -26,12 +26,12 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.common.Mod;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.event.level.ChunkDataEvent;
+import net.minecraftforge.event.level.ChunkDataEvent;
 import net.minecraftforge.event.level.LevelEvent;
-*///? } else {
-import net.minecraftforge.event.world.WorldEvent;
+//? } else {
+/*import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
-//? }
+*///? }
 
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID)
 public class CommonGameEventHandler {
@@ -43,29 +43,29 @@ public class CommonGameEventHandler {
     @SubscribeEvent
     public static void onPreLevelTick(
             //? if >= 1.19.2 {
-            /*TickEvent.LevelTickEvent event
-            *///? } else {
-            TickEvent.WorldTickEvent event
-            //? }
+            TickEvent.LevelTickEvent event
+            //? } else {
+            /*TickEvent.WorldTickEvent event
+            *///? }
     ) {
         //~ if < 1.19.2 '.level' -> '.world' {
-        if (!event.world.isClientSide()) {
-            FutureBreak.process(event.world);
+        if (!event.level.isClientSide()) {
+            FutureBreak.process(event.level);
         }
-        SeasonHelper.updateTick(event.world, event.world.getDayTime());
+        SeasonHelper.updateTick(event.level, event.level.getDayTime());
         //~ }
     }
 
     @SubscribeEvent
     public static void onLevelLoad(
             //? if >= 1.19.2 {
-            /*LevelEvent.Load event
-            *///? } else {
-            WorldEvent.Load event
-            //? }
+            LevelEvent.Load event
+            //? } else {
+            /*WorldEvent.Load event
+            *///? }
     ) {
         //~ if < 1.19.2 '.getLevel' -> '.getWorld'
-        if (event.getWorld().isClientSide()) {
+        if (event.getLevel().isClientSide()) {
             ClientModEventHandler.discoverWoodColors();
         } else {
             BiomeDatabases.populateBlacklistFromConfig();
@@ -78,13 +78,13 @@ public class CommonGameEventHandler {
     @SubscribeEvent
     public static void onLevelUnload(
             //? if >= 1.19.2 {
-            /*LevelEvent.Unload event
-             *///? } else {
-            WorldEvent.Unload event
-            //? }
+            LevelEvent.Unload event
+             //? } else {
+            /*WorldEvent.Unload event
+            *///? }
     ) {
         //~ if < 1.19.2 '.getLevel' -> '.getWorld'
-        final LevelAccessor level = event.getWorld();
+        final LevelAccessor level = event.getLevel();
         if (!level.isClientSide()) {
             DynamicTreeFeature.DISC_PROVIDER.unloadWorld((ServerLevel) level);//clears the circles
         }
@@ -95,7 +95,7 @@ public class CommonGameEventHandler {
         if (!DTConfigs.SERVER.worldGen.get()) return;
 
         //~ if < 1.19.2 '.getLevel' -> '.getWorld'
-        final LevelAccessor level = event.getWorld();
+        final LevelAccessor level = event.getLevel();
 
 		if (level == null || level.isClientSide()) {
 			return;
@@ -113,7 +113,7 @@ public class CommonGameEventHandler {
         if (!DTConfigs.SERVER.worldGen.get()) return;
 
         //~ if < 1.19.2 '.getLevel' -> '.getWorld'
-        final LevelContext levelContext = LevelContext.create(event.getWorld());
+        final LevelContext levelContext = LevelContext.create(event.getLevel());
         final UniversalPoissonDiscProvider discProvider = DynamicTreeFeature.DISC_PROVIDER;
         final ChunkAccess chunk = event.getChunk();
         final ChunkPos chunkPos = chunk.getPos();

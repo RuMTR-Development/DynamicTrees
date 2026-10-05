@@ -1,0 +1,13 @@
+// 1.19.2	2026-10-04T17:45:58.576436771	worldgen/template_pool generator for dynamictrees
+0b0a49024f119acd529ee3ba8190894257d92f74 data/minecraft/worldgen/template_pool/village/plains/decor.json
+cab12550ac44d11172c5b2dd9b0d09e213144e5e data/minecraft/worldgen/template_pool/village/plains/town_centers.json
+ac0c49e575e581bf104e85da938a99a92a7981c2 data/minecraft/worldgen/template_pool/village/plains/trees.json
+1eaf0c5eaee7f3ca1be81066ac460bbc6420d4e5 data/minecraft/worldgen/template_pool/village/plains/zombie/decor.json
+8f458aabedd7d0adfb94b18fb7b86c7040459758 data/minecraft/worldgen/template_pool/village/savanna/decor.json
+b4c74ac8f9c50657e2e46e28f62e839cf3dfacbf data/minecraft/worldgen/template_pool/village/savanna/trees.json
+a44801f93aca1d8ef11641ab3484711bf683d9c0 data/minecraft/worldgen/template_pool/village/savanna/zombie/decor.json
+e5155fa0371e8e2548a380a10dfa80644fb21f18 data/minecraft/worldgen/template_pool/village/snowy/decor.json
+4a8621746851bc9a119ba3cf5e2e37ce9628ca6c data/minecraft/worldgen/template_pool/village/snowy/trees.json
+0674a145df7a2b862f257aac9b512ed04bc48463 data/minecraft/worldgen/template_pool/village/snowy/zombie/decor.json
+de59d554e47d9da61389ba8372de56f1c4cf234b data/minecraft/worldgen/template_pool/village/taiga/decor.json
+e3d23021de969203389ac4fb7e89513a6b52d435 data/minecraft/worldgen/template_pool/village/taiga/zombie/decor.json

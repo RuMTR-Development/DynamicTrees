@@ -12,12 +12,12 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
+//? } else {
+/*import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.ModelDataManager;
-//? }
+*///? }
 
 public class PottedSaplingBlockEntityF extends PottedSaplingBlockEntity {
 
@@ -35,10 +35,10 @@ public class PottedSaplingBlockEntityF extends PottedSaplingBlockEntity {
 
         if (!oldPotState.equals(potState) && level != null) {
             //? if >= 1.19.2 {
-            /*level.getModelDataManager().requestRefresh(this);
-            *///? } else {
-            ModelDataManager.requestModelDataRefresh(this);
-            //? }
+            level.getModelDataManager().requestRefresh(this);
+            //? } else {
+            /*ModelDataManager.requestModelDataRefresh(this);
+            *///? }
 
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
@@ -47,10 +47,10 @@ public class PottedSaplingBlockEntityF extends PottedSaplingBlockEntity {
     @NotNull
     @Override
     //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
-    public IModelData getModelData() {
+    public ModelData getModelData() {
         //~ if < 1.19.2 'ModelData.builder' -> 'new ModelDataMap.Builder'
         //~ if < 1.19.2 '.with' -> '.withInitial'
-        return new ModelDataMap.Builder().withInitial(POT_MIMIC, potState).withInitial(SPECIES, species).build();
+        return ModelData.builder().with(POT_MIMIC, potState).with(SPECIES, species).build();
     }
 
 }

@@ -16,13 +16,13 @@ import java.util.List;import java.util.Set;
 import java.util.function.Function;
 
 //? if >= 1.19.2 {
-/*
+
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
-*///? } else {
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+//? } else {
+/*import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.client.model.IModelConfiguration;
-//? }
+*///? }
 
 /**
  * Bakes {@link BasicBranchBlockBakedModel} from bark and rings texture locations given by {@link
@@ -35,7 +35,7 @@ import net.minecraftforge.client.model.IModelConfiguration;
  */
 
 //~ if < 1.19.2 'IUnbakedGeometry' -> 'IModelGeometry'
-public class BranchBlockModelGeometry implements IModelGeometry<BranchBlockModelGeometry> {
+public class BranchBlockModelGeometry implements IUnbakedGeometry<BranchBlockModelGeometry> {
     protected final Set<ResourceLocation> textures = new HashSet<>();
     protected final ResourceLocation barkTextureLocation;
     protected final ResourceLocation ringsTextureLocation;
@@ -56,10 +56,10 @@ public class BranchBlockModelGeometry implements IModelGeometry<BranchBlockModel
     @Override
     public BakedModel bake(
             //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
-            IModelConfiguration context,
+            IGeometryBakingContext context,
 
             //~ if < 1.19.4 'ModelBaker' -> 'ModelBakery'
-            ModelBakery modelBaker,
+            ModelBaker modelBaker,
 
             Function<Material, TextureAtlasSprite> spriteGetter,
             ModelState modelState,
@@ -72,10 +72,10 @@ public class BranchBlockModelGeometry implements IModelGeometry<BranchBlockModel
         } else {
             if (this.thickRingsTextureLocation == null) {
                 //? if >= 1.19.2 {
-                /*this.thickRingsTextureLocation = this.ringsTextureLocation.withSuffix("_thick");
-                *///? } else {
-                this.thickRingsTextureLocation = new ResourceLocation(this.ringsTextureLocation.getNamespace(), this.ringsTextureLocation.getPath() + "_thick");
-                //? }
+                this.thickRingsTextureLocation = this.ringsTextureLocation.withSuffix("_thick");
+                //? } else {
+                /*this.thickRingsTextureLocation = new ResourceLocation(this.ringsTextureLocation.getNamespace(), this.ringsTextureLocation.getPath() + "_thick");
+                *///? }
             }
 
             return new ThickBranchBlockBakedModel(context, this.barkTextureLocation, this.ringsTextureLocation, this.thickRingsTextureLocation, spriteGetter);
@@ -83,12 +83,12 @@ public class BranchBlockModelGeometry implements IModelGeometry<BranchBlockModel
     }
 
     //? if < 1.19.2 {
-    @Override
+    /*@Override
     public Collection<Material> getTextures(IModelConfiguration iModelConfiguration, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
         return List.of();
     }
 
-    //? } else if < 1.19.4 {
+    *///? } else if < 1.19.4 {
     /*@Override
     public Collection<Material> getMaterials(IGeometryBakingContext iGeometryBakingContext, Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
         return List.of();

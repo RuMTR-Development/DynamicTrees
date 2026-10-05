@@ -21,10 +21,10 @@ import java.lang.reflect.Method;
 import java.util.function.Supplier;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.registries.RegisterEvent;
-*///? } else {
-import net.minecraftforge.event.RegistryEvent;
-//? }
+import net.minecraftforge.registries.RegisterEvent;
+//? } else {
+/*import net.minecraftforge.event.RegistryEvent;
+*///? }
 
 /**
  * Handles registries for the given mod ID in the constructor. Add-ons should instantiate one of these in their
@@ -42,10 +42,10 @@ public class ForgeRegistryHandler extends RegistryHandler {
     static {
         try {
             //? if >= 1.19.2 {
-            /*ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegisterEvent.class);
-            *///? } else {
-            ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegistryEvent.Register.class);
-            //? }
+            ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegisterEvent.class);
+            //? } else {
+            /*ADD_ENTRIES_METHOD = DeferredRegister.class.getDeclaredMethod("addEntries", RegistryEvent.Register.class);
+            *///? }
 
             ADD_ENTRIES_METHOD.setAccessible(true);
         } catch (NoSuchMethodException e) {
@@ -92,23 +92,23 @@ public class ForgeRegistryHandler extends RegistryHandler {
     @Nullable
     public Supplier<Block> getBlock(final ResourceLocation registryName) {
         //? if >= 1.19.2 {
-        /*return ForgeRegistries.BLOCKS.getHolder(registryName).orElse(null);
-        *///? } else {
-        return ForgeRegistries.BLOCKS.getHolder(registryName)
+        return ForgeRegistries.BLOCKS.getHolder(registryName).orElse(null);
+        //? } else {
+        /*return ForgeRegistries.BLOCKS.getHolder(registryName)
                 .map(holder -> (Supplier<Block>) holder::value)
                 .orElse(null);
-        //? }
+        *///? }
     }
 
     @Nullable
     public Supplier<Item> getItem(final ResourceLocation registryName) {
         //? if >= 1.19.2 {
-        /*return ForgeRegistries.ITEMS.getHolder(registryName).orElse(null);
-         *///? } else {
-        return ForgeRegistries.ITEMS.getHolder(registryName)
+        return ForgeRegistries.ITEMS.getHolder(registryName).orElse(null);
+         //? } else {
+        /*return ForgeRegistries.ITEMS.getHolder(registryName)
                 .map(holder -> (Supplier<Item>) holder::value)
                 .orElse(null);
-        //? }
+        *///? }
     }
 
     @SuppressWarnings("unchecked")
@@ -151,7 +151,7 @@ public class ForgeRegistryHandler extends RegistryHandler {
         }
 
         //? if >= 1.19.2 {
-        /*// LOWEST allows DT to accumulate blocks & items from inside other listeners to this register event if necessary
+        // LOWEST allows DT to accumulate blocks & items from inside other listeners to this register event if necessary
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public void onRegister(RegisterEvent event) {
             if (event.getRegistryKey() == this.deferredRegister.getRegistryKey()) {
@@ -162,8 +162,8 @@ public class ForgeRegistryHandler extends RegistryHandler {
                 }
             }
         }
-        *///? } else {
-        @SubscribeEvent(priority = EventPriority.LOWEST)
+        //? } else {
+        /*@SubscribeEvent(priority = EventPriority.LOWEST)
         public void onRegisterItem(RegistryEvent.Register<Item> event) {
             if (!event.getRegistry().getRegistryName().equals(this.deferredRegister.getRegistryName())) {
                 return;
@@ -188,7 +188,7 @@ public class ForgeRegistryHandler extends RegistryHandler {
                 throw new RuntimeException(e);
             }
         }
-        //? }
+        *///? }
     }
 
 }

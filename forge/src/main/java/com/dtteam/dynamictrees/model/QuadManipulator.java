@@ -19,12 +19,12 @@ import java.util.Optional;
 import java.util.Random;import java.util.function.Function;
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.IModelData;
+//? } else {
+/*import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.EmptyModelData;
-//? }
+*///? }
 
 public class QuadManipulator {
 
@@ -32,13 +32,13 @@ public class QuadManipulator {
 
     //~ if < 1.19.2 'RandomSource' -> 'Random'
     //~ if < 1.19.2 'ModelData' -> 'IModelData'
-    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, Random rand, IModelData modelData) {
+    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, RandomSource rand, ModelData modelData) {
         return getQuads(modelIn, stateIn, offset, everyFace, rand, modelData);
     }
 
     //~ if < 1.19.2 'RandomSource' -> 'Random'
     //~ if < 1.19.2 'ModelData' -> 'IModelData'
-    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, Direction[] sides, Random rand, IModelData modelData) {
+    public static List<BakedQuad> getQuads(BakedModel modelIn, BlockState stateIn, Vec3 offset, Direction[] sides, RandomSource rand, ModelData modelData) {
         ArrayList<BakedQuad> outQuads = new ArrayList<>();
 
         if (stateIn != null) {
@@ -50,7 +50,7 @@ public class QuadManipulator {
                         modelData
 
                         //? if >= 1.19.2
-                        //, null
+                        , null
                 ));
             }
         }
@@ -124,7 +124,7 @@ public class QuadManipulator {
             if (model != null) {
                 //~ if < 1.19.4 '.contents().name()' -> '.getName()'
                 //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE'
-                ResourceLocation tex = model.getParticleIcon(EmptyModelData.INSTANCE).getName();
+                ResourceLocation tex = model.getParticleIcon(ModelData.EMPTY).contents().name();
                 TextureAtlasSprite tas = bakedTextureGetter.apply(tex);
                 float u = tas.getU(8);
                 float v = tas.getV(8);
@@ -150,30 +150,30 @@ public class QuadManipulator {
         List<BakedQuad> quads = new ArrayList<>();
 
         //? if >= 1.19.2 {
-        /*RandomSource random = RandomSource.create();
-        *///? } else {
-        Random random = new Random();
-        //? }
+        RandomSource random = RandomSource.create();
+        //? } else {
+        /*Random random = new Random();
+        *///? }
 
         //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE' {
         quads.addAll(bakedModel.getQuads(
                 state,
                 side,
                 random,
-                EmptyModelData.INSTANCE
+                ModelData.EMPTY
 
                 //? if >= 1.19.2
-                //, null
+                , null
         ));
 
         quads.addAll(bakedModel.getQuads(
                 state,
                 null,
                 random,
-                EmptyModelData.INSTANCE
+                ModelData.EMPTY
 
                 //? if >= 1.19.2
-                //, null
+                , null
         ));
         //~ }
 

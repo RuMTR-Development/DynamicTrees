@@ -34,10 +34,10 @@ public class ClientGameEventHandler {
         }
 
         //? if >= 1.19.2 {
-        /*Player player = event.getEntity();
-        *///? } else {
-        Player player = event.getPlayer();
-        //? }
+        Player player = event.getEntity();
+        //? } else {
+        /*Player player = event.getPlayer();
+        *///? }
 
         if (player == null) {
             return;
@@ -51,7 +51,7 @@ public class ClientGameEventHandler {
         }
 
         //~ if < 1.19.4 'BlockPos.containing' -> 'new BlockPos'
-        BlockPos playerPos = new BlockPos(player.position());
+        BlockPos playerPos = BlockPos.containing(player.position());
         ClimateZoneType climate = ClimateHelper.getClimate(player.level, playerPos);
         int flags = seed.getSpecies().getSeasonalTooltipFlags(levelContext, player);
         Tooltips.applySeasonalTooltips(event.getToolTip(), flags, climate);

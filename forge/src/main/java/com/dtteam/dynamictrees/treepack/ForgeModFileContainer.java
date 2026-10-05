@@ -25,7 +25,7 @@ public class ForgeModFileContainer extends ModFileContainer {
     @Override
     public @NotNull Optional<Path> findResource(String strings) {
         //? if < 1.19.4 {
-        if (!FMLEnvironment.production && modInfo.getModId().equals(DynamicTrees.MOD_ID)) {
+        /*if (!FMLEnvironment.production && modInfo.getModId().equals(DynamicTrees.MOD_ID)) {
             var result = FMLPaths.GAMEDIR.get()
                     .getParent()
                     .resolve("build")
@@ -35,7 +35,7 @@ public class ForgeModFileContainer extends ModFileContainer {
 
             return Files.exists(result) ? Optional.of(result) : Optional.empty();
         }
-        //? }
+        *///? }
 
         return Optional.of(modFile.findResource(strings));
     }

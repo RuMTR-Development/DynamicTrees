@@ -17,17 +17,17 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import java.util.UUID;
 
 //? if >= 1.19.4 {
-/*import org.joml.Vector3f;
-*///? } else {
-import com.mojang.math.Vector3f;
-//? }
+import org.joml.Vector3f;
+//? } else {
+/*import com.mojang.math.Vector3f;
+*///? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.RenderTypeGroup;
+import net.minecraftforge.client.RenderTypeGroup;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-*///? } else {
-import net.minecraftforge.client.model.IModelConfiguration;
-//? }
+//? } else {
+/*import net.minecraftforge.client.model.IModelConfiguration;
+*///? }
 
 public class ModelHelper {
 
@@ -86,16 +86,16 @@ public class ModelHelper {
     }
 
     //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
-    public static IModelBuilder<?> getModelBuilder(IModelConfiguration context, TextureAtlasSprite particle) {
+    public static IModelBuilder<?> getModelBuilder(IGeometryBakingContext context, TextureAtlasSprite particle) {
         //? if >= 1.19.2 {
-        /*ResourceLocation renderTypeHint = context.getRenderTypeHint();
+        ResourceLocation renderTypeHint = context.getRenderTypeHint();
         RenderTypeGroup renderTypes = renderTypeHint != null ? context.getRenderType(renderTypeHint) : RenderTypeGroup.EMPTY;
 
         return IModelBuilder.of(context.useAmbientOcclusion(), context.useBlockLight(), context.isGui3d(),
                 context.getTransforms(), ItemOverrides.EMPTY, particle, renderTypes);
-        *///? } else {
-        return IModelBuilder.of(context, ItemOverrides.EMPTY, particle);
-        //? }
+        //? } else {
+        /*return IModelBuilder.of(context, ItemOverrides.EMPTY, particle);
+        *///? }
     }
 
     @SuppressWarnings("deprecation")

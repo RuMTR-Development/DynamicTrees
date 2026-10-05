@@ -75,7 +75,7 @@ public class RegularTemplatePoolModifier implements TemplatePoolModifier {
 
     public static TemplatePoolModifier village(
             //? if >= 1.19.4
-             HolderLookup.Provider lookupProvider,
+            HolderLookup.Provider lookupProvider,
 
             String type,
             String patternGroup
@@ -98,7 +98,7 @@ public class RegularTemplatePoolModifier implements TemplatePoolModifier {
 
     public static TemplatePoolModifier create(
             //? if >= 1.19.4
-             HolderLookup.Provider lookupProvider,
+            HolderLookup.Provider lookupProvider,
 
             ResourceKey<StructureTemplatePool> key
     ) {

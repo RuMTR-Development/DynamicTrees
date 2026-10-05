@@ -7,10 +7,10 @@ import com.dtteam.dynamictrees.item.Seed;
 import com.dtteam.dynamictrees.tree.species.Species;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -24,8 +24,8 @@ public class SeedItemModelGenerator implements Generator<DTDataProvider.ItemMode
         if (prov instanceof DTItemModelProvider provider){
             final Seed seed = dependencies.get(SEED);
             //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'ForgeRegistries.ITEMS' {
-            provider.withExistingParent(String.valueOf(ForgeRegistries.ITEMS.getKey(seed)), seed.getSpecies().getSeedParentModelLocation())
-                    .texture("layer0", seed.getSpecies().getTexturePath(Species.SEED).orElse(provider.item(ForgeRegistries.ITEMS.getKey(seed))));
+            provider.withExistingParent(String.valueOf(BuiltInRegistries.ITEM.getKey(seed)), seed.getSpecies().getSeedParentModelLocation())
+                    .texture("layer0", seed.getSpecies().getTexturePath(Species.SEED).orElse(provider.item(BuiltInRegistries.ITEM.getKey(seed))));
             //~ }
         }
     }

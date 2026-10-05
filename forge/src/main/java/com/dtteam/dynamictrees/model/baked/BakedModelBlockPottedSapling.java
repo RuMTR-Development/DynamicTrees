@@ -22,14 +22,14 @@ import java.util.Map;
 import java.util.Random;import java.util.concurrent.ConcurrentHashMap;
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
+//? } else {
+/*import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
-//? }
+*///? }
 
 public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
 
@@ -47,23 +47,23 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
             @Nullable Direction side,
 
             //~ if < 1.19.2 'RandomSource' -> 'Random'
-            @NotNull Random rand,
+            @NotNull RandomSource rand,
 
             //~ if < 1.19.2 'ModelData' -> 'IModelData'
-            @NotNull IModelData extraData
+            @NotNull ModelData extraData
 
             //? if >= 1.19.2
-            //, @Nullable RenderType renderType
+            , @Nullable RenderType renderType
     ) {
         List<BakedQuad> quads = new ArrayList<>();
 
         //~ if < 1.19.2 '.has' -> '.hasProperty'
-        if (state == null || !extraData.hasProperty(PottedSaplingBlockEntityF.SPECIES) || !extraData.hasProperty(PottedSaplingBlockEntityF.POT_MIMIC)) {
+        if (state == null || !extraData.has(PottedSaplingBlockEntityF.SPECIES) || !extraData.has(PottedSaplingBlockEntityF.POT_MIMIC)) {
             return quads;
         }
 
         //~ if < 1.19.2 '.get' -> '.getData'
-        final BlockState potState = extraData.getData(PottedSaplingBlockEntityF.POT_MIMIC);
+        final BlockState potState = extraData.get(PottedSaplingBlockEntityF.POT_MIMIC);
 
         if (potState == null) {
             return quads;
@@ -78,12 +78,12 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
                 extraData
 
                 //? if >= 1.19.2
-                //, renderType
+                , renderType
         ));
 
         if (side == null){
             //~ if < 1.19.2 '.get' -> '.getData'
-            final Species species = extraData.getData(PottedSaplingBlockEntityF.SPECIES);
+            final Species species = extraData.get(PottedSaplingBlockEntityF.SPECIES);
             if (species == null || !species.isValid() || species.getSapling().isEmpty()) {
                 return quads;
             }
@@ -122,7 +122,7 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
 
     @Override
     //~ if < 1.19.2 'ModelData' -> 'IModelData'
-    public TextureAtlasSprite getParticleIcon(IModelData data) {
+    public TextureAtlasSprite getParticleIcon(ModelData data) {
         return this.basePotModel.getParticleIcon(data);
     }
 
@@ -132,9 +132,9 @@ public class BakedModelBlockPottedSapling implements IDynamicBakedModel {
     }
 
     //? if >= 1.19.2 {
-    /*@Override
+    @Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
         return ChunkRenderTypeSet.of(RenderType.cutoutMipped());
     }
-    *///? }
+    //? }
 }

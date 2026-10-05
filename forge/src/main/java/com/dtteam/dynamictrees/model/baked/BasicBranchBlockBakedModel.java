@@ -28,23 +28,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 //? if >= 1.19.4 {
-/*import org.joml.Vector3f;
-*///? } else {
-import com.mojang.math.Vector3f;
-//? }
+import org.joml.Vector3f;
+//? } else {
+/*import com.mojang.math.Vector3f;
+*///? }
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.NamedRenderTypeManager;
 import net.minecraftforge.client.model.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-*///? } else {
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
+//? } else {
+/*import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.data.IModelData;
-//? }
+*///? }
 
 public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
 
@@ -59,13 +59,13 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
     protected final BakedModel[] rings = new BakedModel[8]; // 8 Cores with the ring textures on all 6 sides.
 
     //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
-    public BasicBranchBlockBakedModel(IModelConfiguration customData, ResourceLocation barkTextureLocation, ResourceLocation ringsTextureLocation, Function<Material, TextureAtlasSprite> spriteGetter) {
+    public BasicBranchBlockBakedModel(IGeometryBakingContext customData, ResourceLocation barkTextureLocation, ResourceLocation ringsTextureLocation, Function<Material, TextureAtlasSprite> spriteGetter) {
         this.blockModel = new BlockModel(null, new ArrayList<>(), new HashMap<>(), false, BlockModel.GuiLight.FRONT, ItemTransforms.NO_TRANSFORMS, new ArrayList<>());
         //? if >= 1.19.2 {
-        /*if (customData.getRenderTypeHint() != null){
+        if (customData.getRenderTypeHint() != null){
             this.blockModel.customData.setRenderTypeHint(customData.getRenderTypeHint());
         }
-        *///? }
+        //? }
         this.barkTexture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, barkTextureLocation));
         this.ringsTexture = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, ringsTextureLocation));
         initModels();
@@ -141,7 +141,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
             //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
-            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), bark, face, BlockModelRotation.X0_Y0));
+            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), bark, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -173,7 +173,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
             //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
-            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
+            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -208,13 +208,13 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
             @Nullable Direction side,
 
             //~ if < 1.19.2 'RandomSource' -> 'Random'
-            @NotNull Random rand,
+            @NotNull RandomSource rand,
 
             //~ if < 1.19.2 'ModelData' -> 'IModelData'
-            @NotNull IModelData extraData
+            @NotNull ModelData extraData
 
             //? if >= 1.19.2
-            //, @Nullable RenderType renderType
+            , @Nullable RenderType renderType
     ) {
         if (state == null || side != null) return Collections.emptyList();
 
@@ -227,7 +227,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
         final AtomicInteger twigRadius = new AtomicInteger(1);
 
         //~ if < 1.19.2 '.get' -> '.getData'
-        ModelConnections connectionsData = extraData.getData(ModelConnections.CONNECTIONS_PROPERTY);
+        ModelConnections connectionsData = extraData.get(ModelConnections.CONNECTIONS_PROPERTY);
         if (connectionsData != null) {
             connections = connectionsData.getAllRadii();
             forceRingDir = connectionsData.getRingOnly();
@@ -252,7 +252,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
                     extraData
 
                     //? if >= 1.19.2
-                    //, renderType
+                    , renderType
             ));
         } else {
             // The source direction is the biggest connection from one of the 6 directions.
@@ -273,7 +273,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
                                 extraData
 
                                 //? if >= 1.19.2
-                                //, renderType
+                                , renderType
                         ));
                     } else {
                         quadsList.addAll(rings[coreRadius - 1].getQuads(
@@ -283,7 +283,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
                                 extraData
 
                                 //? if >= 1.19.2
-                                //, renderType
+                                , renderType
                         ));
                     }
                 }
@@ -301,7 +301,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
                                     extraData
 
                                     //? if >= 1.19.2
-                                    //, renderType
+                                    , renderType
                             ));
                         }
                     }
@@ -321,7 +321,7 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
     @Override
     //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
     //~ if < 1.19.2 'ModelData tileData' -> 'IModelData tileData'
-    public IModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull IModelData tileData) {
+    public ModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData tileData) {
         ModelConnections modelConnections;
         if (state.getBlock() instanceof BranchBlock branchBlock) {
             modelConnections = new ModelConnections(branchBlock.getConnectionData(world, pos, state)).setFamily(branchBlock.getFamily());
@@ -408,20 +408,20 @@ public class BasicBranchBlockBakedModel implements IDynamicBakedModel {
     }
 
     //? if >= 1.19.2 {
-    /*@Override
+    @Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
         return ChunkRenderTypeSet.of(getRenderType());
     }
-    *///? }
+    //? }
 
     public RenderType getRenderType() {
         //? if >= 1.19.2 {
-        /*ResourceLocation renderTypeHint = blockModel.customData.getRenderTypeHint();
+        ResourceLocation renderTypeHint = blockModel.customData.getRenderTypeHint();
         if (renderTypeHint == null)
             return RenderType.solid();
         return NamedRenderTypeManager.get(renderTypeHint).block();
-        *///? } else {
-        return RenderType.cutout();
-        //? }
+        //? } else {
+        /*return RenderType.cutout();
+        *///? }
     }
 }

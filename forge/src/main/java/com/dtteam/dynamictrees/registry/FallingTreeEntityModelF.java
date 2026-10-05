@@ -24,16 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.EmptyModelData;
-//? }
+import net.minecraftforge.client.model.data.ModelData;
+//? } else {
+/*import net.minecraftforge.client.model.data.EmptyModelData;
+*///? }
 
 public class FallingTreeEntityModelF extends FallingTreeEntityModel {
 
@@ -61,13 +61,13 @@ public class FallingTreeEntityModelF extends FallingTreeEntityModel {
                 boolean rootyBlockAdded = false;
                 if (destructionData.soilState != null){
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK.get' -> 'ForgeRegistries.BLOCKS.getValue'
-                    SoilBlock soilBlock = TreeHelper.getRooty(ForgeRegistries.BLOCKS.getValue(destructionData.soilState.getLeft()));
+                    SoilBlock soilBlock = TreeHelper.getRooty(BuiltInRegistries.BLOCK.get(destructionData.soilState.getLeft()));
                     if (soilBlock != null) {
                         BlockState soilState = soilBlock.GetStateFromIndex(destructionData.soilState.getRight());
                         BakedModel rootyModel = dispatcher.getBlockModel(soilState);
                         BlockPos cutOffset = destructionData.getRelativeCutPos();
                         //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE'
-                        treeQuads.addAll(toTreeQuadData(QuadManipulator.getQuads(rootyModel, soilState, new Vec3(cutOffset.getX(), cutOffset.getY()-1, cutOffset.getZ()), entity.level.getRandom(), EmptyModelData.INSTANCE),
+                        treeQuads.addAll(toTreeQuadData(QuadManipulator.getQuads(rootyModel, soilState, new Vec3(cutOffset.getX(), cutOffset.getY()-1, cutOffset.getZ()), entity.level.getRandom(), ModelData.EMPTY),
                                 destructionData.species.getFamily().getRootColor(soilState, soilBlock.getColorFromBark()),
                                 soilState));
                         rootyBlockAdded = true;
@@ -110,7 +110,7 @@ public class FallingTreeEntityModelF extends FallingTreeEntityModel {
                 for (Pair<BlockPos, BlockState> leafLoc : destructionData.getAllLeavesWithPos()) {
                     BlockState leafState = leafLoc.getValue();
                     //~ if < 1.19.2 'ModelData.EMPTY' -> 'EmptyModelData.INSTANCE'
-                    List<BakedQuad> bakedQuads = QuadManipulator.getQuads(dispatcher.getBlockModel(leafState), leafState, new Vec3(leafLoc.getKey().getX(), leafLoc.getKey().getY(), leafLoc.getKey().getZ()), entity.level.getRandom(), EmptyModelData.INSTANCE);
+                    List<BakedQuad> bakedQuads = QuadManipulator.getQuads(dispatcher.getBlockModel(leafState), leafState, new Vec3(leafLoc.getKey().getX(), leafLoc.getKey().getY(), leafLoc.getKey().getZ()), entity.level.getRandom(), ModelData.EMPTY);
 
                     treeQuads.addAll(toTreeQuadData(bakedQuads, species.leafColorMultiplier(entity.level,
                             cutPos.offset(leafLoc.getKey())), leafState));

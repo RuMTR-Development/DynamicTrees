@@ -40,7 +40,7 @@ public final class VillageTreeReplacement {
 
     public static void replaceTreesFromVanillaVillages(
             //? if >= 1.19.4
-             HolderLookup.Provider vanillaProvider,
+            HolderLookup.Provider vanillaProvider,
 
             //? if >= 1.21 {
             BootstrapContext<StructureTemplatePool> context

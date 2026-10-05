@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 public class DendroPotionRecipeHandler {
 
@@ -46,16 +46,16 @@ public class DendroPotionRecipeHandler {
 
     public static ItemStack setPotion(ItemStack pStack, String potionName) {
         //? if >= 1.19.4 {
-        /*Optional<Holder.Reference<Potion>> potion = BuiltInRegistries.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
+        Optional<Holder.Reference<Potion>> potion = BuiltInRegistries.POTION.getHolder(ResourceKey.create(Registries.POTION, ResourceLocation.parse(potionName)));
 
         potion.ifPresent(holder -> PotionUtils.setPotion(pStack, holder.value()));
-        *///? } else {
-        Potion potion = ForgeRegistries.POTIONS.getValue(ResourceLocation.parse(potionName));
+        //? } else {
+        /*Potion potion = ForgeRegistries.POTIONS.getValue(ResourceLocation.parse(potionName));
 
         if (potion != null) {
             PotionUtils.setPotion(pStack, potion);
         }
-        //? }
+        *///? }
 
         return pStack;
     }

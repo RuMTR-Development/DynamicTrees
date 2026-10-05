@@ -1,5 +1,5 @@
 {
-  "feature": "dynamictrees:cave_rooted_tree",
+  "feature": "dynamictrees:dynamic_tree",
   "placement": [
     {
       "type": "dynamictrees:cave_rooted_tree"

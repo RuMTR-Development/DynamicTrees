@@ -1,5 +1,5 @@
 //? if < 1.19.2 {
-package com.dtteam.dynamictrees.worldgen.holderset;
+/*package com.dtteam.dynamictrees.worldgen.holderset;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -26,4 +26,4 @@ public class OrHolderSet<T> extends StreamBackedHolderSet<T> {
         return this.values.stream().allMatch(set -> set.isValidInRegistry(registry));
     }
 }
-//? }
+*///? }

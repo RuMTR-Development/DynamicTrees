@@ -16,18 +16,18 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.registries.holdersets.AndHolderSet;
+import net.minecraftforge.registries.holdersets.AndHolderSet;
 import net.minecraftforge.registries.holdersets.OrHolderSet;
-*///? }
+//? }
 
 public class DTBiomeHolderSet
         //? if >= 1.19.2
-        //extends IncludesExcludesHolderSet<Biome>
+        extends IncludesExcludesHolderSet<Biome>
 
         implements IDTBiomeHolderSet
 {
     //? if >= 1.19.2 {
-    /*@Nullable
+    @Nullable
     private Set<ResourceKey<Biome>> keys = null;
 
     public DTBiomeHolderSet() {
@@ -45,8 +45,8 @@ public class DTBiomeHolderSet
 
         return this.keys.contains(biomeKey);
     }
-    *///? } else {
-    private final List<HolderSet<Biome>> includeComponents = new ArrayList<>();
+    //? } else {
+    /*private final List<HolderSet<Biome>> includeComponents = new ArrayList<>();
     private final List<HolderSet<Biome>> excludeComponents = new ArrayList<>();
 
     @Override
@@ -127,7 +127,7 @@ public class DTBiomeHolderSet
 
     @Override
             //~ if < 1.19.2 'RandomSource random' -> 'Random random'
-    public Optional<Holder<Biome>> getRandomElement(Random random) {
+    public Optional<Holder<Biome>> getRandomElement(RandomSource random) {
         Set<Holder<Biome>> set = this.getSet();
         if (set.isEmpty()) {
             return Optional.empty();
@@ -153,7 +153,7 @@ public class DTBiomeHolderSet
     public boolean contains(Holder<Biome> holder) {
         return this.getSet().contains(holder);
     }
-    //? }
+    *///? }
 
     @Override
     public void addHolderSet(List<HolderSet<Biome>> components, HolderSet<Biome> holderSetSupplier) {
@@ -169,10 +169,10 @@ public class DTBiomeHolderSet
     public void addNameRegexMatch(List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex) {
         Supplier<HolderSet<Biome>> sup = () -> new NameRegexMatchHolderSet<>(
                 //? if >= 1.19.4 {
-                /*registrySupplier.get().asLookup(),
-                *///? } else {
-                registrySupplier,
-                //? }
+                registrySupplier.get().asLookup(),
+                //? } else {
+                /*registrySupplier,
+                *///? }
 
                 regex
         );
@@ -184,10 +184,10 @@ public class DTBiomeHolderSet
     public void addTagsRegexMatch(List<HolderSet<Biome>> components, Supplier<Registry<Biome>> registrySupplier, String regex) {
         Supplier<HolderSet<Biome>> sup = () -> new TagsRegexMatchHolderSet<>(
                 //? if >= 1.19.4 {
-                /*registrySupplier.get().asLookup(),
-                 *///? } else {
-                registrySupplier,
-                //? }
+                registrySupplier.get().asLookup(),
+                 //? } else {
+                /*registrySupplier,
+                *///? }
 
                 regex
         );

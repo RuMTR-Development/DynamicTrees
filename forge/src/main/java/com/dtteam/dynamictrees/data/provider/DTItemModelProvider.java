@@ -9,8 +9,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.List;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.data.PackOutput;
-*///? }
+import net.minecraft.data.PackOutput;
+//? }
 
 /**
  * @author Harley O'Connor
@@ -20,16 +20,16 @@ public class DTItemModelProvider extends ItemModelProvider implements DTDataProv
     private final List<Registry<?>> registries;
 
     //? if >= 1.19.4 {
-    /*public DTItemModelProvider(PackOutput output, String modId, ExistingFileHelper fileHelper, List<Registry<?>> registries) {
+    public DTItemModelProvider(PackOutput output, String modId, ExistingFileHelper fileHelper, List<Registry<?>> registries) {
         super(output, modId, fileHelper);
         this.registries = registries;
     }
-    *///? } else {
-    public DTItemModelProvider(DataGenerator generator, String modId, ExistingFileHelper existingFileHelper, List<Registry<?>> registries) {
+    //? } else {
+    /*public DTItemModelProvider(DataGenerator generator, String modId, ExistingFileHelper existingFileHelper, List<Registry<?>> registries) {
         super(generator, modId, existingFileHelper);
         this.registries = registries;
     }
-    //? }
+    *///? }
 
     @Override
     protected void registerModels() {

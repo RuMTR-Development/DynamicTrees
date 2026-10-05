@@ -10,17 +10,17 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.HolderLookup;
-*///? }
+import net.minecraft.core.HolderLookup;
+//? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.registries.holdersets.HolderSetType;
+import net.minecraftforge.registries.holdersets.HolderSetType;
 import net.minecraftforge.registries.holdersets.ICustomHolderSet;
-*///? }
+//? }
 
 public class TagsRegexMatchHolderSet<T> extends RegexMatchHolderSet<T> {
     //? if >= 1.19.2 {
-    /*public static class Type implements HolderSetType {
+    public static class Type implements HolderSetType {
         @Override
         public <T> Codec<? extends ICustomHolderSet<T>> makeCodec(ResourceKey<? extends Registry<T>> resourceKey, Codec<Holder<T>> codec, boolean b) {
             return RegexMatchHolderSet.mapCodec(resourceKey, TagsRegexMatchHolderSet::new).codec();
@@ -31,21 +31,21 @@ public class TagsRegexMatchHolderSet<T> extends RegexMatchHolderSet<T> {
     public HolderSetType type() {
         return ForgeRegistryLoader.TAGS_REGEX_MATCH_HOLDER_SET_TYPE.get();
     }
-    *///? }
+    //? }
 
     //? if >= 1.19.4 {
-    /*public TagsRegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
+    public TagsRegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
         super(registryLookup, regex);
     }
-    *///? } else {
-    public TagsRegexMatchHolderSet(Registry<T> registry, String regex) {
+    //? } else {
+    /*public TagsRegexMatchHolderSet(Registry<T> registry, String regex) {
         super(registry, regex);
     }
 
     public TagsRegexMatchHolderSet(Supplier<Registry<T>> registrySupplier, String regex) {
         super(registrySupplier, regex);
     }
-    //? }
+    *///? }
 
     @Override
     protected Stream<String> getInput(Holder<T> holder) {

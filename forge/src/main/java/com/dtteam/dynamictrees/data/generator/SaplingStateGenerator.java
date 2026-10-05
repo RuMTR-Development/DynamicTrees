@@ -13,10 +13,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -32,15 +32,15 @@ public class SaplingStateGenerator implements Generator<DTDataProvider.BlockStat
         if (prov instanceof DTBlockStateProvider provider){
             final Optional<ResourceLocation> leavesTextureLocation = dependencies.getOptional(PRIMITIVE_LEAVES)
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                    .map(primitiveLeaves -> provider.block(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(primitiveLeaves))));
+                    .map(primitiveLeaves -> provider.block(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(primitiveLeaves))));
             //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-            final ResourceLocation primitiveLogLocation = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_LOG)));
+            final ResourceLocation primitiveLogLocation = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_LOG)));
 
             final BlockModelBuilder builder = provider.models().getBuilder(input.getSaplingModelName())
                     .parent(provider.models().getExistingFile(input.getSaplingSmartModelLocation()))
 
                     //? if >= 1.19.2
-                    //.renderType("cutout_mipped")
+                    .renderType("cutout_mipped")
 
                     ;
             input.addSaplingTextures(builder::texture, leavesTextureLocation.orElse(primitiveLogLocation), provider.block(primitiveLogLocation));

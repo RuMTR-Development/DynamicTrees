@@ -1,5 +1,5 @@
 //? if < 1.19.2 {
-//
+/*//
 // Copyright (c) Forge Development LLC and contributors
 // SPDX-License-Identifier: LGPL-2.1-only
 //
@@ -120,4 +120,4 @@ public class CustomJsonCodecProvider<T> implements DataProvider {
         return this;
     }
 }
-//? }
+*///? }

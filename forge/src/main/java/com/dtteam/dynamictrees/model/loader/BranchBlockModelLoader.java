@@ -13,10 +13,10 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.model.geometry.IGeometryLoader;
-*///? } else {
-import net.minecraftforge.client.model.IModelLoader;
-//? }
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+//? } else {
+/*import net.minecraftforge.client.model.IModelLoader;
+*///? }
 
 /**
  * Loads a branch block model from a Json file, with useful warnings when things aren't found.
@@ -27,7 +27,7 @@ import net.minecraftforge.client.model.IModelLoader;
  * @author Harley O'Connor
  */
 //~ if < 1.19.2 'IGeometryLoader' -> 'IModelLoader'
-public class BranchBlockModelLoader implements IModelLoader<BranchBlockModelGeometry> {
+public class BranchBlockModelLoader implements IGeometryLoader<BranchBlockModelGeometry> {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -38,10 +38,10 @@ public class BranchBlockModelLoader implements IModelLoader<BranchBlockModelGeom
     @Override
     public BranchBlockModelGeometry read(
             //? if >= 1.19.2 {
-            /*JsonObject modelObject, JsonDeserializationContext deserializationContext
-            *///? } else {
-            JsonDeserializationContext deserializationContext, JsonObject modelObject
-            //? }
+            JsonObject modelObject, JsonDeserializationContext deserializationContext
+            //? } else {
+            /*JsonDeserializationContext deserializationContext, JsonObject modelObject
+            *///? }
     ) throws JsonParseException {
         final JsonObject textures = this.getTexturesObject(modelObject);
         final ResourceLocation familyName = this.getLocation(modelObject, "family");
@@ -129,9 +129,9 @@ public class BranchBlockModelLoader implements IModelLoader<BranchBlockModelGeom
     }
 
     //? if < 1.19.2 {
-    @Override
+    /*@Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
 
     }
-    //? }
+    *///? }
 }

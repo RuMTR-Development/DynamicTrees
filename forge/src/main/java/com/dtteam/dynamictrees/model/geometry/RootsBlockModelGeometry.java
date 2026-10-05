@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-*///? } else {
-import net.minecraftforge.client.model.IModelConfiguration;
-//? }
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+//? } else {
+/*import net.minecraftforge.client.model.IModelConfiguration;
+*///? }
 
 /**
  * Bakes {@link SurfaceRootBlockBakedModel} from bark texture location given by {@link SurfaceRootBlockModelLoader}.
@@ -32,10 +32,10 @@ public class RootsBlockModelGeometry extends BranchBlockModelGeometry {
     @Override
     public BakedModel bake(
             //~ if < 1.19.2 'IGeometryBakingContext' -> 'IModelConfiguration'
-            IModelConfiguration context,
+            IGeometryBakingContext context,
 
             //~ if < 1.19.4 'ModelBaker' -> 'ModelBakery'
-            ModelBakery modelBaker,
+            ModelBaker modelBaker,
 
             Function<Material, TextureAtlasSprite> spriteGetter,
             ModelState modelState,

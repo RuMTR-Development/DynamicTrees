@@ -15,32 +15,32 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.data.PackOutput;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraft.core.HolderLookup;
-*///? } else {
-import net.minecraft.data.tags.BlockTagsProvider;
-//? }
+//? } else {
+/*import net.minecraft.data.tags.BlockTagsProvider;
+*///? }
 
 /**
  * @author Harley O'Connor
  */
 public class DTBlockTagsProvider extends BlockTagsProvider {
     //? if >= 1.19.4 {
-    /*public DTBlockTagsProvider(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
+    public DTBlockTagsProvider(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
         super(output, lookupProvider, modid, fileHelper);
-    }*///? } else {
+    }//? } else {
 
-    public DTBlockTagsProvider(DataGenerator generator, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+    /*public DTBlockTagsProvider(DataGenerator generator, String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(generator, modId, existingFileHelper);
     }
 
-    //? }
+    *///? }
 
     @Override
     protected void addTags(
             //? if >= 1.19.4
-            //HolderLookup.Provider provider
+            HolderLookup.Provider provider
     ) {
         if (this.modId.equals(DynamicTrees.MOD_ID)) {
             this.addDTOnlyTags();
@@ -59,7 +59,7 @@ public class DTBlockTagsProvider extends BlockTagsProvider {
                 .add(Blocks.FERN)
                 .add(Blocks.LILY_PAD)
                 //? if >= 1.19.4
-                //.add(Blocks.PINK_PETALS)
+                .add(Blocks.PINK_PETALS)
                 .add(Blocks.BROWN_MUSHROOM)
                 .add(Blocks.RED_MUSHROOM)
                 .add(Blocks.MOSS_CARPET)

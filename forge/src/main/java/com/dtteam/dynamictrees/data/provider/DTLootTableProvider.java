@@ -18,23 +18,23 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.data.PackOutput;
+import net.minecraft.data.PackOutput;
 import net.minecraft.core.HolderLookup;
-*///? } else {
-import net.minecraft.world.level.storage.loot.LootTables;
-//? }
+//? } else {
+/*import net.minecraft.world.level.storage.loot.LootTables;
+*///? }
 
 /**
  * @author Harley O'Connor
  */
 public class DTLootTableProvider extends LootTableProvider {
     //? if >= 1.19.4 {
-    /*public DTLootTableProvider(PackOutput output, String modId, ExistingFileHelper fileHelper) {
+    public DTLootTableProvider(PackOutput output, String modId, ExistingFileHelper fileHelper) {
         super(output, Set.of(),
                 List.of(new SubProviderEntry(()->new DTBlockLootSubProvider(modId, fileHelper), LootContextParamSets.BLOCK)));
     }
-    *///? } else {
-    private final String modId;
+    //? } else {
+    /*private final String modId;
     private final ExistingFileHelper fileHelper;
 
     public DTLootTableProvider(DataGenerator generator, String modId, ExistingFileHelper fileHelper) {
@@ -55,5 +55,5 @@ public class DTLootTableProvider extends LootTableProvider {
     protected void validate(Map<ResourceLocation, LootTable> tables, ValidationContext ctx) {
         tables.forEach((name, table) -> LootTables.validate(ctx, name, table));
     }
-    //? }
+    *///? }
 }

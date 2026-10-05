@@ -11,10 +11,10 @@ import net.minecraft.world.level.block.Block;
 import java.util.Objects;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -30,11 +30,11 @@ public class BranchStateGenerator implements Generator<DTDataProvider.BlockState
             final BranchBlock branch = dependencies.get(BRANCH);
             final BranchLoaderBuilder builder = provider.models().getBuilder(
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                    Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(branch)).getPath()
+                    Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(branch)).getPath()
             ).customLoader(BranchLoaderBuilder.branchBuilders.get(input.getBranchLoader()));
             Block block = dependencies.get(PRIMITIVE_LOG);
             //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-            input.addBranchTextures(builder::texture, provider.block(ForgeRegistries.BLOCKS.getKey(block)), block);
+            input.addBranchTextures(builder::texture, provider.block(BuiltInRegistries.BLOCK.getKey(block)), block);
             provider.simpleBlock(branch, builder.end());
         }
     }

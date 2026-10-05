@@ -19,23 +19,23 @@ import java.util.function.BiConsumer;
 import java.util.stream.StreamSupport;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlagSet;
-*///? } else {
-import net.minecraft.data.loot.BlockLoot;
+//? } else {
+/*import net.minecraft.data.loot.BlockLoot;
 import net.minecraftforge.registries.ForgeRegistries;
-//? }
+*///? }
 
 //~ if < 1.19.4 'extends BlockLootSubProvider' -> 'extends BlockLoot'
-public class DTBlockLootSubProvider extends BlockLoot {
+public class DTBlockLootSubProvider extends BlockLootSubProvider {
     private final String modId;
     private final ExistingFileHelper fileHelper;
 
     protected DTBlockLootSubProvider(String modId, ExistingFileHelper fileHelper) {
         //? if >= 1.19.4
-        //super(Set.of(), FeatureFlagSet.of());
+        super(Set.of(), FeatureFlagSet.of());
 
         this.modId = modId;
         this.fileHelper = fileHelper;
@@ -44,20 +44,20 @@ public class DTBlockLootSubProvider extends BlockLoot {
     @Override
 
     //? if >= 1.19.4 {
-    /*protected void generate()
-    *///? } else {
-    protected void addTables()
-    //? }
+    protected void generate()
+    //? } else {
+    /*protected void addTables()
+    *///? }
 
     {
         Species.REGISTRY.dataGenerationStream(modId).forEach(this::addVoluntaryTable);
 
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK.stream()' -> 'StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)'
-        StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
+        BuiltInRegistries.BLOCK.stream()
                 .filter(block -> block instanceof BranchBlock)
                 .map(block -> (BranchBlock) block)
                 //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                .filter(block -> ForgeRegistries.BLOCKS.getKey(block).getNamespace().equals(modId))
+                .filter(block -> BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(modId))
                 .forEach(this::addBranchTable);
 
         LeavesProperties.REGISTRY.dataGenerationStream(modId).forEach(leavesProperties -> {
@@ -74,16 +74,16 @@ public class DTBlockLootSubProvider extends BlockLoot {
     @Override
 
     //? if >= 1.19.4 {
-    /*public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> output)
-    *///? } else {
-    public void accept(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> output)
-    //? }
+    public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> output)
+    //? } else {
+    /*public void accept(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> output)
+    *///? }
     {
         //? if >= 1.19.4 {
-        /*this.generate();
-        *///? } else {
-        this.addTables();
-        //? }
+        this.generate();
+        //? } else {
+        /*this.addTables();
+        *///? }
 
         this.map.forEach(output);
     }
@@ -94,7 +94,7 @@ public class DTBlockLootSubProvider extends BlockLoot {
             if (!fileHelper.exists(leavesTablePath, PackType.SERVER_DATA)) {
                 this.map.put(leavesTablePath, species.createVoluntaryDrops(
                         //? if >= 1.19.4
-                        //null
+                        null
                 ));
             }
         }
@@ -106,7 +106,7 @@ public class DTBlockLootSubProvider extends BlockLoot {
             if (!fileHelper.exists(branchTablePath, PackType.SERVER_DATA)) {
                 this.map.put(branchTablePath, branchBlock.createBranchDrops(
                         //? if >= 1.19.4
-                        //null
+                        null
                 ));
             }
         }
@@ -118,7 +118,7 @@ public class DTBlockLootSubProvider extends BlockLoot {
             if (!fileHelper.exists(leavesBlockTablePath, PackType.SERVER_DATA)) {
                 this.map.put(leavesBlockTablePath, leavesProperties.createBlockDrops(
                         //? if >= 1.19.4
-                        //null
+                        null
                 ));
             }
         }
@@ -130,7 +130,7 @@ public class DTBlockLootSubProvider extends BlockLoot {
             if (!fileHelper.exists(leavesTablePath, PackType.SERVER_DATA)) {
                 this.map.put(leavesTablePath, leavesProperties.createDrops(
                         //? if >= 1.19.4
-                        //null
+                        null
                 ));
             }
         }
@@ -142,7 +142,7 @@ public class DTBlockLootSubProvider extends BlockLoot {
             if (!fileHelper.exists(fruitBlockTablePath, PackType.SERVER_DATA)) {
                 this.map.put(fruitBlockTablePath, fruit.createBlockDrops(
                         //? if >= 1.19.4
-                        //null
+                        null
                 ));
             }
         }
@@ -154,7 +154,7 @@ public class DTBlockLootSubProvider extends BlockLoot {
             if (!fileHelper.exists(fruitBlockTablePath, PackType.SERVER_DATA)) {
                 this.map.put(fruitBlockTablePath, pod.createBlockDrops(
                         //? if >= 1.19.4
-                        //null
+                        null
                 ));
             }
         }

@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 @Mixin(TextureAtlas.class)
 public class MixinTextureAtlas {
     //? if < 1.19.4 {
-    @SuppressWarnings("unchecked")
+    /*@SuppressWarnings("unchecked")
     @Shadow
     @Final
     private ResourceLocation location;
@@ -133,6 +133,6 @@ public class MixinTextureAtlas {
             cir.getReturnValue().add(sprite);
         }
     }
-    //? }
+    *///? }
 
 }

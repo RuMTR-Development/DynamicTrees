@@ -19,7 +19,7 @@ public class BiomeGenSettingsBuilderWrapperNF extends BiomeGenSettingsBuilderWra
 
     @Override
     //~ if < 1.19.4 'BiomeGenerationSettings.PlainBuilder' -> 'BiomeGenerationSettings.Builder'
-    public BiomeGenerationSettings.Builder getPlainBuilder() {
+    public BiomeGenerationSettings.PlainBuilder getPlainBuilder() {
         return settingsBuilder;
     }
 

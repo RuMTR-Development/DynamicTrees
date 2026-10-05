@@ -32,6 +32,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 
 import java.util.List;
 import java.util.Set;
@@ -54,7 +55,9 @@ public class DTDatapackBuiltinEntriesProvider extends DatapackBuiltinEntriesProv
 //            Set<HolderOwner<?>> owners = (Set<HolderOwner<?>>) ownersField.get(holderOwner);
 //            var builderKeys = new HashSet<>(datapackEntriesBuilder.getEntryKeys());
 //            DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().filter(data -> !builderKeys.contains(data.key())).forEach(data -> datapackEntriesBuilder.add(data.key(), context -> {}));
-            RegistrySetBuilder.PatchedRegistries provider = datapackEntriesBuilder.buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), original, new Cloner.Factory()); //Where to get the cloner factory?
+            Cloner.Factory factory = new Cloner.Factory();
+            DataPackRegistriesHooks.getDataPackRegistriesWithDimensions().forEach(data -> data.runWithArguments(factory::addCodec));
+            RegistrySetBuilder.PatchedRegistries provider = datapackEntriesBuilder.buildPatch(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY), original, factory); //Where to get the cloner factory?
 //            Object newHolderOwner = ownerField.get(provider.full().lookupOrThrow(Registries.CONFIGURED_FEATURE).getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE));
 //            owners.addAll((Set<HolderOwner<?>>) ownersField.get(newHolderOwner));
             return provider;
@@ -72,7 +75,7 @@ public class DTDatapackBuiltinEntriesProvider extends DatapackBuiltinEntriesProv
 
     private static void bootstrapTemplatePools(HolderLookup.Provider vanillaProvider, BootstrapContext<StructureTemplatePool> context) {
         // TODO 1.20: Verify this works
-        VillageTreeReplacement.replaceTreesFromVanillaVillages(vanillaProvider, context);
+//        VillageTreeReplacement.replaceTreesFromVanillaVillages(vanillaProvider, context);
     }
 
     private static void bootstrapConfiguredFeatures(HolderLookup.Provider vanillaProvider, BootstrapContext<ConfiguredFeature<?, ?>> context) {

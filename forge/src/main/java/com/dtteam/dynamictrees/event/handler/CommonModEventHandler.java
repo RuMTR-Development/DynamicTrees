@@ -38,15 +38,15 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraftforge.event.CreativeModeTabEvent;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.registries.RegisterEvent;
-*///? }
+import net.minecraftforge.registries.RegisterEvent;
+//? }
 
 @Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonModEventHandler {
@@ -136,14 +136,14 @@ public class CommonModEventHandler {
 
     @SubscribeEvent
     //? if >= 1.19.2 {
-    /*public static void loadResources(RegisterEvent event) {
+    public static void loadResources(RegisterEvent event) {
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK.key()' -> 'net.minecraft.core.Registry.BLOCK_REGISTRY'
-        if (event.getRegistryKey() != net.minecraft.core.Registry.BLOCK_REGISTRY) {
+        if (event.getRegistryKey() != BuiltInRegistries.BLOCK.key()) {
             return;
         }
-    *///? } else {
-    public static void loadResources(net.minecraftforge.event.RegistryEvent.Register<Block> event) {
-    //? }
+    //? } else {
+    /*public static void loadResources(net.minecraftforge.event.RegistryEvent.Register<Block> event) {
+    *///? }
         // Register any registry entries from Json files.
         Resources.MANAGER.load();
         // Lock all the registries.
@@ -153,11 +153,11 @@ public class CommonModEventHandler {
     }
 
     //? if >= 1.19.4 {
-    /*@SubscribeEvent
+    @SubscribeEvent
     public static void registerCreativeTabs(CreativeModeTabEvent.Register event) {
         for (Consumer<CreativeModeTabEvent.Register> handler : ForgeRegistryLoader.CREATIVE_TABS) {
             handler.accept(event);
         }
     }
-    *///? }
+    //? }
 }

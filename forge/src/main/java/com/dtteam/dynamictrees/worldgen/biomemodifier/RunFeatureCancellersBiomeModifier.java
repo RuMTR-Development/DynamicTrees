@@ -19,24 +19,24 @@ import net.minecraftforge.eventbus.api.EventPriority;import net.minecraftforge.e
 import net.minecraftforge.fml.common.Mod;import net.minecraftforge.registries.ForgeRegistries;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.Registries;
-*///? }
-
-//? if >= 1.19.2 {
-/*import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.ModifiableBiomeInfo;
-*///? } else {
-import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraft.core.registries.Registries;
 //? }
 
+//? if >= 1.19.2 {
+import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.common.world.ModifiableBiomeInfo;
+//? } else {
+/*import net.minecraftforge.event.world.BiomeLoadingEvent;
+*///? }
+
 //? if < 1.19.2
-@Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//@Mod.EventBusSubscriber(modid = DynamicTrees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RunFeatureCancellersBiomeModifier
         //? if >= 1.19.2
-        //implements BiomeModifier
+        implements BiomeModifier
 {
     //~ if < 1.19.4 'Registries.PLACED_FEATURE' -> 'Registry.PLACED_FEATURE_REGISTRY'
-    public static final TagKey<PlacedFeature> FEATURE_CANCELLER_EXCLUSIONS_KEY = TagKey.create(Registry.PLACED_FEATURE_REGISTRY,
+    public static final TagKey<PlacedFeature> FEATURE_CANCELLER_EXCLUSIONS_KEY = TagKey.create(Registries.PLACED_FEATURE,
             DynamicTrees.location("feature_canceller_exclusions"));
 
     private static void apply(ResourceKey<Biome> biomeKey, BiomeGenerationSettingsBuilder generationSettings) {
@@ -75,7 +75,7 @@ public class RunFeatureCancellersBiomeModifier
     }
 
     //? if >= 1.19.2 {
-    /*@Override
+    @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase != Phase.REMOVE) {
             return;
@@ -91,8 +91,8 @@ public class RunFeatureCancellersBiomeModifier
     public Codec<? extends BiomeModifier> codec() {
         return ForgeRegistryLoader.RUN_FEATURE_CANCELLERS_BIOME_MODIFIER.get();
     }
-    *///? } else {
-    @SubscribeEvent(priority = EventPriority.LOW)
+    //? } else {
+    /*@SubscribeEvent(priority = EventPriority.LOW)
     public static void onBiomeLoading(BiomeLoadingEvent event) {
         ResourceLocation biomeId = event.getName();
 
@@ -105,5 +105,5 @@ public class RunFeatureCancellersBiomeModifier
 
         apply(biomeKey, generationSettings);
     }
-    //? }
+    *///? }
 }

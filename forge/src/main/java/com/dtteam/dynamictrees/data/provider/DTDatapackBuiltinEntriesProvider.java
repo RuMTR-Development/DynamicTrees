@@ -37,25 +37,26 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 //? if >= 1.19.4 {
-/*import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
+import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.worldgen.BootstapContext;
-*///? } else {
-import net.minecraft.data.BuiltinRegistries;
-//? }
+//? } else {
+/*import net.minecraft.data.BuiltinRegistries;
+*///? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.common.data.JsonCodecProvider;
-*///? }
+import net.minecraftforge.common.data.JsonCodecProvider;
+import net.minecraftforge.registries.ForgeRegistries;
+//? }
 
 public class DTDatapackBuiltinEntriesProvider
         //? if >= 1.19.4
-        //extends DatapackBuiltinEntriesProvider
+        extends DatapackBuiltinEntriesProvider
 {
     //? if >= 1.19.4 {
-    /*public DTDatapackBuiltinEntriesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, Set<String> modIds) {
+    public DTDatapackBuiltinEntriesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, Set<String> modIds) {
         super(output, registries.thenApply(p -> constructRegistries(p, getBuilder(p))), modIds);
     }
 
@@ -85,28 +86,37 @@ public class DTDatapackBuiltinEntriesProvider
                 .add(Registries.CONFIGURED_FEATURE, context -> bootstrapConfiguredFeatures(vanillaProvider, context))
                 .add(Registries.PLACED_FEATURE, DTDatapackBuiltinEntriesProvider::bootstrapPlacedFeatures);
     }
-    *///? } else {
-    public static void registerProviders(DataGenerator generator, ExistingFileHelper fileHelper, String modId, boolean run) {
+    //? } else {
+    /*public static void registerProviders(DataGenerator generator, ExistingFileHelper fileHelper, String modId, boolean run) {
         Map<ResourceLocation, StructureTemplatePool> templatePools = new HashMap<>();
         Map<ResourceLocation, ConfiguredFeature<?, ?>> configuredFeatures = new HashMap<>();
         Map<ResourceLocation, PlacedFeature> placedFeatures = new HashMap<>();
 
-        bootstrapTemplatePools((key, value) -> templatePools.put(key.location(), value));
-        bootstrapConfiguredFeatures((key, value) -> configuredFeatures.put(key.location(), value));
-        bootstrapPlacedFeatures((key, value) -> placedFeatures.put(key.location(), value));
+        bootstrapTemplatePools((key, value) -> {
+            templatePools.put(key.location(), value);
+            return Registry.register(BuiltinRegistries.TEMPLATE_POOL, key, value);
+        });
+        bootstrapConfiguredFeatures((key, value) -> {
+            configuredFeatures.put(key.location(), value);
+            return Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, key, value);
+        });
+        bootstrapPlacedFeatures((key, value) -> {
+            placedFeatures.put(key.location(), value);
+            return Registry.register(BuiltinRegistries.PLACED_FEATURE, key, value);
+        });
 
         //? if < 1.19.2 {
-        if (!run) {
+        /^if (!run) {
             return;
         }
-        //? }
+        ^///? }
 
         generator.addProvider(
                 //? if >= 1.19.2
-                //run,
+                run,
 
                 //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
-                CustomJsonCodecProvider.forDatapackRegistry(
+                JsonCodecProvider.forDatapackRegistry(
                     generator,
                     fileHelper,
                     modId,
@@ -118,10 +128,10 @@ public class DTDatapackBuiltinEntriesProvider
 
         generator.addProvider(
                 //? if >= 1.19.2
-                //run,
+                run,
 
                 //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
-                CustomJsonCodecProvider.forDatapackRegistry(
+                JsonCodecProvider.forDatapackRegistry(
                     generator,
                     fileHelper,
                     modId,
@@ -133,10 +143,10 @@ public class DTDatapackBuiltinEntriesProvider
 
         generator.addProvider(
                 //? if >= 1.19.2
-                //run,
+                run,
 
                 //~ if < 1.19.2 'JsonCodecProvider' -> 'CustomJsonCodecProvider'
-                CustomJsonCodecProvider.forDatapackRegistry(
+                JsonCodecProvider.forDatapackRegistry(
                     generator,
                     fileHelper,
                     modId,
@@ -146,19 +156,19 @@ public class DTDatapackBuiltinEntriesProvider
             )
         );
     }
-    //? }
+    *///? }
 
     private static void bootstrapTemplatePools(
             //? if >= 1.19.4
-            //HolderLookup.Provider vanillaProvider,
+            HolderLookup.Provider vanillaProvider,
 
             //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
-            CustomBootstrapContext<StructureTemplatePool> context
+            BootstapContext<StructureTemplatePool> context
     ) {
         // TODO 1.20: Verify this works
         VillageTreeReplacement.replaceTreesFromVanillaVillages(
                 //? if >= 1.19.4
-                //vanillaProvider,
+                vanillaProvider,
 
                 context
         );
@@ -166,10 +176,10 @@ public class DTDatapackBuiltinEntriesProvider
 
     private static void bootstrapConfiguredFeatures(
             //? if >= 1.19.4
-            //HolderLookup.Provider vanillaProvider,
+            HolderLookup.Provider vanillaProvider,
 
             //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
-            CustomBootstrapContext<ConfiguredFeature<?, ?>> context
+            BootstapContext<ConfiguredFeature<?, ?>> context
     ) {
         context.register(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE,
                 new ConfiguredFeature<>(DTRegistries.DYNAMIC_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
@@ -179,27 +189,27 @@ public class DTDatapackBuiltinEntriesProvider
         // TODO 1.20: Verify this works
         replaceNyliumFungiFeatures(
                 //? if >= 1.19.4
-                //vanillaProvider,
+                vanillaProvider,
 
                 context
         );
     }
 
     //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
-    private static void bootstrapPlacedFeatures(CustomBootstrapContext<PlacedFeature> context) {
+    private static void bootstrapPlacedFeatures(BootstapContext<PlacedFeature> context) {
         //? if >= 1.19.4 {
-        /*var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-        *///? } else {
-        var configuredFeatures = BuiltinRegistries.ACCESS.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
+        var configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        //? } else {
+        /*var configuredFeatures = BuiltinRegistries.ACCESS.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
 
-        //? }
+        *///? }
 
         context.register(DTRegistries.DYNAMIC_TREE_PLACED_FEATURE, new PlacedFeature(
                 //? if >= 1.19.4 {
-                /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
-                *///? } else {
-                configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
-                //? }
+                configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
+                //? } else {
+                /*configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
+                *///? }
 
                 List.of()
         ));
@@ -207,10 +217,10 @@ public class DTDatapackBuiltinEntriesProvider
         context.register(DTRegistries.CAVE_ROOTED_TREE_PLACED_FEATURE,
                 new PlacedFeature(
                         //? if >= 1.19.4 {
-                        /*configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
-                        *///? } else {
-                        configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
-                        //? }
+                        configuredFeatures.getOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
+                        //? } else {
+                        /*configuredFeatures.getHolderOrThrow(DTRegistries.DYNAMIC_TREE_CONFIGURED_FEATURE),
+                        *///? }
 
                         List.of(
                                 CaveRootedTreePlacement.INSTANCE, PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
@@ -221,18 +231,18 @@ public class DTDatapackBuiltinEntriesProvider
 
     private static void replaceNyliumFungiFeatures(
             //? if >= 1.19.4
-            //HolderLookup.Provider vanillaProvider,
+            HolderLookup.Provider vanillaProvider,
 
             //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
-            CustomBootstrapContext<ConfiguredFeature<?, ?>> context
+            BootstapContext<ConfiguredFeature<?, ?>> context
     ) {
         Species.findSpecies(DynamicTrees.CRIMSON).getSapling().ifPresent(crimsonSapling ->
                 Species.findSpecies(DynamicTrees.WARPED).getSapling().ifPresent(warpedSapling -> {
                     //? if >= 1.19.4 {
-                    /*var configuredFeatures = vanillaProvider.lookup(Registries.CONFIGURED_FEATURE).orElseThrow();
-                    *///? } else {
-                    var configuredFeatures = BuiltinRegistries.ACCESS.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
-                    //? }
+                    var configuredFeatures = vanillaProvider.lookup(Registries.CONFIGURED_FEATURE).orElseThrow();
+                    //? } else {
+                    /*var configuredFeatures = BuiltinRegistries.ACCESS.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
+                    *///? }
 
                     List.of(NetherFeatures.CRIMSON_FOREST_VEGETATION, NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL,
                                     NetherFeatures.WARPED_FOREST_VEGETION, NetherFeatures.WARPED_FOREST_VEGETATION_BONEMEAL)
@@ -241,10 +251,10 @@ public class DTDatapackBuiltinEntriesProvider
                                     configuredFeatures,
 
                                     //? if >= 1.19.4 {
-                                    /*key,
-                                    *///? } else {
-                                    (ResourceKey) key.unwrapKey().orElseThrow(),
-                                    //? }
+                                    key,
+                                    //? } else {
+                                    /*(ResourceKey) key.unwrapKey().orElseThrow(),
+                                    *///? }
 
                                     crimsonSapling,
                                     warpedSapling
@@ -255,20 +265,20 @@ public class DTDatapackBuiltinEntriesProvider
 
     private static void replaceFeature(
             //~ if < 1.19.4 'BootstapContext' -> 'CustomBootstrapContext'
-            CustomBootstrapContext<ConfiguredFeature<?, ?>> context,
+            BootstapContext<ConfiguredFeature<?, ?>> context,
 
             //~ if < 1.19.4 'HolderLookup.RegistryLookup' -> 'Registry'
-            Registry<ConfiguredFeature<?, ?>> configuredFeatures,
+            HolderLookup.RegistryLookup<ConfiguredFeature<?, ?>> configuredFeatures,
 
             ResourceKey<ConfiguredFeature<?, ?>> key,
             Block crimsonSapling,
             Block warpedSapling
     ) {
         //? if >= 1.19.4 {
-        /*var feature = configuredFeatures.getOrThrow(key).value();
-        *///? } else {
-        var feature = configuredFeatures.get(key);
-        //? }
+        var feature = configuredFeatures.getOrThrow(key).value();
+        //? } else {
+        /*var feature = configuredFeatures.get(key);
+        *///? }
 
         var config = (NetherForestVegetationConfig) feature.config();
         var stateProvider = (WeightedStateProvider) config.stateProvider;

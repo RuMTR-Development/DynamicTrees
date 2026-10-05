@@ -17,10 +17,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 public class LeavesPropertiesLangGenerator implements Generator<DTDataProvider.Language, LeavesProperties> {
     DTLangProvider provider;
@@ -41,7 +41,7 @@ public class LeavesPropertiesLangGenerator implements Generator<DTDataProvider.L
     protected void itemLang(Item entry, Optional<String> override) {
         if (!(entry instanceof BlockItem) || entry instanceof ItemNameBlockItem) {
             //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'ForgeRegistries.ITEMS'
-            provider.addItem(() -> entry, override.orElse(checkReplace(ForgeRegistries.ITEMS.getKey(entry))));
+            provider.addItem(() -> entry, override.orElse(checkReplace(BuiltInRegistries.ITEM.getKey(entry))));
         }
     }
 
@@ -51,7 +51,7 @@ public class LeavesPropertiesLangGenerator implements Generator<DTDataProvider.L
 
     protected void blockLang(Block entry, Optional<String> blah) {
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-        provider.addBlock(() -> entry, blah.orElse(checkReplace(ForgeRegistries.BLOCKS.getKey(entry))));
+        provider.addBlock(() -> entry, blah.orElse(checkReplace(BuiltInRegistries.BLOCK.getKey(entry))));
     }
 
     protected String checkReplace(ResourceLocation registryObject) {

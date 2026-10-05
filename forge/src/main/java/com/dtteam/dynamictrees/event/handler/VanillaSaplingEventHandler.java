@@ -12,12 +12,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.event.level.SaplingGrowTreeEvent;
+import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.event.level.BlockEvent;
-*///? } else {
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+//? } else {
+/*import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 import net.minecraftforge.event.world.BlockEvent;
-//? }
+*///? }
 
 public class VanillaSaplingEventHandler {
 
@@ -27,7 +27,7 @@ public class VanillaSaplingEventHandler {
         final Block block = state.getBlock();
 
         //~ if < 1.19.2 '.getLevel' -> '.getWorld'
-        if (!(event.getWorld() instanceof Level level) || !DynamicSaplingBlock.shouldReplaceSaplingWhenPlaced(state)) {
+        if (!(event.getLevel() instanceof Level level) || !DynamicSaplingBlock.shouldReplaceSaplingWhenPlaced(state)) {
             return;
         }
 
@@ -57,7 +57,7 @@ public class VanillaSaplingEventHandler {
     @SubscribeEvent
     public void onSaplingGrowTree(SaplingGrowTreeEvent event) {
         //~ if < 1.19.2 '.getLevel' -> '.getWorld'
-        final LevelAccessor levelAccess = event.getWorld();
+        final LevelAccessor levelAccess = event.getLevel();
         final BlockPos pos = event.getPos();
         final BlockState state = levelAccess.getBlockState(pos);
         final Block block = state.getBlock();

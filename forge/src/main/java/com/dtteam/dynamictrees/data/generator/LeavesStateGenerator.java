@@ -8,10 +8,10 @@ import com.dtteam.dynamictrees.data.provider.DTBlockStateProvider;
 import net.minecraft.world.level.block.Block;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -27,7 +27,7 @@ public class LeavesStateGenerator implements Generator<DTDataProvider.BlockState
             provider.simpleBlock(dependencies.get(LEAVES), provider.models().getExistingFile(
                     input.getModelPath(LeavesProperties.LEAVES).orElse(
                             //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                            provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_LEAVES)))
+                            provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_LEAVES)))
                     )
             ));
         }

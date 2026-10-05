@@ -10,8 +10,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
-*///? }
+import net.minecraft.util.RandomSource;
+//? }
 
 public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
     public List<Holder<T>> contents() {
@@ -39,7 +39,7 @@ public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
 
     @Override
     //~ if < 1.19.2 'RandomSource random' -> 'Random random'
-    public Optional<Holder<T>> getRandomElement(Random random) {
+    public Optional<Holder<T>> getRandomElement(RandomSource random) {
         return Util.getRandomSafe(this.contents(), random);
     }
 
@@ -59,9 +59,9 @@ public abstract class StreamBackedHolderSet<T> implements HolderSet<T> {
     }
 
     //? if >= 1.19.4 {
-    /*@Override
+    @Override
     public Optional<TagKey<T>> unwrapKey() {
         return Optional.empty();
     }
-    *///? }
+    //? }
 }

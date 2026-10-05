@@ -13,12 +13,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.HolderOwner;
-*///? }
+import net.minecraft.core.HolderOwner;
+//? }
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
-*///? }
+import net.minecraft.util.RandomSource;
+//? }
 
 public class DelayedHolderSet<T> implements HolderSet<T> {
     private final Supplier<HolderSet<T>> holderSetSupplier;
@@ -45,7 +45,7 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
 
     @Override
     //~ if < 1.19.2 'RandomSource random' -> 'Random random'
-    public Optional<Holder<T>> getRandomElement(Random random) {
+    public Optional<Holder<T>> getRandomElement(RandomSource random) {
         return this.holderSetSupplier.get().getRandomElement(random);
     }
 
@@ -60,7 +60,7 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
     }
 
     //? if >= 1.19.4 {
-    /*@Override
+    @Override
     public boolean canSerializeIn(HolderOwner<T> owner) {
         return this.holderSetSupplier.get().canSerializeIn(owner);
     }
@@ -69,12 +69,12 @@ public class DelayedHolderSet<T> implements HolderSet<T> {
     public Optional<TagKey<T>> unwrapKey() {
         return this.holderSetSupplier.get().unwrapKey();
     }
-    *///? } else {
-    @Override
+    //? } else {
+    /*@Override
     public boolean isValidInRegistry(Registry<T> registry) {
         return this.holderSetSupplier.get().isValidInRegistry(registry);
     }
-    //? }
+    *///? }
 
     @NotNull
     @Override

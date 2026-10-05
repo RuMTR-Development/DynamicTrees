@@ -13,10 +13,10 @@ import net.minecraft.world.level.block.Block;
 import java.util.Objects;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Max Hyper
@@ -34,17 +34,17 @@ public class RootsStateGenerator implements Generator<DTDataProvider.BlockState,
             final BranchBlock root = dependencies.get(ROOT);
             final BranchLoaderBuilder builderExposed = provider.models().getBuilder(
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                    Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(root)).getPath()
+                    Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(root)).getPath()
             ).customLoader(BranchLoaderBuilder.branchBuilders.get(input.getRootsLoader()));
             //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-            input.addRootTextures(builderExposed::texture, provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_ROOT))));
+            input.addRootTextures(builderExposed::texture, provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_ROOT))));
 
             final BranchLoaderBuilder builderFilled = provider.models().getBuilder(
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                    Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(root)).getPath() + "_filled"
+                    Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(root)).getPath() + "_filled"
             ).customLoader(BranchLoaderBuilder.branchBuilders.get(input.getRootsLoader()));
             //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-            input.addRootTextures(builderFilled::texture, provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_FILLED_ROOT))));
+            input.addRootTextures(builderFilled::texture, provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_FILLED_ROOT))));
 
             provider.getVariantBuilder(root)
                     .partialState().with(BasicRootsBlock.LAYER, BasicRootsBlock.Layer.EXPOSED)
@@ -52,7 +52,7 @@ public class RootsStateGenerator implements Generator<DTDataProvider.BlockState,
                             builderExposed.end()
 
                             //? if >= 1.19.2
-                            //.renderType("cutout_mipped")
+                            .renderType("cutout_mipped")
                     ).addModel()
                     .partialState().with(BasicRootsBlock.LAYER, BasicRootsBlock.Layer.FILLED)
                     .modelForState().modelFile(builderFilled.end()).addModel()

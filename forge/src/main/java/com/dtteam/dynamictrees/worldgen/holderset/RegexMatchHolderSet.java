@@ -15,53 +15,53 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.HolderOwner;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderLookup;
-*///? }
+//? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.registries.holdersets.ICustomHolderSet;
-*///? }
+import net.minecraftforge.registries.holdersets.ICustomHolderSet;
+//? }
 
 public abstract class RegexMatchHolderSet<T>
         extends StreamBackedHolderSet<T>
 
         //? if >= 1.19.2
-        //implements ICustomHolderSet<T>
+        implements ICustomHolderSet<T>
 {
     //? if >= 1.19.2 {
-    /*protected static <T> MapCodec<? extends ICustomHolderSet<T>> mapCodec(
+    protected static <T> MapCodec<? extends ICustomHolderSet<T>> mapCodec(
             ResourceKey<? extends Registry<T>> registryKey,
 
             //? if >= 1.19.4 {
             BiFunction<HolderLookup.RegistryLookup<T>, String, RegexMatchHolderSet<T>> factory
             //? } else {
-            BiFunction<Registry<T>, String, RegexMatchHolderSet<T>> factory
-            //? }
+            /*BiFunction<Registry<T>, String, RegexMatchHolderSet<T>> factory
+            *///? }
     ) {
         return RecordCodecBuilder.<RegexMatchHolderSet<T>>mapCodec(builder -> builder.group(
                 //? if >= 1.19.4 {
                 RegistryOps.retrieveRegistryLookup(registryKey).forGetter(RegexMatchHolderSet::registryLookup),
                 //? } else {
-                RegistryOps.retrieveRegistry(registryKey).forGetter(RegexMatchHolderSet::registry),
-                //? }
+                /*RegistryOps.retrieveRegistry(registryKey).forGetter(RegexMatchHolderSet::registry),
+                *///? }
 
                 Codec.STRING.fieldOf("regex").forGetter(RegexMatchHolderSet::regex)
         ).apply(builder, factory));
     }
-    *///? }
+    //? }
 
     //? if >= 1.19.4 {
-    /*private final HolderLookup.RegistryLookup<T> registryLookup;
-    *///? } else {
-    private final Supplier<Registry<T>> registrySupplier;
-    //? }
+    private final HolderLookup.RegistryLookup<T> registryLookup;
+    //? } else {
+    /*private final Supplier<Registry<T>> registrySupplier;
+    *///? }
 
     private final String regex;
     private Pattern pattern;
 
     //? if >= 1.19.4 {
-    /*public RegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
+    public RegexMatchHolderSet(HolderLookup.RegistryLookup<T> registryLookup, String regex) {
         this.registryLookup = registryLookup;
         this.regex = regex;
     }
@@ -84,8 +84,8 @@ public abstract class RegexMatchHolderSet<T>
     public boolean canSerializeIn(HolderOwner<T> owner) {
         return this.registryLookup.canSerializeIn(owner);
     }
-    *///? } else {
-    public RegexMatchHolderSet(Registry<T> registry, String regex) {
+    //? } else {
+    /*public RegexMatchHolderSet(Registry<T> registry, String regex) {
         this(() -> registry, regex);
     }
 
@@ -112,7 +112,7 @@ public abstract class RegexMatchHolderSet<T>
     public boolean isValidInRegistry(Registry<T> registry) {
         return true;
     }
-    //? }
+    *///? }
 
     public final String regex() {
         return this.regex;

@@ -9,10 +9,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -27,14 +27,14 @@ public class BranchItemModelGenerator implements Generator<DTDataProvider.ItemMo
         if (prov instanceof DTItemModelProvider provider){
             final ItemModelBuilder builder = provider.withExistingParent(
                     //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'ForgeRegistries.ITEMS'
-                    String.valueOf(ForgeRegistries.ITEMS.getKey(dependencies.get(PRIMITIVE_LOG_ITEM))),
+                    String.valueOf(BuiltInRegistries.ITEM.getKey(dependencies.get(PRIMITIVE_LOG_ITEM))),
                     input.getBranchItemParentLocation()
             );
             Block block = dependencies.get(PRIMITIVE_LOG_BLOCK);
             input.addBranchTextures(
                     builder::texture,
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                    provider.block(ForgeRegistries.BLOCKS.getKey(block)),
+                    provider.block(BuiltInRegistries.BLOCK.getKey(block)),
                     block
             );
         }

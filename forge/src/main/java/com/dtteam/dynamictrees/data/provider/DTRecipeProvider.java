@@ -24,13 +24,13 @@ public class DTRecipeProvider extends RecipeProvider {
     private static final ResourceLocation COCOA = DynamicTrees.location("cocoa");
 
     //? if >= 1.19.4 {
-    /*public DTRecipeProvider(PackOutput output) {
+    public DTRecipeProvider(PackOutput output) {
         super(output);
-    }*///? } else {
-    public DTRecipeProvider(DataGenerator generator) {
+    }//? } else {
+    /*public DTRecipeProvider(DataGenerator generator) {
         super(generator);
     }
-    //? }
+    *///? }
 
     @Override
     //~ if < 1.19.4 'buildRecipes' -> 'buildCraftingRecipes'

@@ -20,19 +20,19 @@ import java.util.*;
 import java.util.function.Function;
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.RenderTypeGroup;
 import net.minecraftforge.client.model.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
+//? } else {
+/*import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
-//? }
+*///? }
 
 public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
     //? if >= 1.19.2
-    //protected RenderTypeGroup renderGroup = new RenderTypeGroup(RenderType.cutout(), RenderType.cutout());
+    protected RenderTypeGroup renderGroup = new RenderTypeGroup(RenderType.cutout(), RenderType.cutout());
 
     protected final BlockModel blockModel;
 
@@ -56,13 +56,13 @@ public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
             @Nullable Direction side,
 
             //~ if < 1.19.2 'RandomSource' -> 'Random'
-            @NotNull Random rand,
+            @NotNull RandomSource rand,
 
             //~ if < 1.19.2 'ModelData' -> 'IModelData'
-            @NotNull IModelData extraData
+            @NotNull ModelData extraData
 
             //? if >= 1.19.2
-            //, @Nullable RenderType renderType
+            , @Nullable RenderType renderType
     ) {
         if (state == null || side != null)
             return Collections.emptyList();
@@ -79,7 +79,7 @@ public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
                     extraData
 
                     //? if >= 1.19.2
-                    //, renderType
+                    , renderType
             ));
 
 
@@ -119,12 +119,12 @@ public abstract class PalmLeavesBakedModel implements IDynamicBakedModel {
     }
 
     //? if >= 1.19.2 {
-    /*@Override
+    @Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
     {
         return ChunkRenderTypeSet.of(RenderType.cutoutMipped());
     }
-    *///? }
+    //? }
 
     public static class BlockVertexData {
 

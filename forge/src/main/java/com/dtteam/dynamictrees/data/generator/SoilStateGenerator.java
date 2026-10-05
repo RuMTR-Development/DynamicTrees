@@ -10,10 +10,10 @@ import net.minecraft.world.level.block.Block;
 import java.util.Objects;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Harley O'Connor
@@ -29,7 +29,7 @@ public class SoilStateGenerator implements Generator<DTDataProvider.BlockState, 
             provider.getMultipartBuilder(dependencies.get(SOIL))
                     .part().modelFile(provider.models().getExistingFile(
                             //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                            input.getModelPath(SoilProperties.SOIL_BLOCK).orElse(provider.block(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_SOIL)))))
+                            input.getModelPath(SoilProperties.SOIL_BLOCK).orElse(provider.block(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_SOIL)))))
                     )).addModel().end()
                     .part().modelFile(provider.models().getExistingFile(input.getRootsOverlayModelLocation())).addModel().end();
         }

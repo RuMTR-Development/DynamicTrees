@@ -10,10 +10,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 /**
  * @author Max Hyper
@@ -27,13 +27,13 @@ public class RootsItemModelGenerator implements Generator<DTDataProvider.ItemMod
         if (prov instanceof DTItemModelProvider provider){
             final ItemModelBuilder builder = provider.withExistingParent(
                     //~ if < 1.19.4 'BuiltInRegistries.ITEM' -> 'ForgeRegistries.ITEMS'
-                    String.valueOf(ForgeRegistries.ITEMS.getKey(dependencies.get(ROOT_ITEM))),
+                    String.valueOf(BuiltInRegistries.ITEM.getKey(dependencies.get(ROOT_ITEM))),
                     input.getRootItemParentLocation()
             );
             input.addRootTextures(
                     builder::texture,
                     //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-                    provider.block(ForgeRegistries.BLOCKS.getKey(dependencies.get(PRIMITIVE_ROOT)))
+                    provider.block(BuiltInRegistries.BLOCK.getKey(dependencies.get(PRIMITIVE_ROOT)))
             );
         }
     }

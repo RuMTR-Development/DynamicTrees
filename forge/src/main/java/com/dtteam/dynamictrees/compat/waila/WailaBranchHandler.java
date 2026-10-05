@@ -30,14 +30,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 //? if >= 1.19.2 {
-/*import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
 import snownee.jade.impl.ui.ElementHelper;
-*///? } else {
-import mcp.mobius.waila.api.BlockAccessor;
+//? } else {
+/*import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IComponentProvider;
 import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.config.IPluginConfig;
@@ -45,10 +45,10 @@ import mcp.mobius.waila.api.ui.IElement;
 import mcp.mobius.waila.impl.ui.ElementHelper;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-//? }
+*///? }
 
 //~ if < 1.19.2 'IBlockComponentProvider' -> 'IComponentProvider'
-public class WailaBranchHandler implements IComponentProvider {
+public class WailaBranchHandler implements IBlockComponentProvider {
     public static final ResourceLocation ID = DynamicTrees.location("branch");
 
     private BlockPos lastPos = BlockPos.ZERO;
@@ -99,12 +99,12 @@ public class WailaBranchHandler implements IComponentProvider {
         if (species != Species.NULL_SPECIES) {
             if (species.showSpeciesOnWaila()) {
                 //~ if < 1.19.2 'Component.translatable' -> 'new TranslatableComponent'
-                tooltip.add(new TranslatableComponent("tooltip.dynamictrees.species", species.getTextComponent()));
+                tooltip.add(Component.translatable("tooltip.dynamictrees.species", species.getTextComponent()));
             }
 
             if (Minecraft.getInstance().options.advancedItemTooltips) {
                 //~ if < 1.19.2 'Component.literal' -> 'new TextComponent'
-                tooltip.add(new TextComponent(ChatFormatting.DARK_GRAY + species.getRegistryName().toString()));
+                tooltip.add(Component.literal(ChatFormatting.DARK_GRAY + species.getRegistryName().toString()));
             }
 
             ItemStack seedStack = species.getSeedStack(1);
@@ -193,9 +193,9 @@ public class WailaBranchHandler implements IComponentProvider {
     }
 
     //? if >= 1.19.2 {
-    /*@Override
+    @Override
     public ResourceLocation getUid() {
         return ID;
     }
-    *///? }
+    //? }
 }

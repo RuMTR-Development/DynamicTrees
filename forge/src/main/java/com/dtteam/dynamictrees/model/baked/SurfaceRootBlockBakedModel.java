@@ -27,20 +27,20 @@ import java.util.*;
 import java.util.function.Function;
 
 //? if >= 1.19.4 {
-/*import org.joml.Vector3f;
-*///? } else {
-import com.mojang.math.Vector3f;
-//? }
+import org.joml.Vector3f;
+//? } else {
+/*import com.mojang.math.Vector3f;
+*///? }
 
 //? if >= 1.19.2 {
-/*import net.minecraft.util.RandomSource;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.client.model.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
+//? } else {
+/*import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
-//? }
+*///? }
 
 public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
@@ -121,7 +121,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
             //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
-            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), this.barkTexture, face, BlockModelRotation.X0_Y0));
+            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), this.barkTexture, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -147,7 +147,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
 
                 BlockElement part = new BlockElement(limits[0], limits[1], mapFacesIn, null, true);
                 //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
-                builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, part.faces.get(face), this.barkTexture, face, BlockModelRotation.X0_Y0));
+                builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, part.faces.get(face), this.barkTexture, face, BlockModelRotation.X0_Y0));
             }
         }
 
@@ -180,7 +180,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
         for (Map.Entry<Direction, BlockElementFace> e : part.faces.entrySet()) {
             Direction face = e.getKey();
             //~ if < 1.19.2 '.addCulledFace' -> '.addFaceQuad'
-            builder.addFaceQuad(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
+            builder.addCulledFace(face, ModelHelper.makeBakedQuad(part, e.getValue(), icon, face, BlockModelRotation.X0_Y0));
         }
 
         return builder.build();
@@ -193,13 +193,13 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
             @Nullable Direction side,
 
             //~ if < 1.19.2 'RandomSource' -> 'Random'
-            @NotNull Random rand,
+            @NotNull RandomSource rand,
 
             //~ if < 1.19.2 'ModelData' -> 'IModelData'
-            @NotNull IModelData extraData
+            @NotNull ModelData extraData
 
             //? if >= 1.19.2
-            //, @Nullable RenderType renderType
+            , @Nullable RenderType renderType
     ) {
         if (side != null || state == null) {
             return Collections.emptyList();
@@ -212,7 +212,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
         int[] connections = new int[]{0, 0, 0, 0};
         RootConnections.ConnectionLevel[] connectionLevels = RootConnections.PLACEHOLDER_CONNECTION_LEVELS.clone();
         //~ if < 1.19.2 '.get' -> '.getData'
-        RootConnections connectionData = extraData.getData(ModelHelper.ROOT_CONNECTIONS_PROPERTY);
+        RootConnections connectionData = extraData.get(ModelHelper.ROOT_CONNECTIONS_PROPERTY);
         if (connectionData != null) {
             connections = connectionData.getAllRadii();
             connectionLevels = connectionData.getConnectionLevels();
@@ -241,7 +241,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
                         extraData
 
                         //? if >= 1.19.2
-                        //, renderType
+                        , renderType
                 ));
             }
 
@@ -260,7 +260,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
                                     extraData
 
                                     //? if >= 1.19.2
-                                    //, renderType
+                                    , renderType
                             ));
                         }
                         if (connectionLevels[idx] == RootConnections.ConnectionLevel.HIGH) {
@@ -271,7 +271,7 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
                                     extraData
 
                                     //? if >= 1.19.2
-                                    //, renderType
+                                    , renderType
                             ));
                         }
                     }
@@ -286,13 +286,13 @@ public class SurfaceRootBlockBakedModel implements IDynamicBakedModel {
     @Override
     //~ if < 1.19.2 'public ModelData' -> 'public IModelData'
     //~ if < 1.19.2 'ModelData tileData' -> 'IModelData tileData'
-    public IModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData tileData) {
+    public ModelData getModelData(@NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData tileData) {
         RootConnections rootConnections = state.getBlock() instanceof SurfaceRootBlock surfaceRootBlock
                 ? new RootConnections(surfaceRootBlock.getConnectionData(world, pos))
                 : new RootConnections();
         //~ if < 1.19.2 'ModelData.builder' -> 'new ModelDataMap.Builder'
         //~ if < 1.19.2 '.with' -> '.withInitial'
-        return new ModelDataMap.Builder().withInitial(ModelHelper.ROOT_CONNECTIONS_PROPERTY, rootConnections).build();
+        return ModelData.builder().with(ModelHelper.ROOT_CONNECTIONS_PROPERTY, rootConnections).build();
     }
 
     /**

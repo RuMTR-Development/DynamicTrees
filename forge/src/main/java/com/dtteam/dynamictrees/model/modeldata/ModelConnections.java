@@ -9,11 +9,11 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.model.data.ModelData;
-*///? } else {
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
+//? } else {
+/*import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
-//? }
+*///? }
 
 /**
  * Extension of {@link Connections} for storing and transferring model data to baked models.
@@ -68,15 +68,15 @@ public class ModelConnections extends Connections {
     }
 
     //? if >= 1.19.2 {
-    /*public ModelData toModelData() {
+    public ModelData toModelData() {
         return ModelData.builder().with(CONNECTIONS_PROPERTY, this).build();
     }
 
     public ModelData toModelData(ModelData baseData) {
         return baseData.derive().with(CONNECTIONS_PROPERTY, this).build();
     }
-    *///? } else {
-    private static class ModelDataWrapper extends ModelDataMap {
+    //? } else {
+    /*private static class ModelDataWrapper extends ModelDataMap {
         //
         // Copyright (c) Forge Development LLC and contributors
         // SPDX-License-Identifier: LGPL-2.1-only
@@ -116,5 +116,5 @@ public class ModelConnections extends Connections {
         wrapper.setData(CONNECTIONS_PROPERTY, this);
         return wrapper;
     }
-    //? }
+    *///? }
 }

@@ -11,13 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.client.model.geometry.IGeometryLoader;
- *///? } else {
-import net.minecraftforge.client.model.IModelLoader;
-//? }
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+ //? } else {
+/*import net.minecraftforge.client.model.IModelLoader;
+*///? }
 
 //~ if < 1.19.2 'IGeometryLoader' -> 'IModelLoader'
-public class PalmLeavesModelLoader implements IModelLoader<PalmLeavesModelGeometry> {
+public class PalmLeavesModelLoader implements IGeometryLoader<PalmLeavesModelGeometry> {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -33,10 +33,10 @@ public class PalmLeavesModelLoader implements IModelLoader<PalmLeavesModelGeomet
     @Override
     public PalmLeavesModelGeometry read(
             //? if >= 1.19.2 {
-            /*JsonObject modelObject, JsonDeserializationContext deserializationContext
-             *///? } else {
-            JsonDeserializationContext deserializationContext, JsonObject modelObject
-            //? }
+            JsonObject modelObject, JsonDeserializationContext deserializationContext
+             //? } else {
+            /*JsonDeserializationContext deserializationContext, JsonObject modelObject
+            *///? }
     ) {
         final JsonObject textures = this.getTexturesObject(modelObject);
         return new PalmLeavesModelGeometry(getTextureLocation(textures, FROND), frondType);
@@ -88,9 +88,9 @@ public class PalmLeavesModelLoader implements IModelLoader<PalmLeavesModelGeomet
     }
 
     //? if < 1.19.2 {
-    @Override
+    /*@Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
 
     }
-    //? }
+    *///? }
 }

@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.core.registries.BuiltInRegistries;
-*///? } else {
-import net.minecraftforge.registries.ForgeRegistries;
-//? }
+import net.minecraft.core.registries.BuiltInRegistries;
+//? } else {
+/*import net.minecraftforge.registries.ForgeRegistries;
+*///? }
 
 public class FamilyLangGenerator implements Generator<DTDataProvider.Language, Family> {
     DTLangProvider provider;
@@ -47,7 +47,7 @@ public class FamilyLangGenerator implements Generator<DTDataProvider.Language, F
 
     protected void blockLang(Block entry, Optional<String> blah) {
         //~ if < 1.19.4 'BuiltInRegistries.BLOCK' -> 'ForgeRegistries.BLOCKS'
-        provider.addBlock(() -> entry, blah.orElse(checkReplace(ForgeRegistries.BLOCKS.getKey(entry).getPath())));
+        provider.addBlock(() -> entry, blah.orElse(checkReplace(BuiltInRegistries.BLOCK.getKey(entry).getPath())));
     }
 
     protected String checkReplace(String path) {

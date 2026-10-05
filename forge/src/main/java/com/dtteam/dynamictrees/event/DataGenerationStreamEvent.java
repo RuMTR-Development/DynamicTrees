@@ -10,10 +10,10 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.Map;
 
 //? if >= 1.19.4 {
-/*import net.minecraft.data.loot.LootTableSubProvider;
-*///? } else {
-import net.minecraft.data.loot.BlockLoot;
-//? }
+import net.minecraft.data.loot.LootTableSubProvider;
+//? } else {
+/*import net.minecraft.data.loot.BlockLoot;
+*///? }
 
 public class DataGenerationStreamEvent extends Event implements IModBusEvent {
 
@@ -22,17 +22,17 @@ public class DataGenerationStreamEvent extends Event implements IModBusEvent {
     private final String modId;
 
     //? if >= 1.19.4 {
-    /*private final LootTableSubProvider provider;
-    *///? } else {
-    private final BlockLoot provider;
-    //? }
+    private final LootTableSubProvider provider;
+    //? } else {
+    /*private final BlockLoot provider;
+    *///? }
 
     public DataGenerationStreamEvent(
             //? if >= 1.19.4 {
-            /*final LootTableSubProvider tableProvider,
-             *///? } else {
-            final BlockLoot tableProvider,
-            //? }
+            final LootTableSubProvider tableProvider,
+             //? } else {
+            /*final BlockLoot tableProvider,
+            *///? }
 
             String modId,
             ExistingFileHelper fileHelper,
@@ -47,14 +47,14 @@ public class DataGenerationStreamEvent extends Event implements IModBusEvent {
     }
 
     //? if >= 1.19.4 {
-    /*public LootTableSubProvider getProvider() {
+    public LootTableSubProvider getProvider() {
         return provider;
     }
-    *///? } else {
-    public BlockLoot getProvider() {
+    //? } else {
+    /*public BlockLoot getProvider() {
         return provider;
     }
-    //? }
+    *///? }
 
     public String getModId() {
         return modId;

@@ -27,16 +27,16 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import java.util.Set;
 
 //? if >= 1.19.4 {
-/*import com.dtteam.dynamictrees.client.ThickBranchRingsSource;
+import com.dtteam.dynamictrees.client.ThickBranchRingsSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSources;
-*///? }
+//? }
 
 //? if >= 1.19.2 {
-/*import net.minecraftforge.data.event.GatherDataEvent;
- *///? } else {
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
+ //? } else {
+/*import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.ModLoadingContext;
-//? }
+*///? }
 
 @Mod(DynamicTrees.MOD_ID)
 public class DynamicTreesForge {
@@ -50,12 +50,12 @@ public class DynamicTreesForge {
         eventBus.addListener(this::gatherData);
 
         //? if < 1.19.2
-        ModLoadingContext configContext = ModLoadingContext.get();
+        //ModLoadingContext configContext = ModLoadingContext.get();
 
         //~ if < 1.19.2 'context.' -> 'configContext.' {
-        configContext.registerConfig(ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
-        configContext.registerConfig(ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
-        configContext.registerConfig(ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
+        context.registerConfig(ModConfig.Type.SERVER, DTConfigs.SERVER_CONFIG);
+        context.registerConfig(ModConfig.Type.COMMON, DTConfigs.COMMON_CONFIG);
+        context.registerConfig(ModConfig.Type.CLIENT, DTConfigs.CLIENT_CONFIG);
         //~ }
 
         ForgeRegistryHandler.setup(DynamicTrees.MOD_ID, eventBus);
@@ -74,7 +74,7 @@ public class DynamicTreesForge {
         BlockColorMultipliers.cleanUp();
 
         //? if >= 1.19.4
-        //SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
+        SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
     }
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
@@ -84,6 +84,9 @@ public class DynamicTreesForge {
     }
 
     private void gatherData(final GatherDataEvent event) {
+        //? if >= 1.19.4
+        SpriteSources.register(ThickBranchRingsSource.ID.toString(), ThickBranchRingsSource.setType(ThickBranchRingsSource.CODEC).codec());
+
         //Generate the tree block and item data
         Resources.MANAGER.gatherData();
         GatherDataHelper.gatherAllData(
@@ -96,13 +99,13 @@ public class DynamicTreesForge {
         );
         //Generate the feature replacement data
         //? if >= 1.19.4 {
-        /*DataGenerator dataGen = event.getGenerator();
+        DataGenerator dataGen = event.getGenerator();
         dataGen.addProvider(event.includeServer(), new DTDatapackBuiltinEntriesProvider(
                 dataGen.getPackOutput(), event.getLookupProvider(), Set.of(DynamicTrees.MOD_ID, DynamicTrees.MINECRAFT)
         ));
-        *///? } else {
-        DTDatapackBuiltinEntriesProvider.registerProviders(event.getGenerator(), event.getExistingFileHelper(), DynamicTrees.MOD_ID, event.includeServer());
-        //? }
+        //? } else {
+        /*DTDatapackBuiltinEntriesProvider.registerProviders(event.getGenerator(), event.getExistingFileHelper(), DynamicTrees.MOD_ID, event.includeServer());
+        *///? }
     }
 
 }

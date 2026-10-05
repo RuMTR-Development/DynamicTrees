@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt"
+    },
+    "U": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "pattern": [
+    "#",
+    "U"
+  ],
+  "result": {
+    "item": "dynamictrees:dirt_bucket"
+  },
+  "show_notification": true
+}
